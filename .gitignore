@@ -1,0 +1,7 @@
+*.dep
+*.db
+*.db.lock
+*.dot
+*.lib
+MANIFEST
+AtelierB
