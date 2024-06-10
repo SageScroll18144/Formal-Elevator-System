@@ -1,5 +1,5 @@
 /* Elevator_System
- * Author: Felipe Santos, Victor Mendonça
+ * Author: Felipe Santos, Victor Mendonça, Roberto Albuquerque
  * Creation date: 08/06/24
  * 
  * TODO: 
@@ -13,7 +13,7 @@ MACHINE
     Elevator_System
     
 SETS
-    ELEVATOR_DIRECTIONS = {up, down};
+    ELEVATOR_DIRECTIONS = {up, down}; // Visor
     FLOOR_BUTTONS = {btn_up, btn_down}
     
 CONSTANTS
@@ -21,11 +21,9 @@ CONSTANTS
     NUM_ELEVATOR
     
 PROPERTIES 
-    NUM_FLOOR : NAT
-    & NUM_FLOOR >= 4
-    & NUM_FLOOR = 8
-    
-    & NUM_ELEVATOR : NAT
+    NUM_FLOOR >= 4
+    & NUM_FLOOR = 8 //arbritrario
+    & NUM_ELEVATOR : NAT1
 
 VARIABLES 
     current_floor,
@@ -33,15 +31,16 @@ VARIABLES
     status_work
 
 INVARIANT
-    current_floor : NAT
-    & current_floor >= 4
+    current_floor : NAT1
     & current_floor <= NUM_FLOOR
     
     & status_door : BOOL
     & status_work : BOOL
+    //& (status_work = FALSE) => status_door = TRUE
+    //& (status_work = TRUE) => status_door = FALSE
     
 INITIALISATION
-    current_floor := 4
+    current_floor := 1
     || status_door := TRUE
     || status_work := FALSE
     
