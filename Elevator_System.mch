@@ -94,7 +94,8 @@ OPERATIONS
         & btn_special(btn_close) = FALSE
     THEN
         btn_special(btn_open) := TRUE;
-        btn_special(btn_close) := FALSE
+        btn_special(btn_close) := FALSE;
+        status_door := TRUE
     END;
 
     elevator_operation_close_door = 
@@ -103,7 +104,8 @@ OPERATIONS
         & btn_special(btn_close) = FALSE
     THEN
         btn_special(btn_open) := FALSE;
-        btn_special(btn_close) := TRUE
+        btn_special(btn_close) := TRUE;
+        status_door := FALSE
     END//;
 
     // Operações referentes ao pavimento
