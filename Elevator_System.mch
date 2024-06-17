@@ -91,7 +91,6 @@ OPERATIONS
     elevator_operation_open_door = 
     PRE
         btn_special(btn_open) = FALSE
-        & btn_special(btn_close) = FALSE
     THEN
         btn_special(btn_open) := TRUE;
         btn_special(btn_close) := FALSE;
@@ -100,8 +99,7 @@ OPERATIONS
 
     elevator_operation_close_door = 
     PRE
-        btn_special(btn_open) = FALSE
-        & btn_special(btn_close) = FALSE
+        btn_special(btn_close) = FALSE
     THEN
         btn_special(btn_open) := FALSE;
         btn_special(btn_close) := TRUE;
