@@ -86,7 +86,7 @@ OPERATIONS
     PRE
         display_floor(current_floor) = TRUE
         & !(f1) . (f1 /= current_floor => display_floor(f1) = FALSE)
-        //& sensor_balance <= 450
+        & sensor_balance <= 450
         & user_orders : 1..NUM_FLOOR
         & not(user_orders : ran(check_points))
         & status_operation = TRUE
