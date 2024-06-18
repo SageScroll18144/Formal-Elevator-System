@@ -42,9 +42,9 @@ INVARIANT
     & status_door : BOOL
     & status_work : BOOL
     & status_operation : BOOL
-    & time : NATURAL
+    & time : NAT
     & sensor_pir : BOOL
-    & sensor_balance : NATURAL
+    & sensor_balance : NAT
     & ((status_work = FALSE) => status_door = TRUE & (status_work = TRUE) => status_door = FALSE)
     & btn_actions : ELEVATOR_ORDINARY_BUTTONS --> BOOL // relação com o elevador
     & btn_special : ELEVATOR_SPECIAL_BUTTONS --> BOOL
@@ -54,8 +54,8 @@ INVARIANT
     & check_points : seq(1..NUM_FLOOR) // referente ao elevador
     & request_points : 1..NUM_FLOOR <-> ELEVATOR_DIRECTIONS // referente ao 
     & ask_to_repair : BOOL
-    & people_in_elevator : NATURAL <-> NAT1
-    & id_inside : NATURAL
+    & people_in_elevator : NAT <-> NAT1
+    & id_inside : NAT
     
 INITIALISATION
     current_floor := 1
@@ -204,12 +204,12 @@ OPERATIONS
     PRE 
         people_in_elevator /= {} 
     THEN
-        ANY p1 WHERE p1 : people_in_elevator
-        THEN
-            people_in_elevator := people_in_elevator - {p1}
-            || sensor_balance := sensor_balance - p1
+        ANY p1 WHERE p1 : dom(people_in_elevator) THEN
+            sensor_balance := sensor_balance - people_in_elevator(p1)
+            || people_in_elevator := people_in_elevator - {p1 |-> people_in_elevator(p1)}
         END
     END;
+
 
     // Operações referentes a portaria
 
