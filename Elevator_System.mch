@@ -1,5 +1,5 @@
 MACHINE
-    Elevator_System
+    Elevator_system
     
 SETS
     ELEVATOR_DIRECTIONS = {up, down, empty}; // Visor
@@ -51,7 +51,7 @@ INVARIANT
     & display_floor(current_floor) = TRUE
     & display_direction_elevator : ELEVATOR_DIRECTIONS
     & check_points : seq(1..NUM_FLOOR) // referente ao elevador
-    & request_points : 1..NUM_FLOOR --> ELEVATOR_DIRECTIONS // referente ao 
+    & request_points : 1..NUM_FLOOR <-> ELEVATOR_DIRECTIONS // referente ao 
     & ask_to_repair : BOOL
     & people_in_elevator : seq(NAT1)
     
@@ -174,7 +174,7 @@ OPERATIONS
         || status_operation := TRUE
         || btn_actions := ELEVATOR_ORDINARY_BUTTONS * {FALSE} // relação com o elevador
         || btn_special := ELEVATOR_SPECIAL_BUTTONS * {FALSE} // relação com o elevador
-        || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {current_floor |-> TRUE} // relação com o elevador
+        || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+  {current_floor |-> TRUE} // relação com o elevador
         || time := 0
         || sensor_pir := FALSE
         || sensor_balance := 0
@@ -196,12 +196,12 @@ OPERATIONS
         || people_in_elevator := people_in_elevator ^ [weight]
     END;
 
-    // exit_elevator =
-    // ANY p1 WHERE p1 : people_in_elevator
-    // THEN
-    //     people_in_elevator := people_in_elevator - {p1}
-    //     || sensor_balance := sensor_balance - p1
-    // END;
+    exit_elevator =
+    ANY p1 WHERE p1 : people_in_elevator
+    THEN
+        people_in_elevator := people_in_elevator /= {p1}
+        || sensor_balance := sensor_balance - p1
+    END;
 
     // Operações referentes a portaria
 
