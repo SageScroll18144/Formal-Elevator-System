@@ -34,7 +34,8 @@ VARIABLES
     check_points,
     request_points,
     ask_to_repair,
-    people_in_elevator
+    people_in_elevator,
+    id_inside
 
 INVARIANT
     current_floor : 1..NUM_FLOOR
@@ -53,7 +54,8 @@ INVARIANT
     & check_points : seq(1..NUM_FLOOR) // referente ao elevador
     & request_points : 1..NUM_FLOOR <-> ELEVATOR_DIRECTIONS // referente ao 
     & ask_to_repair : BOOL
-    & people_in_elevator : seq(NAT1)
+    & people_in_elevator : NATURAL <-> NAT1
+    & id_inside : NATURAL
     
 INITIALISATION
     current_floor := 1
@@ -70,7 +72,8 @@ INITIALISATION
     || display_direction_elevator := empty
     || ask_to_repair := FALSE
     || request_points := {}
-    || people_in_elevator := []
+    || people_in_elevator := {}
+    || id_inside := 0
 
 OPERATIONS
     
@@ -158,7 +161,7 @@ OPERATIONS
            // vai para o pavimento acima
            status_work := FALSE
            || status_operation := FALSE
-           ||time := time + 1
+           || time := time + 1
            || display_direction_elevator := empty
            || ask_to_repair := FALSE
         END
@@ -193,14 +196,19 @@ OPERATIONS
     THEN
         sensor_balance := sensor_balance + weight
         || sensor_pir := TRUE
-        || people_in_elevator := people_in_elevator ^ [weight]
+        || id_inside := id_inside + 1
+        || people_in_elevator := people_in_elevator <+ {id_inside |-> weight}
     END;
 
     exit_elevator =
-    ANY p1 WHERE p1 : people_in_elevator
+    PRE 
+        people_in_elevator /= {} 
     THEN
-        people_in_elevator := people_in_elevator /= {p1}
-        || sensor_balance := sensor_balance - p1
+        ANY p1 WHERE p1 : people_in_elevator
+        THEN
+            people_in_elevator := people_in_elevator - {p1}
+            || sensor_balance := sensor_balance - p1
+        END
     END;
 
     // Operações referentes a portaria
