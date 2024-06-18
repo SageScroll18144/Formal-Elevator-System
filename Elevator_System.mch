@@ -56,7 +56,7 @@ INVARIANT
     & ask_to_repair : BOOL
     & people_in_elevator : NAT <-> NAT1
     & id_inside : NAT
-    
+
 INITIALISATION
     current_floor := 1
     || status_door := TRUE
@@ -93,11 +93,13 @@ OPERATIONS
         & not(user_orders : ran(check_points))
         & status_operation = TRUE
         & sensor_pir = TRUE
+        & btn_special(btn_phone) = FALSE
 
     THEN
         check_points := check_points ^ [user_orders]
         || status_door := FALSE
         || status_work := TRUE
+        || btn_actions(user_orders) := TRUE
     END;
 
     elevator_operation_alarm = 
@@ -149,21 +151,29 @@ OPERATIONS
     
     elevator_operation_break_to_repair =
     PRE
-        status_operation = TRUE
+        status_operation = FALSE
         & ask_to_repair = TRUE
     THEN
         IF card(check_points) = 0 THEN
             status_work := FALSE
-            || status_operation := FALSE
             || display_direction_elevator := empty
             || ask_to_repair := FALSE
+            || request_points := {}
+            || people_in_elevator := {}
+            || id_inside := 0
+            || sensor_balance := 0
+            || sensor_pir := FALSE
         ELSE
            // vai para o pavimento acima
-           status_work := FALSE
-           || status_operation := FALSE
-           || time := time + 1
-           || display_direction_elevator := empty
-           || ask_to_repair := FALSE
+            status_work := FALSE
+            || time := time + 1 // para no andar de cima
+            || display_direction_elevator := empty
+            || ask_to_repair := FALSE
+            || request_points := {}
+            || people_in_elevator := {}
+            || id_inside := 0
+            || sensor_balance := 0
+            || sensor_pir := FALSE
         END
     END;
     
@@ -184,7 +194,10 @@ OPERATIONS
         || check_points := []
         || display_direction_elevator := empty
         || ask_to_repair := FALSE
-
+        || request_points := {}
+        || people_in_elevator := {}
+        || id_inside := 0
+        
     END;
 
     enter_elevator(weight) = 
@@ -203,10 +216,19 @@ OPERATIONS
     exit_elevator =
     PRE 
         people_in_elevator /= {} 
+        & status_door = TRUE
+        & status_operation = TRUE
+        & status_work = FALSE
     THEN
-        ANY p1 WHERE p1 : dom(people_in_elevator) THEN
-            sensor_balance := sensor_balance - people_in_elevator(p1)
-            || people_in_elevator := people_in_elevator - {p1 |-> people_in_elevator(p1)}
+        IF card(people_in_elevator) > 1 THEN
+            ANY p1 WHERE p1 : dom(people_in_elevator) THEN
+                sensor_balance := sensor_balance - people_in_elevator(p1)
+                || people_in_elevator := people_in_elevator - {p1 |-> people_in_elevator(p1)}
+            END
+        ELSE
+            sensor_balance := 0
+            || people_in_elevator := {}
+            || sensor_pir := FALSE
         END
     END;
 
@@ -219,6 +241,7 @@ OPERATIONS
     THEN
         btn_special := btn_special <+ {btn_phone |-> FALSE, btn_alarm |-> FALSE}
         || ask_to_repair := TRUE
+        || status_operation := FALSE
     END;      
     
     // Operações referentes ao pavimento
@@ -229,6 +252,7 @@ OPERATIONS
         number_floor > 1 & number_floor < NUM_FLOOR
         & direction : ELEVATOR_DIRECTIONS & direction /= empty
         & status_operation = TRUE
+        & btn_special(btn_phone) = FALSE
     THEN
         request_points := request_points <+ {number_floor |-> direction}
     END;
@@ -236,6 +260,7 @@ OPERATIONS
     ground_floor_call_elevator = 
     PRE
         status_operation = TRUE
+        & btn_special(btn_phone) = FALSE
     THEN
         request_points := request_points <+ {1 |-> up}
     END;
@@ -243,6 +268,7 @@ OPERATIONS
     last_floor_call_elevator = 
     PRE
         status_operation = TRUE
+        & btn_special(btn_phone) = FALSE
     THEN
         request_points := request_points <+ {NUM_FLOOR |-> down}
     END
