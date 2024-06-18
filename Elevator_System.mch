@@ -41,9 +41,9 @@ INVARIANT
     & status_door : BOOL
     & status_work : BOOL
     & status_operation : BOOL
-    & time : NAT
+    & time : NATURAL
     & sensor_pir : BOOL
-    & sensor_balance : NAT
+    & sensor_balance : NATURAL
     & ((status_work = FALSE) => status_door = TRUE & (status_work = TRUE) => status_door = FALSE)
     & btn_actions : ELEVATOR_ORDINARY_BUTTONS --> BOOL // relação com o elevador
     & btn_special : ELEVATOR_SPECIAL_BUTTONS --> BOOL
