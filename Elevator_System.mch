@@ -44,8 +44,7 @@ INVARIANT
     & time : NAT
     & sensor_pir : BOOL
     & sensor_balance : NAT
-    & (status_work = FALSE) <=> status_door = TRUE
-    //& (status_work = TRUE) => status_door = FALSE
+    & ((status_work = FALSE) => status_door = TRUE & (status_work = TRUE) => status_door = FALSE)
     & btn_actions : ELEVATOR_ORDINARY_BUTTONS --> BOOL // relação com o elevador
     & btn_special : ELEVATOR_SPECIAL_BUTTONS --> BOOL
     & display_floor : ELEVATOR_FLOOR_DISPLAY --> BOOL
