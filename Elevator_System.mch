@@ -1,5 +1,5 @@
 MACHINE
-    Elevator_system
+    Elevator_System
     
 SETS
     ELEVATOR_DIRECTIONS = {up, down, empty}; // Visor
@@ -35,7 +35,8 @@ VARIABLES
     request_points,
     ask_to_repair,
     people_in_elevator,
-    id_inside
+    id_inside,
+    behavior
 
 INVARIANT
     current_floor : 1..NUM_FLOOR
@@ -56,15 +57,16 @@ INVARIANT
     & ask_to_repair : BOOL
     & people_in_elevator : NAT <-> NAT1
     & id_inside : NAT
+    & behavior : NAT <-> ELEVATOR_DIRECTIONS
 
 INITIALISATION
-    current_floor := 1
+    current_floor := 3
     || status_door := TRUE
     || status_work := FALSE
     || status_operation := TRUE
     || btn_actions := ELEVATOR_ORDINARY_BUTTONS * {FALSE} // relação com o elevador
     || btn_special := ELEVATOR_SPECIAL_BUTTONS * {FALSE} // relação com o elevador
-    || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {1 |-> TRUE} // relação com o elevador
+    || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {3 |-> TRUE} // relação com o elevador
     || time := 0
     || sensor_pir := FALSE
     || sensor_balance := 0
@@ -74,14 +76,45 @@ INITIALISATION
     || request_points := {}
     || people_in_elevator := {}
     || id_inside := 0
+    || behavior := {}
 
 OPERATIONS
-    
-    // Movimentação?
-    clock = 
-    BEGIN
-        time := time + 1
+        
+    move = 
+    PRE
+        status_work = TRUE
+        & status_operation = TRUE
+        & status_door = FALSE
+        & sensor_pir = TRUE
+        & ask_to_repair = FALSE
+    THEN
+        IF behavior /= {} THEN
+            IF min(dom(behavior)) = 0 THEN
+                behavior := behavior - {0 |-> behavior(0)}
+                || status_door := TRUE
+                || status_work := FALSE
+                || time := time + 1
+            ELSE
+                IF behavior(min(dom(behavior))) = up THEN
+                     current_floor := current_floor + 1
+                    || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {(display_floor~(TRUE) + 1) |-> TRUE} 
+                    || behavior := (behavior <+ {(min(dom(behavior)) - 1) |-> behavior(min(dom(behavior))), min(dom(behavior)) |-> empty})
+                    || time := time + 1
+                ELSE
+                    IF behavior(min(dom(behavior))) = down THEN
+                        current_floor := current_floor - 1
+                    || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {((display_floor~(TRUE)) - 1) |-> TRUE}
+                    || behavior := (behavior <+ {(min(dom(behavior)) - 1) |-> behavior(min(dom(behavior))), min(dom(behavior)) |-> empty})
+                    || time := time + 1
+                    END
+                END
+            END
+        ELSE
+            current_floor := current_floor
+            || time := time + 1
+        END
     END;
+        
     // Operações referentes ao elevador
     
     elevator_operation_request(user_orders) = 
@@ -95,11 +128,20 @@ OPERATIONS
         & sensor_pir = TRUE
         & btn_special(btn_phone) = FALSE
 
-    THEN
-        check_points := check_points ^ [user_orders]
-        || status_door := FALSE
-        || status_work := TRUE
-        || btn_actions(user_orders) := TRUE
+    THEN        
+        IF (user_orders - current_floor) < 0 THEN
+            behavior := behavior <+ {(current_floor - user_orders) |-> down}
+            || check_points := check_points ^ [user_orders]
+            || status_door := FALSE
+            || status_work := TRUE
+            || btn_actions(user_orders) := TRUE
+        ELSE
+            behavior := behavior <+ {(user_orders - current_floor) |-> up}
+            || check_points := check_points ^ [user_orders]
+            || status_door := FALSE
+            || status_work := TRUE
+            || btn_actions(user_orders) := TRUE
+        END
     END;
 
     elevator_operation_alarm = 
