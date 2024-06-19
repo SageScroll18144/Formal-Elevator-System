@@ -100,7 +100,11 @@ OPERATIONS
             || current_direction := empty
             || status_door := TRUE
             || status_work := FALSE
+            || btn_special(btn_close) := FALSE
             || time := time + 1
+            || btn_actions(current_floor) := FALSE
+            || floor_leds := floor_leds - {current_floor |-> up, current_floor |-> down} \/ {current_floor |-> empty}
+            
         ELSE
             IF behavior(min(dom(behavior))) = up & current_direction /= down THEN
                  current_floor := current_floor + 1
