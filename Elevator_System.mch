@@ -21,6 +21,7 @@ PROPERTIES
 
 VARIABLES 
     current_floor,
+    current_direction,
     status_door,
     status_work,
     status_operation,
@@ -36,10 +37,12 @@ VARIABLES
     ask_to_repair,
     people_in_elevator,
     id_inside,
-    behavior
+    behavior,
+    floor_leds
 
 INVARIANT
     current_floor : 1..NUM_FLOOR
+    & current_direction : ELEVATOR_DIRECTIONS
     & status_door : BOOL
     & status_work : BOOL
     & status_operation : BOOL
@@ -58,9 +61,11 @@ INVARIANT
     & people_in_elevator : NAT <-> NAT1
     & id_inside : NAT
     & behavior : NAT <-> ELEVATOR_DIRECTIONS
+    & floor_leds : 1..NUM_FLOOR <-> ELEVATOR_DIRECTIONS
 
 INITIALISATION
     current_floor := 3
+    || current_direction := empty
     || status_door := TRUE
     || status_work := FALSE
     || status_operation := TRUE
@@ -77,6 +82,7 @@ INITIALISATION
     || people_in_elevator := {}
     || id_inside := 0
     || behavior := {}
+    || floor_leds := {}
 
 OPERATIONS
         
@@ -87,31 +93,45 @@ OPERATIONS
         & status_door = FALSE
         & sensor_pir = TRUE
         & ask_to_repair = FALSE
+        & behavior /= {}
     THEN
-        IF behavior /= {} THEN
-            IF min(dom(behavior)) = 0 THEN
-                behavior := behavior - {0 |-> behavior(0)}
-                || status_door := TRUE
-                || status_work := FALSE
+        IF min(dom(behavior)) = 0 THEN
+            behavior := behavior - {0 |-> behavior(0)} 
+            || current_direction := empty
+            || status_door := TRUE
+            || status_work := FALSE
+            || time := time + 1
+        ELSE
+            IF behavior(min(dom(behavior))) = up & current_direction /= down THEN
+                 current_floor := current_floor + 1
+                || current_direction := up
+                || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {(display_floor~(TRUE) + 1) |-> TRUE} 
+                //|| behavior := {xx, yy | xx : dom(behavior) & yy ran(behavior) & (xx-1) |-> yy : behavior}
+                || behavior := { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {down}) & (xx- 1) |-> yy : (behavior /\ NAT * {down}) } \/ { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {up}) & (xx+1) |-> yy : (behavior /\ NAT * {up}) }
                 || time := time + 1
             ELSE
-                IF behavior(min(dom(behavior))) = up THEN
-                     current_floor := current_floor + 1
-                    || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {(display_floor~(TRUE) + 1) |-> TRUE} 
-                    || behavior := (behavior <+ {(min(dom(behavior)) - 1) |-> behavior(min(dom(behavior))), min(dom(behavior)) |-> empty})
-                    || time := time + 1
-                ELSE
-                    IF behavior(min(dom(behavior))) = down THEN
-                        current_floor := current_floor - 1
+                IF behavior(min(dom(behavior))) = down & current_direction /= up THEN
+                    current_floor := current_floor - 1
+                    || current_direction := down
                     || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {((display_floor~(TRUE)) - 1) |-> TRUE}
-                    || behavior := (behavior <+ {(min(dom(behavior)) - 1) |-> behavior(min(dom(behavior))), min(dom(behavior)) |-> empty})
+                    || behavior := { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {down}) & (xx+1) |-> yy : (behavior /\ NAT * {down}) } \/ { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {up}) & (xx-1) |-> yy : (behavior /\ NAT * {up}) }
                     || time := time + 1
+                ELSE 
+                    IF behavior(min(dom(behavior))) = up & current_direction = down THEN
+                        current_floor := current_floor - 1
+                        || current_direction := down
+                        || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {(display_floor~(TRUE) - 1) |-> TRUE}
+                        || behavior := { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {down}) & (xx+1) |-> yy : (behavior /\ NAT * {down}) } \/ { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {up}) & (xx-1) |-> yy : (behavior /\ NAT * {up}) }
+                      
+                        //|| behavior := (behavior <+ {(min(dom(behavior /\ NAT * {down})) - 1) |-> behavior(min(dom(behavior /\ NAT * {down}))), min(dom(behavior /\ NAT * {down})) |-> empty}, )
+                    ELSE
+                        current_floor := current_floor + 1
+                        || current_direction := up
+                        || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {(display_floor~(TRUE) + 1) |-> TRUE} 
+                        || behavior := { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {down}) & (xx-1) |-> yy : (behavior /\ NAT * {down}) } \/ { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {up}) & (xx+1) |-> yy : (behavior /\ NAT * {up}) }
                     END
                 END
             END
-        ELSE
-            current_floor := current_floor
-            || time := time + 1
         END
     END;
         
@@ -189,6 +209,7 @@ OPERATIONS
     THEN
         btn_special := btn_special <+ {btn_open |-> FALSE, btn_close |-> TRUE}
         || status_door := FALSE
+        || status_work := TRUE
     END;
     
     elevator_operation_break_to_repair =
@@ -296,7 +317,19 @@ OPERATIONS
         & status_operation = TRUE
         & btn_special(btn_phone) = FALSE
     THEN
-        request_points := request_points <+ {number_floor |-> direction}
+        IF (number_floor - current_floor) < 0 THEN
+            behavior := behavior <+ {(current_floor - number_floor) |-> down}
+            || request_points := request_points <+ {(current_floor - number_floor) |-> down}
+            || status_door := FALSE
+            || status_work := TRUE
+            || floor_leds(number_floor) := direction
+        ELSE
+            behavior := behavior <+ {(number_floor - current_floor) |-> up}
+            || request_points := request_points <+ {(number_floor - current_floor) |-> up}
+            || status_door := FALSE
+            || status_work := TRUE
+            || floor_leds(number_floor) := direction
+        END
     END;
 
     ground_floor_call_elevator = 
@@ -305,6 +338,9 @@ OPERATIONS
         & btn_special(btn_phone) = FALSE
     THEN
         request_points := request_points <+ {1 |-> up}
+        || behavior := behavior <+ {(current_floor - 1) |-> up}
+        || status_door := FALSE
+        || status_work := TRUE
     END;
 
     last_floor_call_elevator = 
@@ -313,9 +349,11 @@ OPERATIONS
         & btn_special(btn_phone) = FALSE
     THEN
         request_points := request_points <+ {NUM_FLOOR |-> down}
+        || behavior := behavior <+ {(NUM_FLOOR - current_floor) |-> down}
+        || status_door := FALSE
+        || status_work := TRUE
     END
-
-
+    
     // Operações que denotam o sistema do elevador: elevador + pavimento + logica de movimentação
 
     //Sistema com mais de 1 elevador?
