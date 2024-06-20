@@ -38,7 +38,9 @@ VARIABLES
     behavior,
     floor_leds,
     cancel_set,
-    state_blink
+    state_blink,
+    time_door,
+    alarm_door
 
 INVARIANT
     current_floor : 1..NUM_FLOOR
@@ -47,6 +49,7 @@ INVARIANT
     & status_work : BOOL
     & status_operation : BOOL
     & time : NAT
+    & time_door : NAT
     & sensor_pir : BOOL
     & sensor_balance : NAT
     & ((status_work = FALSE) => status_door = TRUE & (status_work = TRUE) => status_door = FALSE)
@@ -62,6 +65,8 @@ INVARIANT
     & floor_leds : 1..NUM_FLOOR <-> ELEVATOR_DIRECTIONS
     & cancel_set : NAT <-> 1..NUM_FLOOR
     & state_blink : ELEVATOR_FLOOR_DISPLAY --> BOOL
+    & alarm_door : BOOL
+    
 INITIALISATION
     current_floor := 3
     || current_direction := empty
@@ -72,6 +77,7 @@ INITIALISATION
     || btn_special := ELEVATOR_SPECIAL_BUTTONS * {FALSE} // relação com o elevador
     || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {3 |-> TRUE} // relação com o elevador
     || time := 0
+    || time_door := 1
     || sensor_pir := FALSE
     || sensor_balance := 0
     || display_direction_elevator := empty
@@ -82,6 +88,7 @@ INITIALISATION
     || floor_leds := {}
     || cancel_set := {}
     || state_blink := ELEVATOR_FLOOR_DISPLAY  * {FALSE}
+    || alarm_door := FALSE
 
 OPERATIONS
         
@@ -91,7 +98,6 @@ OPERATIONS
         & status_operation = TRUE
         
         & status_door = FALSE
-        & sensor_pir = TRUE
         & ask_to_repair = FALSE
         & behavior /= {}
     THEN
@@ -152,7 +158,6 @@ OPERATIONS
         & sensor_balance <= 450
         & user_orders : 1..NUM_FLOOR
         & status_operation = TRUE
-        & sensor_pir = TRUE
         & btn_special(btn_phone) = FALSE
 
     THEN        
@@ -176,7 +181,6 @@ OPERATIONS
         btn_special(btn_alarm) = FALSE
         & status_operation = TRUE
         & status_work = TRUE
-        & sensor_pir = TRUE
         
     THEN
         btn_special(btn_alarm) := TRUE 
@@ -186,38 +190,63 @@ OPERATIONS
     PRE
         btn_special(btn_phone) = FALSE
         & status_work = TRUE
-        & sensor_pir = TRUE
+        
         
     THEN
         btn_special := btn_special <+ {btn_phone |-> TRUE, btn_alarm |-> TRUE} 
         || status_operation := FALSE
     END;
+    
+    elevator_operation_hold_door = 
+    PRE
+        status_work = FALSE
+        & status_operation = TRUE
+        & alarm_door = FALSE
+        
+    THEN
+        IF time_door = 10 THEN 
+            time_door := 1
+            || alarm_door := TRUE
+            || sensor_pir := TRUE
+        ELSE 
+            sensor_pir := TRUE
+            || status_door := TRUE
+            || time_door := time_door + 1
+        END
+    END;
 
     elevator_operation_open_door = 
     PRE
-        btn_special(btn_open) = FALSE
-        & status_work = FALSE
+        status_work = FALSE
         & status_operation = TRUE
-        & status_door = FALSE
-        & sensor_pir = TRUE
+        & alarm_door = FALSE
         
     THEN
-        btn_special := btn_special <+ {btn_open |-> TRUE, btn_close |-> FALSE}
-        || status_door := TRUE
+        IF time_door = 10 THEN 
+            time_door := 1
+            || alarm_door := TRUE
+            || btn_special := btn_special <+ {btn_open |-> FALSE, btn_close |-> FALSE}
+        ELSE 
+            btn_special := btn_special <+ {btn_open |-> TRUE, btn_close |-> FALSE}
+            || status_door := TRUE
+            || time_door := time_door + 1
+        END
     END;
 
     elevator_operation_close_door = 
     PRE
-        btn_special(btn_close) = FALSE
+        (btn_special(btn_close) = FALSE
         & status_work = FALSE
         & status_operation = TRUE
         & status_door = TRUE
-        & sensor_pir = TRUE
+        ) or alarm_door = TRUE
         
     THEN
         btn_special := btn_special <+ {btn_open |-> FALSE, btn_close |-> TRUE}
         || status_door := FALSE
         || status_work := TRUE
+        || alarm_door := FALSE
+        
     END;
     
     elevator_operation_break_to_repair =
@@ -295,9 +324,9 @@ OPERATIONS
         & status_work = FALSE
         & status_door = TRUE
         & status_operation = TRUE
+        & alarm_door = FALSE
     THEN
         sensor_balance := sensor_balance + weight
-        || sensor_pir := TRUE
         || id_inside := id_inside + 1
         || people_in_elevator := people_in_elevator <+ {id_inside |-> weight}
     END;
@@ -308,6 +337,7 @@ OPERATIONS
         & status_door = TRUE
         & status_operation = TRUE
         & status_work = FALSE
+        & alarm_door = FALSE
     THEN
         IF card(people_in_elevator) > 1 THEN
             ANY p1 WHERE p1 : dom(people_in_elevator) THEN
@@ -317,7 +347,6 @@ OPERATIONS
         ELSE
             sensor_balance := 0
             || people_in_elevator := {}
-            || sensor_pir := FALSE
         END
     END;
 
