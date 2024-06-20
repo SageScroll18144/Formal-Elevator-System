@@ -120,6 +120,7 @@ OPERATIONS
                 
                 || behavior := { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {down}) & (xx- 1) |-> yy : (behavior /\ NAT * {down}) } \/ { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {up}) & (xx+1) |-> yy : (behavior /\ NAT * {up}) }
                 || time := 0
+                || status_work := TRUE
                 
             ELSE
                 IF behavior(min(dom(behavior))) = down & current_direction /= up THEN
@@ -128,6 +129,7 @@ OPERATIONS
                     || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {((display_floor~(TRUE)) - 1) |-> TRUE}
                     || behavior := { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {down}) & (xx+1) |-> yy : (behavior /\ NAT * {down}) } \/ { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {up}) & (xx-1) |-> yy : (behavior /\ NAT * {up}) }
                     || time := 0
+                    || status_work := TRUE
                     
                 ELSE 
                     IF behavior(min(dom(behavior))) = up & current_direction = down THEN
@@ -136,6 +138,7 @@ OPERATIONS
                         || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {(display_floor~(TRUE) - 1) |-> TRUE}
                         || behavior := { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {down}) & (xx+1) |-> yy : (behavior /\ NAT * {down}) } \/ { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {up}) & (xx-1) |-> yy : (behavior /\ NAT * {up}) }
                         || time := 0
+                        || status_work := TRUE
                       
                     ELSE
                         current_floor := current_floor + 1
@@ -143,6 +146,7 @@ OPERATIONS
                         || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {(display_floor~(TRUE) + 1) |-> TRUE} 
                         || behavior := { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {down}) & (xx-1) |-> yy : (behavior /\ NAT * {down}) } \/ { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {up}) & (xx+1) |-> yy : (behavior /\ NAT * {up}) }
                         || time := 0
+                        || status_work := TRUE
                     END
                 END
             END
@@ -156,6 +160,7 @@ OPERATIONS
         display_floor(current_floor) = TRUE
         & !(f1) . (f1 /= current_floor => display_floor(f1) = FALSE)
         & sensor_balance <= 450
+        & sensor_balance > 0
         & user_orders : 1..NUM_FLOOR
         & status_operation = TRUE
         & btn_special(btn_phone) = FALSE
@@ -163,14 +168,10 @@ OPERATIONS
     THEN        
         IF (user_orders - current_floor) < 0 THEN
             behavior := behavior \/ {(current_floor - user_orders) |-> down}
-            || status_door := FALSE
-            || status_work := TRUE
             || btn_actions(user_orders) := TRUE
             || time := 0
         ELSE
             behavior := behavior \/ {(user_orders - current_floor) |-> up}
-            || status_door := FALSE
-            || status_work := TRUE
             || btn_actions(user_orders) := TRUE
             || time := 0
         END
@@ -200,18 +201,26 @@ OPERATIONS
     elevator_operation_hold_door = 
     PRE
         status_work = FALSE
+        & status_door = TRUE
         & status_operation = TRUE
         & alarm_door = FALSE
         
     THEN
-        IF time_door = 10 THEN 
+        IF time_door = 10 & card(behavior) > 0 THEN 
             time_door := 1
             || alarm_door := TRUE
             || sensor_pir := TRUE
-        ELSE 
-            sensor_pir := TRUE
+        ELSE IF card(behavior) > 0 THEN
+             sensor_pir := TRUE
             || status_door := TRUE
             || time_door := time_door + 1
+           ELSE
+             sensor_pir := TRUE
+            || status_door := TRUE
+            || time_door := 1
+       
+            END 
+        
         END
     END;
 
@@ -220,16 +229,23 @@ OPERATIONS
         status_work = FALSE
         & status_operation = TRUE
         & alarm_door = FALSE
-        
+        & sensor_balance > 0
     THEN
-        IF time_door = 10 THEN 
+        IF time_door = 10 & card(behavior) > 0 THEN 
             time_door := 1
             || alarm_door := TRUE
             || btn_special := btn_special <+ {btn_open |-> FALSE, btn_close |-> FALSE}
-        ELSE 
+        ELSE IF card(behavior) > 0 THEN
             btn_special := btn_special <+ {btn_open |-> TRUE, btn_close |-> FALSE}
             || status_door := TRUE
             || time_door := time_door + 1
+           ELSE
+            btn_special := btn_special <+ {btn_open |-> TRUE, btn_close |-> FALSE}
+            || status_door := TRUE
+            || time_door := 1
+       
+            END 
+        
         END
     END;
 
@@ -239,13 +255,14 @@ OPERATIONS
         & status_work = FALSE
         & status_operation = TRUE
         & status_door = TRUE
-        ) or alarm_door = TRUE
+        & sensor_balance > 0) or alarm_door = TRUE
         
     THEN
         btn_special := btn_special <+ {btn_open |-> FALSE, btn_close |-> TRUE}
         || status_door := FALSE
         || status_work := TRUE
         || alarm_door := FALSE
+        || time_door := 1
         
     END;
     
@@ -371,21 +388,36 @@ OPERATIONS
         & direction : ELEVATOR_DIRECTIONS & direction /= empty
         & status_operation = TRUE
         & btn_special(btn_phone) = FALSE
+        & ({number_floor |-> direction} /\ floor_leds) = {}
     THEN
-        IF (number_floor - current_floor) < 0 THEN
-            behavior := behavior <+ {(current_floor - number_floor) |-> down}
-            
-            || status_door := FALSE
-            || status_work := TRUE
-            || floor_leds(number_floor) := direction
-            || time := 0
+        IF sensor_pir = FALSE THEN
+            IF (number_floor - current_floor) < 0 THEN
+                behavior := behavior \/ {(current_floor - number_floor) |-> down}
+                || status_door := FALSE
+                || status_work := TRUE
+                || floor_leds := floor_leds \/ {(number_floor) |-> direction}
+                || time := 0
+            ELSE 
+                behavior := behavior \/ {(number_floor - current_floor) |-> up}
+                || status_door := FALSE
+                || status_work := TRUE
+                || floor_leds := floor_leds \/ {(number_floor) |-> direction}
+                || time := 0
+            END
         ELSE
-            behavior := behavior <+ {(number_floor - current_floor) |-> up}
-            
-            || status_door := FALSE
-            || status_work := TRUE
-            || floor_leds(number_floor) := direction
-            || time := 0
+            IF (number_floor - current_floor) < 0 THEN
+                behavior := behavior \/ {(current_floor - number_floor) |-> down}
+                || status_door := TRUE
+                || status_work := FALSE
+                || floor_leds := floor_leds \/ {number_floor |-> direction}
+                || time := 0
+            ELSE 
+                behavior := behavior \/ {(number_floor - current_floor) |-> up}
+                || status_door := TRUE
+                || status_work := FALSE
+                || floor_leds := floor_leds \/ {(number_floor) |-> direction}
+                || time := 0
+            END
         END
     END;
 
@@ -394,10 +426,20 @@ OPERATIONS
         status_operation = TRUE
         & btn_special(btn_phone) = FALSE
     THEN
-        behavior := behavior <+ {(current_floor - 1) |-> up}
-        || status_door := FALSE
-        || status_work := TRUE
-        || time := 0
+        IF sensor_pir = TRUE THEN
+            behavior := behavior <+ {(current_floor - 1) |-> down}
+            || time := 0
+            || floor_leds := floor_leds <+ {1 |-> up}
+            || status_door := TRUE
+            || status_work := FALSE
+        ELSE
+            behavior := behavior <+ {(current_floor - 1) |-> down}
+            || time := 0
+            || floor_leds := floor_leds <+ {1 |-> up}
+            || status_door := FALSE
+            || status_work := TRUE
+            
+        END
     END;
 
     last_floor_call_elevator = 
@@ -405,10 +447,19 @@ OPERATIONS
         status_operation = TRUE
         & btn_special(btn_phone) = FALSE
     THEN
-        behavior := behavior <+ {(NUM_FLOOR - current_floor) |-> down}
-        || status_door := FALSE
-        || status_work := TRUE
-        || time := 0
+        IF sensor_pir = TRUE THEN
+            behavior := behavior <+ {(NUM_FLOOR - current_floor) |-> up}
+            || time := 0
+            || floor_leds := floor_leds <+ {1 |-> down}
+            || status_door := TRUE
+            || status_work := FALSE
+        ELSE
+            behavior := behavior <+ {(NUM_FLOOR - current_floor) |-> up}
+            || time := 0
+            || floor_leds := floor_leds <+ {1 |-> down}
+            || status_door := FALSE
+            || status_work := TRUE
+        END
     END;
     
     cancel(num_floor) =
