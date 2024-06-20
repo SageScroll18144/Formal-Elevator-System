@@ -102,7 +102,7 @@ OPERATIONS
         & behavior /= {}
     THEN
         IF min(dom(behavior)) = 0 THEN
-            behavior := behavior - {0 |-> behavior(0)} 
+            behavior := behavior - {0 |-> up, 0 |-> down}  
             || current_direction := empty
             || status_door := TRUE
             || status_work := FALSE
@@ -255,7 +255,7 @@ OPERATIONS
         & status_work = FALSE
         & status_operation = TRUE
         & status_door = TRUE
-        & sensor_balance > 0) or alarm_door = TRUE
+       ) or alarm_door = TRUE
         
     THEN
         btn_special := btn_special <+ {btn_open |-> FALSE, btn_close |-> TRUE}
@@ -322,17 +322,18 @@ OPERATIONS
         || btn_special := ELEVATOR_SPECIAL_BUTTONS * {FALSE} // relação com o elevador
         || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {current_floor |-> TRUE} // relação com o elevador
         || time := 0
+        || time_door := 1
         || sensor_pir := FALSE
         || sensor_balance := 0
         || display_direction_elevator := empty
         || ask_to_repair := FALSE
-        
         || people_in_elevator := {}
         || id_inside := 0
         || behavior := {}
         || floor_leds := {}
         || cancel_set := {}
-        
+        || state_blink := ELEVATOR_FLOOR_DISPLAY  * {FALSE}
+        || alarm_door := FALSE
     END;
 
     enter_elevator(weight) = 
@@ -389,6 +390,7 @@ OPERATIONS
         & status_operation = TRUE
         & btn_special(btn_phone) = FALSE
         & ({number_floor |-> direction} /\ floor_leds) = {}
+        & number_floor /= current_floor
     THEN
         IF sensor_pir = FALSE THEN
             IF (number_floor - current_floor) < 0 THEN
