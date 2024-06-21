@@ -1,5 +1,5 @@
 MACHINE
-    Elevator_system
+    Elevator_System
     
 SETS
     ELEVATOR_DIRECTIONS = {up, down, empty}; // Visor
