@@ -1,5 +1,5 @@
 MACHINE
-    Elevator_System
+    Elevator_system
     
 SETS
     ELEVATOR_DIRECTIONS = {up, down, empty}; // Visor
@@ -68,7 +68,7 @@ INVARIANT
     & behavior : NAT <-> ELEVATOR_DIRECTIONS
     & floor_leds : 1..NUM_FLOOR <-> ELEVATOR_DIRECTIONS
     & cancel_set : NAT <-> 1..NUM_FLOOR
-    & cancel_set_floor : NAT <-> floor_leds
+    & cancel_set_floor : NAT <-> (1..NUM_FLOOR <-> ELEVATOR_DIRECTIONS)
     & state_blink : ELEVATOR_FLOOR_DISPLAY --> BOOL
     & state_blink_floor : ELEVATOR_FLOOR_DISPLAY --> BOOL
     & alarm_door : BOOL
@@ -536,14 +536,14 @@ OPERATIONS
         ELSE IF time_floor > 1 & card(behavior) > 1 & cancel_set_floor(time_floor-2) = {num_floor |-> direction} & cancel_set_floor(time_floor-2) = cancel_set_floor(time_floor-1)  THEN
             IF (num_floor - current_floor) < 0 THEN
                 behavior := behavior - {(current_floor - num_floor) |-> down}
-                || btn_actions(num_floor) := FALSE
+                || floor_leds := floor_leds - {num_floor |-> direction}
                 || cancel_set_floor := {}
                 || time_floor := 0
                 || current_direction := empty
                 || state_blink_floor(num_floor) := FALSE
             ELSE 
                 behavior := behavior - {(num_floor - current_floor) |-> up}
-                || btn_actions(num_floor) := FALSE
+                || floor_leds := floor_leds - {num_floor |-> direction}
                 || cancel_set_floor := {}
                 || time_floor := 0
                 || current_direction := empty
