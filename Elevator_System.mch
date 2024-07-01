@@ -1,5 +1,5 @@
 MACHINE
-    Elevator_System
+    Elevator_system
     
 SETS
     ELEVATOR_DIRECTIONS = {up, down, empty}; // Visor
@@ -61,6 +61,7 @@ INVARIANT
     & display_floor : ELEVATOR_FLOOR_DISPLAY --> BOOL
     & display_floor(current_floor) = TRUE
     & display_direction_elevator : ELEVATOR_DIRECTIONS
+    & display_direction_elevator = current_direction
     & ask_to_repair : BOOL
     & people_in_elevator : NAT <-> NAT1
     & id_inside : NAT
@@ -110,6 +111,7 @@ OPERATIONS
         IF min(dom(behavior)) = 0 THEN
             behavior := behavior - {0 |-> up, 0 |-> down}  
             || current_direction := empty
+            || display_direction_elevator := empty
             || status_door := TRUE
             || status_work := FALSE
             || btn_special(btn_close) := FALSE
@@ -123,6 +125,7 @@ OPERATIONS
             IF behavior(min(dom(behavior))) = up & current_direction /= down THEN
                  current_floor := current_floor + 1
                 || current_direction := up
+                || display_direction_elevator := up
                 || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {(display_floor~(TRUE) + 1) |-> TRUE} 
                 
                 || behavior := { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {down}) & (xx- 1) |-> yy : (behavior /\ NAT * {down}) } \/ { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {up}) & (xx+1) |-> yy : (behavior /\ NAT * {up}) }
@@ -134,6 +137,7 @@ OPERATIONS
                 IF behavior(min(dom(behavior))) = down & current_direction /= up THEN
                     current_floor := current_floor - 1
                     || current_direction := down
+                    || display_direction_elevator := down
                     || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {((display_floor~(TRUE)) - 1) |-> TRUE}
                     || behavior := { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {down}) & (xx+1) |-> yy : (behavior /\ NAT * {down}) } \/ { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {up}) & (xx-1) |-> yy : (behavior /\ NAT * {up}) }
                     || time := 0
@@ -144,6 +148,7 @@ OPERATIONS
                     IF behavior(min(dom(behavior))) = up & current_direction = down THEN
                         current_floor := current_floor - 1
                         || current_direction := down
+                        || display_direction_elevator := empty
                         || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {(display_floor~(TRUE) - 1) |-> TRUE}
                         || behavior := { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {down}) & (xx+1) |-> yy : (behavior /\ NAT * {down}) } \/ { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {up}) & (xx-1) |-> yy : (behavior /\ NAT * {up}) }
                         || time := 0
@@ -153,6 +158,7 @@ OPERATIONS
                     ELSE
                         current_floor := current_floor + 1
                         || current_direction := up
+                        || display_direction_elevator := up
                         || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {(display_floor~(TRUE) + 1) |-> TRUE} 
                         || behavior := { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {down}) & (xx-1) |-> yy : (behavior /\ NAT * {down}) } \/ { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {up}) & (xx+1) |-> yy : (behavior /\ NAT * {up}) }
                         || time := 0
@@ -299,6 +305,7 @@ OPERATIONS
                 status_work := FALSE
                 || current_floor := current_floor + 1 
                 || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {display_floor~(TRUE) + 1 |-> TRUE}
+                || current_direction := empty
                 || display_direction_elevator := empty
                 || ask_to_repair := FALSE
                 || behavior := {}
@@ -310,6 +317,7 @@ OPERATIONS
                 status_work := FALSE
                 || current_floor := current_floor - 1 
                 || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {display_floor~(TRUE) - 1 |-> TRUE}
+                || current_direction := empty
                 || display_direction_elevator := empty
                 || ask_to_repair := FALSE
                 || behavior := {}
@@ -491,16 +499,16 @@ OPERATIONS
         btn_actions(num_floor) = TRUE
         & status_operation = TRUE
     THEN
-        IF card(behavior) = 1 THEN
-            state_blink(num_floor) := TRUE
-
-        ELSE IF time > 1 & card(behavior) > 1 & cancel_set(time-2) = num_floor & cancel_set(time-2) = cancel_set(time-1)  THEN
-            IF (num_floor - current_floor) < 0 THEN
+        IF time > 1 & cancel_set(time-2) = num_floor & cancel_set(time-2) = cancel_set(time-1)  THEN
+            IF card(behavior) = 1 THEN
+                state_blink(num_floor) := TRUE
+            ELSE IF (num_floor - current_floor) < 0 THEN
                 behavior := behavior - {(current_floor - num_floor) |-> down}
                 || btn_actions(num_floor) := FALSE
                 || cancel_set := {}
                 || time := 0
                 || current_direction := empty
+                || display_direction_elevator := empty
                 || state_blink(num_floor) := FALSE
             ELSE 
                 behavior := behavior - {(num_floor - current_floor) |-> up}
@@ -508,14 +516,14 @@ OPERATIONS
                 || cancel_set := {}
                 || time := 0
                 || current_direction := empty
+                || display_direction_elevator := empty
                 || state_blink(num_floor) := FALSE
             END
-            
+            END
         ELSE
             cancel_set := cancel_set <+ {time |-> num_floor}
             || time := time + 1
             || state_blink(num_floor) := FALSE
-           END
         END
     END;
     
@@ -526,44 +534,49 @@ OPERATIONS
         & num_floor /= current_floor 
         & {num_floor |-> direction} /\ floor_leds /= {}
         & status_operation = TRUE
+        & direction /= empty
     THEN
-        IF card(behavior) = 1 THEN
-            IF current_direction = up THEN
-                behavior := {}
-                || floor_leds := floor_leds - {num_floor |-> direction}
-                || cancel_set_floor := {}
-                || time_floor := 0
-                || current_direction := empty
-                || current_floor := current_floor + 1 
-                || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {display_floor~(TRUE) +1 |-> TRUE}
-                
-             ELSE IF current_direction = down THEN
-                behavior := {}
-                || floor_leds := floor_leds - {num_floor |-> direction}
-                || cancel_set_floor := {}
-                || time_floor := 0
-                || current_direction := empty
-                || current_floor := current_floor - 1
-                || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {display_floor~(TRUE) -1 |-> TRUE}
-                 
-             ELSE
-                 behavior := {}
-                || floor_leds := floor_leds - {num_floor |-> direction}
-                || cancel_set_floor := {}
-                || time_floor := 0
-                || current_direction := empty
-                 
-           
-             END
-             END
-
-        ELSE IF time_floor > 1 & card(behavior) > 1 & cancel_set_floor(time_floor-2) = {num_floor |-> direction} & cancel_set_floor(time_floor-2) = cancel_set_floor(time_floor-1)  THEN
-            IF (num_floor - current_floor) < 0 THEN
+        IF time_floor > 1 & cancel_set_floor(time_floor-2) = {num_floor |-> direction} & cancel_set_floor(time_floor-2) = cancel_set_floor(time_floor-1) THEN
+            IF card(behavior) = 1 THEN
+                IF current_direction = up THEN
+                    behavior := {}
+                    || floor_leds := floor_leds - {num_floor |-> direction}
+                    || cancel_set_floor := {}
+                    || time_floor := 0
+                    || current_direction := empty
+                    || display_direction_elevator := empty
+                    || current_floor := current_floor + 1 
+                    || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {display_floor~(TRUE) +1 |-> TRUE}
+                    
+                 ELSE IF current_direction = down THEN
+                    behavior := {}
+                    || floor_leds := floor_leds - {num_floor |-> direction}
+                    || cancel_set_floor := {}
+                    || time_floor := 0
+                    || current_direction := empty
+                    || display_direction_elevator := empty
+                    || current_floor := current_floor - 1
+                    || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {display_floor~(TRUE) -1 |-> TRUE}
+                     
+                 ELSE
+                     behavior := {}
+                    || floor_leds := floor_leds - {num_floor |-> direction}
+                    || cancel_set_floor := {}
+                    || time_floor := 0
+                    || current_direction := empty
+                    || display_direction_elevator := empty
+                     
+               
+                 END
+            END
+            
+            ELSE IF (num_floor - current_floor) < 0 THEN
                 behavior := behavior - {(current_floor - num_floor) |-> down}
                 || floor_leds := floor_leds - {num_floor |-> direction}
                 || cancel_set_floor := {}
                 || time_floor := 0
                 || current_direction := empty
+                || display_direction_elevator := empty
        
             ELSE 
                 behavior := behavior - {(num_floor - current_floor) |-> up}
@@ -571,14 +584,15 @@ OPERATIONS
                 || cancel_set_floor := {}
                 || time_floor := 0
                 || current_direction := empty
+                || display_direction_elevator := empty
        
+            END
             END
             
         ELSE
             cancel_set_floor := cancel_set_floor <+ {time_floor |-> {num_floor |-> direction}}
             || time_floor := time_floor + 1
      
-           END
         END
-    END
+     END
 END
