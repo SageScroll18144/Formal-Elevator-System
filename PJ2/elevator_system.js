@@ -38,8 +38,8 @@
 
 for (var i = 1; i <= 8; i++){
   bms.observe('formula', {
-    selector: "#btn_red" + i, //alterar para o ID svg
-    formulas: ["display_floor(" + i + ")"],
+    selector: "#btn_red" + i, 
+    formulas: ["btn_actions(" + i + ")"],
     trigger: function (origin, values) {
       
       switch (values[0]) {
@@ -50,6 +50,44 @@ for (var i = 1; i <= 8; i++){
           origin.attr("xlink:href", "btn_green.png");
           break;
       }      
+    }
+  });
+
+  bms.observe('formula', {
+    selector: "#display_floor_id", 
+    formulas: ["display_floor(" + i + ")"],
+    trigger: function (origin, values) {
+      
+      if(values[0] == "TRUE") {
+        switch (i) {
+          case 1:
+            origin.attr("xlink:href", "one.png");
+            break;
+          case 2:
+            origin.attr("xlink:href", "two.png");
+            break;
+          case 3:
+            origin.attr("xlink:href", "three.png");
+            break;
+          case 4:
+            origin.attr("xlink:href", "four.png");
+            break;
+          case 5:
+            origin.attr("xlink:href", "five.png");
+            break;
+          case 6:
+            origin.attr("xlink:href", "six.png");
+            break;
+          case 7:
+            origin.attr("xlink:href", "seven.png");
+            break;
+          case 8:
+            origin.attr("xlink:href", "eight.png");
+            break;
+        }  
+      }
+
+          
     }
   });
 }
