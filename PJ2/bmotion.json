@@ -1,0 +1,10 @@
+{
+  "model": "Elevator_System.mch",
+  "id": "elevator",
+  "name": "Elevator System visualization",
+  "template": "elevator_system.html",
+  "autoOpen": [
+    "CurrentTrace",
+    "Events"
+  ]
+}
