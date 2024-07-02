@@ -26,7 +26,7 @@
      showgrid="false"
      inkscape:zoom="0.69664703"
      inkscape:cx="396.90114"
-     inkscape:cy="560.54212"
+     inkscape:cy="543.31675"
      inkscape:window-width="1850"
      inkscape:window-height="1016"
      inkscape:window-x="0"
@@ -103,5 +103,314 @@
        id="image1686-2-3"
        x="-0.76538563"
        y="259.4819" />
+    <image
+       width="152.90379"
+       height="253.1812"
+       preserveAspectRatio="none"
+       xlink:href="into_elevator.png"
+       id="image239"
+       x="57.074509"
+       y="0.093986869" />
+    <image
+       width="28.768648"
+       height="42.33519"
+       preserveAspectRatio="none"
+       xlink:href="phone.png"
+       id="image295"
+       x="181.20966"
+       y="253.27519" />
+    <image
+       width="32.537659"
+       height="43.364792"
+       preserveAspectRatio="none"
+       xlink:href="alarm.png"
+       id="image337"
+       x="148.67201"
+       y="253.27519" />
+    <image
+       width="45.847584"
+       height="42.932358"
+       preserveAspectRatio="none"
+       xlink:href="open_door_btn.png"
+       id="image393"
+       x="102.82444"
+       y="253.70763" />
+    <image
+       width="47.442345"
+       height="42.283264"
+       preserveAspectRatio="none"
+       xlink:href="close_door_btn.png"
+       id="image449"
+       x="57.074509"
+       y="254.11652" />
+    <image
+       width="17.162003"
+       height="296.30579"
+       preserveAspectRatio="none"
+       xlink:href="wall.png"
+       id="image505"
+       x="39.912506"
+       y="0.093986869" />
+    <image
+       width="56.091667"
+       height="82.814583"
+       preserveAspectRatio="none"
+       xlink:href="one.png"
+       id="image617"
+       x="102.3433"
+       y="34.668976" />
+    <image
+       width="78.106445"
+       height="97.627609"
+       preserveAspectRatio="none"
+       xlink:href="display_btn.png"
+       id="image833"
+       x="91.988808"
+       y="134.18527" />
+    <image
+       width="8.8869629"
+       height="8.5843134"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889"
+       x="43.914848"
+       y="14.542531" />
+    <image
+       width="8.8869629"
+       height="8.5843134"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-3-7"
+       x="43.435959"
+       y="83.63475" />
+    <image
+       width="8.8869629"
+       height="8.5843134"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-6-5"
+       x="43.435959"
+       y="92.219063" />
+    <image
+       width="8.8869629"
+       height="8.5843134"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-3-7-6"
+       x="43.14518"
+       y="121.00751" />
+    <image
+       width="8.8869629"
+       height="8.5843134"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-6-5-2"
+       x="43.14518"
+       y="129.59183" />
+    <image
+       width="8.8869629"
+       height="8.5843134"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-3-7-9"
+       x="43.689651"
+       y="46.966702" />
+    <image
+       width="8.8869629"
+       height="8.5843134"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-6-5-1"
+       x="43.689651"
+       y="55.551014" />
+    <image
+       width="8.8869629"
+       height="8.5843134"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-3-7-2"
+       x="42.682304"
+       y="158.73929" />
+    <image
+       width="8.8869629"
+       height="8.5843134"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-6-5-7"
+       x="42.682304"
+       y="167.32361" />
+    <image
+       width="8.8869629"
+       height="8.5843134"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-3-7-0"
+       x="42.390034"
+       y="196.05124" />
+    <image
+       width="8.8869629"
+       height="8.5843134"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-6-5-9"
+       x="42.390034"
+       y="204.63554" />
+    <image
+       width="8.8869629"
+       height="8.5843134"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-3-7-3"
+       x="41.848537"
+       y="231.8692" />
+    <image
+       width="8.8869629"
+       height="8.5843134"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-6-5-6"
+       x="41.848537"
+       y="240.45352" />
+    <image
+       width="8.8869629"
+       height="8.5843134"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-3-7-06"
+       x="42.188271"
+       y="272.32925" />
+    <image
+       width="5.2952261"
+       height="5.0296659"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-3-7-7"
+       x="105.70311"
+       y="156.41898" />
+    <image
+       width="5.2952261"
+       height="5.0296659"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-3-7-7-0"
+       x="106.49906"
+       y="179.40419" />
+    <image
+       width="5.2952261"
+       height="5.0296659"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-3-7-7-2"
+       x="105.82997"
+       y="202.85063" />
+    <image
+       width="5.2952261"
+       height="5.0296659"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-3-7-7-3"
+       x="105.76468"
+       y="225.95287" />
+    <image
+       width="5.2952261"
+       height="5.0296659"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-3-7-7-7"
+       x="150.85054"
+       y="156.87608" />
+    <image
+       width="5.2952261"
+       height="5.0296659"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-3-7-7-5"
+       x="151.50481"
+       y="179.45018" />
+    <image
+       width="5.2952261"
+       height="5.0296659"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-3-7-7-9"
+       x="151.75406"
+       y="202.32246" />
+    <image
+       width="5.2952261"
+       height="5.0296659"
+       preserveAspectRatio="none"
+       xlink:href="btn_red.png"
+       id="image889-3-7-7-22"
+       x="152.09232"
+       y="225.96176" />
+    <image
+       width="10.865362"
+       height="10.645793"
+       preserveAspectRatio="none"
+       xlink:href="none.png"
+       id="image1895"
+       x="41.936447"
+       y="3.8967381" />
+    <image
+       width="10.865362"
+       height="10.645793"
+       preserveAspectRatio="none"
+       xlink:href="none.png"
+       id="image1895-8"
+       x="41.71125"
+       y="36.320908" />
+    <image
+       width="10.865362"
+       height="10.645793"
+       preserveAspectRatio="none"
+       xlink:href="none.png"
+       id="image1895-9"
+       x="41.457558"
+       y="72.98896" />
+    <image
+       width="10.865362"
+       height="10.645793"
+       preserveAspectRatio="none"
+       xlink:href="none.png"
+       id="image1895-7"
+       x="41.166779"
+       y="110.36172" />
+    <image
+       width="10.865362"
+       height="10.645793"
+       preserveAspectRatio="none"
+       xlink:href="none.png"
+       id="image1895-3"
+       x="40.703903"
+       y="148.09349" />
+    <image
+       width="10.865362"
+       height="10.645793"
+       preserveAspectRatio="none"
+       xlink:href="none.png"
+       id="image1895-6"
+       x="40.411636"
+       y="185.40544" />
+    <image
+       width="10.865362"
+       height="10.645793"
+       preserveAspectRatio="none"
+       xlink:href="none.png"
+       id="image1895-1"
+       x="39.87014"
+       y="221.2234" />
+    <image
+       width="10.865362"
+       height="10.645793"
+       preserveAspectRatio="none"
+       xlink:href="none.png"
+       id="image1895-93"
+       x="42.188271"
+       y="261.68347" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#image1895-93"
+       id="use2097" />
   </g>
 </svg>
