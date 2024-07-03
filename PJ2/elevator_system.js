@@ -56,7 +56,7 @@ for (var i = 1; i <= 8; i++){
     formulas: ["status_door", "current_floor"],
     trigger: function (origin, values) { 
       console.log("Valores: ", values);
-      if(values[0] === "TRUE" && values[1] === i.toString()) {
+      if(values[0] == "TRUE" && values[1] == i.toString()) {
         origin.attr("xlink:href", "open_door.png");
       } else {
         origin.attr("xlink:href", "close_door.png");
