@@ -51,8 +51,9 @@ for (var i = 1; i <= 8; i++){
   });
 
   //função de atualização da porta
-  for (var index = 1; index <= 8; index++){
-    function updateDoor(origin, values) {
+  
+  function updateDoor(origin, values) {
+    for (var index = 1; index <= 8; index++) {
         if (values[0] === "TRUE" && values[1] === index.toString()) {
           origin.attr("xlink:href", "open_door.png");
         } else {
@@ -60,6 +61,7 @@ for (var i = 1; i <= 8; i++){
         }
     }
   }
+
 
   // Portas do pavimento
   bms.observe('formula', {
