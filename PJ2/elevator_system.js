@@ -19,36 +19,34 @@ for (var i = 1; i <= 8; i++){
   // Display 7 segmentos interno do elevador(visor)
   bms.observe('formula', {
     selector: "#display_floor_id", 
-    formulas: ["display_floor(" + i + ")"],
+    formulas: ["current_floor"],
     trigger: function (origin, values) {
-      if(values[0] == "TRUE") {
-        switch (i) {
-          case 1:
-            origin.attr("xlink:href", "one.png");
-            break;
-          case 2:
-            origin.attr("xlink:href", "two.png");
-            break;
-          case 3:
-            origin.attr("xlink:href", "three.png");
-            break;
-          case 4:
-            origin.attr("xlink:href", "four.png");
-            break;
-          case 5:
-            origin.attr("xlink:href", "five.png");
-            break;
-          case 6:
-            origin.attr("xlink:href", "six.png");
-            break;
-          case 7:
-            origin.attr("xlink:href", "seven.png");
-            break;
-          case 8:
-            origin.attr("xlink:href", "eight.png");
-            break;
-        }  
-      }           
+      switch (values[0]) {
+        case "1":
+          origin.attr("xlink:href", "one.png");
+          break;
+        case "2":
+          origin.attr("xlink:href", "two.png");
+          break;
+        case "3":
+          origin.attr("xlink:href", "three.png");
+          break;
+        case "4":
+          origin.attr("xlink:href", "four.png");
+          break;
+        case "5":
+          origin.attr("xlink:href", "five.png");
+          break;
+        case "6":
+          origin.attr("xlink:href", "six.png");
+          break;
+        case "7":
+          origin.attr("xlink:href", "seven.png");
+          break;
+        case "8":
+          origin.attr("xlink:href", "eight.png");
+          break;
+      }             
     }
   });
 
