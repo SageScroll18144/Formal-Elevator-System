@@ -87,7 +87,7 @@ for (var i = 1; i <= 8; i++){
     selector: "#btn_floor" + (2 * i), 
     formulas: ["floor_leds(" + i + ")"],
     trigger: function (origin, values) {
-      if(values[0] == "up"){
+      if(values[0] === "up"){
         origin.attr("xlink:href", "btn_green.png");
       }else {
         origin.attr("xlink:href", "btn_red.png");
@@ -98,10 +98,10 @@ for (var i = 1; i <= 8; i++){
 
   // Botões do pavimento: DOWN
   bms.observe('formula', {
-    selector: "#btn_floor" + (2 * i - 1),
+    selector: "#btn_floor" + ((2 * i) - 1),
     formulas: ["floor_leds(" + i + ")"],
     trigger: function (origin, values) {
-      if(values[0] == "down"){
+      if(values[0] === "down"){
         origin.attr("xlink:href", "btn_green.png");
       }else {
         origin.attr("xlink:href", "btn_red.png");
