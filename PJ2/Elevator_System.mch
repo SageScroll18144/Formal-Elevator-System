@@ -481,14 +481,14 @@ OPERATIONS
             behavior := behavior <+ {(NUM_FLOOR - current_floor) |-> up}
             || time := 0
             || time_floor := 0
-            || floor_leds := floor_leds <+ {1 |-> down}
+            || floor_leds := floor_leds <+ {NUM_FLOOR |-> down}
             || status_door := TRUE
             || status_work := FALSE
         ELSE
             behavior := behavior <+ {(NUM_FLOOR - current_floor) |-> up}
             || time := 0
             || time_floor := 0
-            || floor_leds := floor_leds <+ {1 |-> down}
+            || floor_leds := floor_leds <+ {NUM_FLOOR |-> down}
             || status_door := FALSE
             || status_work := TRUE
         END
