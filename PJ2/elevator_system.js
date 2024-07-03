@@ -51,26 +51,26 @@ for (var i = 1; i <= 8; i++){
   });
 
   //função de atualização da porta
+  (function(index) {
+    function updateDoor(origin, values) {
+      console.log("Valor de index: ", index);
+      if (values[0] === "TRUE" && values[1] === index.toString()) {
+        origin.attr("xlink:href", "open_door.png");
+      } else {
+        origin.attr("xlink:href", "close_door.png");
+      }
+    }
   
-  function updateDoor(origin, values) {
-    for (var index = 1; index <= 8; index++) {
-        if (values[0] === "TRUE" && values[1] === index.toString()) {
-          origin.attr("xlink:href", "open_door.png");
-        } else {
-          origin.attr("xlink:href", "close_door.png");
-        }
-    }
-  }
-
-
-  // Portas do pavimento
-  bms.observe('formula', {
-    selector: "#floor" + i, 
-    formulas: ["status_door", "current_floor"],
-    trigger: function (origin, values) { 
-       updateDoor(origin, values);      
-    }
-  });
+  
+    // Portas do pavimento
+    bms.observe('formula', {
+      selector: "#floor" + i, 
+      formulas: ["status_door", "current_floor"],
+      trigger: function (origin, values) { 
+         updateDoor(origin, values);      
+      }
+    });
+  })(i);
 
   // Display do pavimento(sentido vetorial do elevador)
    bms.observe('formula', {
