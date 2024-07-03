@@ -55,9 +55,9 @@ for (var i = 1; i <= 8; i++){
   // Portas do pavimento
   bms.observe('formula', {
     selector: "#floor" + i, 
-    formulas: ["display_floor(" + i + ")"],
-    trigger: function (origin, values) {
-      if(values[0] == "TRUE") {
+    formulas: ["status_door", "current_floor"],
+    trigger: function (origin, values) { 
+      if(values[0] == "TRUE" && values[1] == i) {
         origin.attr("xlink:href", "open_door.png");
       } else {
         origin.attr("xlink:href", "close_door.png");
