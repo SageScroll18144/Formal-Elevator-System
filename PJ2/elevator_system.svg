@@ -44,7 +44,7 @@
        height="37.055416"
        preserveAspectRatio="none"
        xlink:href="open_door.png"
-       id="image1686"
+       id="floor8"
        x="-0.76538563"
        y="0.093986869" />
     <image
@@ -52,7 +52,7 @@
        height="37.055416"
        preserveAspectRatio="none"
        xlink:href="open_door.png"
-       id="image1686-8"
+       id="floor7"
        x="-0.76538563"
        y="37.149403" />
     <image
@@ -60,7 +60,7 @@
        height="37.055416"
        preserveAspectRatio="none"
        xlink:href="open_door.png"
-       id="image1686-7"
+       id="floor6"
        x="-0.76538563"
        y="74.204819" />
     <image
@@ -68,7 +68,7 @@
        height="37.055416"
        preserveAspectRatio="none"
        xlink:href="open_door.png"
-       id="image1686-9"
+       id="floor5"
        x="-0.76538563"
        y="111.26023" />
     <image
@@ -76,7 +76,7 @@
        height="37.055416"
        preserveAspectRatio="none"
        xlink:href="open_door.png"
-       id="image1686-2"
+       id="floor4"
        x="-0.76538563"
        y="148.31564" />
     <image
@@ -84,7 +84,7 @@
        height="37.055416"
        preserveAspectRatio="none"
        xlink:href="open_door.png"
-       id="image1686-2-0"
+       id="floor3"
        x="-0.76538563"
        y="185.37106" />
     <image
@@ -92,7 +92,7 @@
        height="37.055416"
        preserveAspectRatio="none"
        xlink:href="open_door.png"
-       id="image1686-2-2"
+       id="floor2"
        x="-0.76538563"
        y="222.42648" />
     <image
@@ -100,7 +100,7 @@
        height="37.055416"
        preserveAspectRatio="none"
        xlink:href="open_door.png"
-       id="image1686-2-3"
+       id="floor1"
        x="-0.76538563"
        y="259.4819" />
     <image
@@ -164,7 +164,7 @@
        height="97.627609"
        preserveAspectRatio="none"
        xlink:href="display_btn.png"
-       id="image833"
+       id="btn_floor15"
        x="91.988808"
        y="134.18527" />
     <image
@@ -172,7 +172,7 @@
        height="8.5843134"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="image889"
+       id="btn_floor14"
        x="43.914848"
        y="14.542531" />
     <image
@@ -180,7 +180,7 @@
        height="8.5843134"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="image889-3-7"
+       id="btn_floor13"
        x="43.435959"
        y="83.63475" />
     <image
@@ -188,7 +188,7 @@
        height="8.5843134"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="image889-6-5"
+       id="btn_floor12"
        x="43.435959"
        y="92.219063" />
     <image
@@ -196,7 +196,7 @@
        height="8.5843134"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="image889-3-7-6"
+       id="btn_floor11"
        x="43.14518"
        y="121.00751" />
     <image
@@ -204,7 +204,7 @@
        height="8.5843134"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="image889-6-5-2"
+       id="btn_floor10"
        x="43.14518"
        y="129.59183" />
     <image
@@ -212,7 +212,7 @@
        height="8.5843134"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="image889-3-7-9"
+       id="btn_floor9"
        x="43.689651"
        y="46.966702" />
     <image
@@ -220,7 +220,7 @@
        height="8.5843134"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="image889-6-5-1"
+       id="btn_floor8"
        x="43.689651"
        y="55.551014" />
     <image
@@ -228,7 +228,7 @@
        height="8.5843134"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="image889-3-7-2"
+       id="btn_floor7"
        x="42.682304"
        y="158.73929" />
     <image
@@ -236,7 +236,7 @@
        height="8.5843134"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="image889-6-5-7"
+       id="btn_floor6"
        x="42.682304"
        y="167.32361" />
     <image
@@ -244,7 +244,7 @@
        height="8.5843134"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="image889-3-7-0"
+       id="btn_floor5"
        x="42.390034"
        y="196.05124" />
     <image
@@ -252,7 +252,7 @@
        height="8.5843134"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="image889-6-5-9"
+       id="btn_floor4"
        x="42.390034"
        y="204.63554" />
     <image
@@ -260,7 +260,7 @@
        height="8.5843134"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="image889-3-7-3"
+       id="btn_floor4"
        x="41.848537"
        y="231.8692" />
     <image
@@ -268,7 +268,7 @@
        height="8.5843134"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="image889-6-5-6"
+       id="btn_floor3"
        x="41.848537"
        y="240.45352" />
     <image
@@ -276,7 +276,7 @@
        height="8.5843134"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="xxxxx"
+       id="btn_floor2"
        x="42.188271"
        y="272.32925" />
     <image
@@ -348,7 +348,7 @@
        height="10.645793"
        preserveAspectRatio="none"
        xlink:href="none.png"
-       id="image1895"
+       id="display_floor_vector8"
        x="41.936447"
        y="3.8967381" />
     <image
@@ -356,7 +356,7 @@
        height="10.645793"
        preserveAspectRatio="none"
        xlink:href="none.png"
-       id="image1895-8"
+       id="display_floor_vector7"
        x="41.71125"
        y="36.320908" />
     <image
@@ -364,7 +364,7 @@
        height="10.645793"
        preserveAspectRatio="none"
        xlink:href="none.png"
-       id="image1895-9"
+       id="display_floor_vector6"
        x="41.457558"
        y="72.98896" />
     <image
@@ -372,7 +372,7 @@
        height="10.645793"
        preserveAspectRatio="none"
        xlink:href="none.png"
-       id="image1895-7"
+       id="display_floor_vector5"
        x="41.166779"
        y="110.36172" />
     <image
@@ -380,7 +380,7 @@
        height="10.645793"
        preserveAspectRatio="none"
        xlink:href="none.png"
-       id="image1895-3"
+       id="display_floor_vector4"
        x="40.703903"
        y="148.09349" />
     <image
@@ -388,7 +388,7 @@
        height="10.645793"
        preserveAspectRatio="none"
        xlink:href="none.png"
-       id="image1895-6"
+       id="display_floor_vector3"
        x="40.411636"
        y="185.40544" />
     <image
@@ -396,7 +396,7 @@
        height="10.645793"
        preserveAspectRatio="none"
        xlink:href="none.png"
-       id="image1895-1"
+       id="display_floor_vector2"
        x="39.87014"
        y="221.2234" />
     <image
@@ -404,7 +404,7 @@
        height="10.645793"
        preserveAspectRatio="none"
        xlink:href="none.png"
-       id="image1895-93"
+       id="display_floor_vector1"
        x="42.188271"
        y="261.68347" />
     <use
