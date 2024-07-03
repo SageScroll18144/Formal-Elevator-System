@@ -51,12 +51,14 @@ for (var i = 1; i <= 8; i++){
   });
 
   //função de atualização da porta
-  function updateDoor(origin, values) {
-      if (values[0] === "TRUE" && values[1] === i.toString()) {
-        origin.attr("xlink:href", "open_door.png");
-      } else {
-        origin.attr("xlink:href", "close_door.png");
-      }
+  for (var index = 1; index <= 8; index++){
+    function updateDoor(origin, values) {
+        if (values[0] === "TRUE" && values[1] === index.toString()) {
+          origin.attr("xlink:href", "open_door.png");
+        } else {
+          origin.attr("xlink:href", "close_door.png");
+        }
+    }
   }
 
   // Portas do pavimento
