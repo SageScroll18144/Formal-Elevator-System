@@ -65,23 +65,23 @@ for (var i = 1; i <= 8; i++){
   });
 
   // Display do pavimento(sentido vetorial do elevador)
-  bms.observe('formula', {
-    selector: "#display_floor_vector" + i, 
-    formulas: ["current_direction"],
-    trigger: function (origin, values) {
-      switch (values[0]) {
-        case "up":
-          origin.attr("xlink:href", "up.png");
-          break;
-        case "down":
-          origin.attr("xlink:href", "down.png");
-          break;
-        case "empty":
-          origin.attr("xlink:href", "none.png");
-          break;
-      }       
-    }
-  });
+  // bms.observe('formula', {
+  //   selector: "#display_floor_vector" + i, 
+  //   formulas: ["current_direction"],
+  //   trigger: function (origin, values) {
+  //     switch (values[0]) {
+  //       case "up":
+  //         origin.attr("xlink:href", "up.png");
+  //         break;
+  //       case "down":
+  //         origin.attr("xlink:href", "down.png");
+  //         break;
+  //       case "empty":
+  //         origin.attr("xlink:href", "none.png");
+  //         break;
+  //     }       
+  //   }
+  // });
 
   // Botões do pavimento: UP
   bms.observe('formula', {
