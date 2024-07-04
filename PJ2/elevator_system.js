@@ -93,42 +93,30 @@ for (var i = 1; i <= 8; i++){
   //Botões do pavimento: UP
   bms.observe('formula', {
     selector: "#btn_floor" + (2 * i), 
-    formulas: ["floor_leds(" + i + ")"], 
+    formulas: ["floor_leds_down(" + i + ")"], 
     trigger: function (origin, values) {
-      console.log("Vetor: ", values);
-      console.log(values[0].indexOf("up") !== -1);
-      if(values[0].length > 0){
-       (function(index) {
-          if (index !== 8 && values[0].indexOf("up") !== -1){
+      (function(index) {
+          if (index !== 8 && values[0] !== "TRUE"){
             origin.attr("xlink:href", "btn_green.png");
           }else {
             origin.attr("xlink:href", "btn_red.png");
           }
         })(i);
-      } else {
-        origin.attr("xlink:href", "btn_red.png");
-      }
     }
   });
 
    //Botões do pavimento: DOWN
    bms.observe('formula', {
      selector: "#btn_floor" + ((2 * i) - 1),
-     formulas: ["floor_leds(" + i + ")"], 
+     formulas: ["floor_leds_up(" + i + ")"], 
       trigger: function (origin, values) { 
-      console.log("Vetor: ", values);
-      console.log(values[0].indexOf("down") !== -1);
-       if(values[0].length > 0){
          (function(index){
-         if (index !== 1 && values[0].indexOf("down") !== -1){
+         if (index !== 1 && values[0] == "TRUE"){
              origin.attr("xlink:href", "btn_green.png");
            }else {
              origin.attr("xlink:href", "btn_red.png");
            }
-         })(i);
-       } else {
-         origin.attr("xlink:href", "btn_red.png");
-       }
+         })(i)
      }
    });
 
