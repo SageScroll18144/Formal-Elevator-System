@@ -147,5 +147,30 @@ for (var i = 1; i <= 8; i++){
       }
     }
   });
+
+  // Evento: Botão mover
+  bms.executeEvent({
+    selector: "#move_id",
+    events: [
+      { name: "move" }, 
+    ]
+  });
   
+  // Evento: open door
+  bms.executeEvent({
+    selector: "#open_door_btn",
+    events: [
+      { name: "elevator_operation_open_door" }, 
+    ]
+  });
+
+// Evento: close_door
+bms.executeEvent({
+  selector: "#close_door_btn",
+  events: [
+    { name: "elevator_operation_close_door" }, 
+  ]
+});
+
+
 }

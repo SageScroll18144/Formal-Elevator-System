@@ -116,7 +116,7 @@
        height="42.33519"
        preserveAspectRatio="none"
        xlink:href="phone.png"
-       id="image295"
+       id="phone_id"
        x="181.20966"
        y="253.27519" />
     <image
@@ -124,7 +124,7 @@
        height="43.364792"
        preserveAspectRatio="none"
        xlink:href="alarm.png"
-       id="image337"
+       id="alarm_socorro"
        x="148.67201"
        y="253.27519" />
     <image
@@ -132,7 +132,7 @@
        height="22.761658"
        preserveAspectRatio="none"
        xlink:href="open_door_btn.png"
-       id="image393"
+       id="open_door_btn"
        x="121.58582"
        y="273.87833" />
     <image
@@ -140,7 +140,7 @@
        height="23.977421"
        preserveAspectRatio="none"
        xlink:href="close_door_btn.png"
-       id="image449"
+       id="close_door_btn"
        x="121.58582"
        y="249.90091" />
     <image
@@ -449,7 +449,7 @@
        height="47.588688"
        preserveAspectRatio="none"
        xlink:href="move_btn.png"
-       id="image361"
+       id="move_id"
        x="57.074509"
        y="248.81111" />
   </g>
