@@ -199,48 +199,48 @@ bms.executeEvent({
 });
 
 // Evento: chamada do pavimento terreo
-bms.executeEvent({
-  selector: "#btn_floor2",
-  events: [
-    { name: "ground_floor_call_elevator" },
-    {
-      name: "cancel_floor",
-      predicate: function(origin) {
-        return "num_floor=" + origin.attr("data-frog") + " & direction= " + nr.val();
-      }
-    }
-  ]
-});
+// bms.executeEvent({
+//   selector: "#btn_floor2",
+//   events: [
+//     { name: "ground_floor_call_elevator" },
+//     {
+//       name: "cancel_floor",
+//       predicate: function(origin) {
+//         return "num_floor=" + origin.attr("data-frog") + " & direction= " + nr.val();
+//       }
+//     }
+//   ]
+// });
 
-// Evento: chamada do ultimo pavimento 
-bms.executeEvent({
-  selector: "#btn_floor15",
-  events: [
-    { name: "last_floor_call_elevator" },
-    {
-      name: "cancel_floor",
-      predicate: function(origin) {
-        return "num_floor=" + origin.attr("data-frog") + " & direction= " + nr.val();
-      }
-    }
-  ]
-});
+// // Evento: chamada do ultimo pavimento 
+// bms.executeEvent({
+//   selector: "#btn_floor15",
+//   events: [
+//     { name: "last_floor_call_elevator" },
+//     {
+//       name: "cancel_floor",
+//       predicate: function(origin) {
+//         return "num_floor=" + origin.attr("data-frog") + " & direction= " + nr.val();
+//       }
+//     }
+//   ]
+// });
 
-// Evento: chamada intermediaria pavimento
-bms.executeEvent({
-  selector: "#btn_floor" + i,
-  events: [{
-    name: "intermediary_call_elevator",
-    predicate: function(origin) {
-      return "user_orders=" + origin.attr("data-frog");
-    }
-  }, {
-    name: "cancel_floor",
-    predicate: function(origin) {
-      return "num_floor=" + origin.attr("data-frog") + " & direction= " + nr.val();
-    }
-  }]
-});
+// // Evento: chamada intermediaria pavimento
+// bms.executeEvent({
+//   selector: "#btn_floor" + i,
+//   events: [{
+//     name: "intermediary_call_elevator",
+//     predicate: function(origin) {
+//       return "user_orders=" + origin.attr("data-frog");
+//     }
+//   }, {
+//     name: "cancel_floor",
+//     predicate: function(origin) {
+//       return "num_floor=" + origin.attr("data-frog") + " & direction= " + nr.val();
+//     }
+//   }]
+// });
 
 // Evento: chama interna do display ou cancelamento
 bms.executeEvent({
