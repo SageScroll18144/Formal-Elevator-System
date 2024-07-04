@@ -189,4 +189,50 @@ bms.executeEvent({
   ]
 });
 
+// Evento: Break to repair e repaired
+bms.executeEvent({
+  selector: "#floor" + i,
+  events: [
+    { name: "elevator_operation_break_to_repair" },
+    { name: "elevator_operation_repaired" }
+  ]
+});
+
+// Evento: chamada do pavimento terreo
+bms.executeEvent({
+  selector: "#btn_floor2",
+  events: [
+    { name: "ground_floor_call_elevator" }
+  ]
+});
+
+// Evento: chamada do ultimo pavimento 
+bms.executeEvent({
+  selector: "#btn_floor15",
+  events: [
+    { name: "last_floor_call_elevator" }
+  ]
+});
+
+// Evento: chamada intermediaria pavimento
+
+// Evento: chama interna do display ou cancelamento
+bms.executeEvent({
+  selector: "#btn_red" + i,
+  events: [{
+    name: "elevator_operation_request",
+    predicate: function(origin) {
+      return "user_orders=" + origin.attr("data-frog");
+    }
+  }, {
+    name: "cancel",
+    predicate: function(origin) {
+      return "num_floor=" + origin.attr("data-frog");
+    }
+  },
+  {name: "elevator_operation_hold_door"}
+  ]
+});
+
+
 }
