@@ -202,7 +202,13 @@ bms.executeEvent({
 bms.executeEvent({
   selector: "#btn_floor2",
   events: [
-    { name: "ground_floor_call_elevator" }
+    { name: "ground_floor_call_elevator" },
+    {
+      name: "cancel_floor",
+      predicate: function(origin) {
+        return "num_floor=" + origin.attr("data-frog") + " & direction= " + nr.val();
+      }
+    }
   ]
 });
 
@@ -210,11 +216,31 @@ bms.executeEvent({
 bms.executeEvent({
   selector: "#btn_floor15",
   events: [
-    { name: "last_floor_call_elevator" }
+    { name: "last_floor_call_elevator" },
+    {
+      name: "cancel_floor",
+      predicate: function(origin) {
+        return "num_floor=" + origin.attr("data-frog") + " & direction= " + nr.val();
+      }
+    }
   ]
 });
 
 // Evento: chamada intermediaria pavimento
+bms.executeEvent({
+  selector: "#btn_floor" + i,
+  events: [{
+    name: "intermediary_call_elevator",
+    predicate: function(origin) {
+      return "user_orders=" + origin.attr("data-frog");
+    }
+  }, {
+    name: "cancel_floor",
+    predicate: function(origin) {
+      return "num_floor=" + origin.attr("data-frog") + " & direction= " + nr.val();
+    }
+  }]
+});
 
 // Evento: chama interna do display ou cancelamento
 bms.executeEvent({
@@ -234,5 +260,23 @@ bms.executeEvent({
   ]
 });
 
+//Enter elevator 
+bms.executeEvent({
+  selector: "#enter_id",
+  events: [{
+    name: "enter_elevator",
+    predicate: function(origin) {
+      return "weight=" + origin.attr("data-frog");
+    }
+  }]
+});
+
+//Exit elevator 
+bms.executeEvent({
+  selector: "#exit_id",
+  events: [
+    { name: "exit_elevator" }
+  ]
+});
 
 }

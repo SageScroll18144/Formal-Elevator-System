@@ -433,7 +433,7 @@
        height="26.477837"
        preserveAspectRatio="none"
        xlink:href="sair.png"
-       id="image217"
+       id="exit_id"
        x="92.235779"
        y="273.87833" />
     <image
@@ -441,7 +441,7 @@
        height="27.159662"
        preserveAspectRatio="none"
        xlink:href="enttrar.png"
-       id="image289"
+       id="enter_id"
        x="92.235779"
        y="246.71866" />
     <image
