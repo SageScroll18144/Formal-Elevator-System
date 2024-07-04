@@ -95,8 +95,8 @@ for (var i = 1; i <= 8; i++){
     selector: "#btn_floor" + (2 * i), 
     formulas: ["floor_leds(" + i + ")"],
     trigger: function (origin, values) {
-      console.log("tamanho do vetor values: ", values[0].length);
-      console.log("Vetor values: ", values[0]);
+      console.log(values[0].indexOf("up") !== -1);
+      console.log(values[0].indexOf("down") !== -1);
       if(values[0].length > 0){
        (function(index) {
           if(index <= values[0].length && values[0][index-1] === "up"){
@@ -116,8 +116,8 @@ for (var i = 1; i <= 8; i++){
      selector: "#btn_floor" + ((2 * i) - 1),
      formulas: ["floor_leds(" + i + ")"],
      trigger: function (origin, values) { 
-      console.log("tamanho do vetor values: ", values[0].length);
-      console.log("Vetor values: ", values[0]);
+      console.log(values[0].indexOf("up") !== -1);
+      console.log(values[0].indexOf("down") !== -1);
        if(values[0].length > 0){
          (function(index){
            if(index <= values[0].length && values[0][index-1] === "down"){
