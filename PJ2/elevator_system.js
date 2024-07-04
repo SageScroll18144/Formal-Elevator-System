@@ -53,7 +53,6 @@ for (var i = 1; i <= 8; i++){
   //função de atualização da porta
   (function(index) {
     function updateDoor(origin, values) {
-      console.log("Valor de index: ", index);
       if (values[0] === "TRUE" && values[1] === index.toString()) {
         origin.attr("xlink:href", "open_door.png");
       } else {
@@ -91,42 +90,42 @@ for (var i = 1; i <= 8; i++){
      }
    });
 
-  // Botões do pavimento: UP
-  // bms.observe('formula', {
-  //   selector: "#btn_floor" + (2 * i), 
-  //   formulas: ["floor_leds(" + i + ")"],
-  //   trigger: function (origin, values) {
-  //     if(values[0].length > 0){
-  //       for (let index = 0; index < values[0].length; index++) {
-  //         if(values[0][index] === "up"){
-  //           origin.attr("xlink:href", "btn_green.png");
-  //         }else {
-  //           origin.attr("xlink:href", "btn_red.png");
-  //         }
-  //       }
-  //     } else {
-  //       origin.attr("xlink:href", "btn_red.png");
-  //     }
-  //   }
-  // });
+  //Botões do pavimento: UP
+  bms.observe('formula', {
+    selector: "#btn_floor" + (2 * i), 
+    formulas: ["floor_leds(" + i + ")"],
+    trigger: function (origin, values) {
+      if(values[0].length > 0){
+       (function(index) {
+          if(values[0][index] === "up"){
+            origin.attr("xlink:href", "btn_green.png");
+          }else {
+            origin.attr("xlink:href", "btn_red.png");
+          }
+        })(i);
+      } else {
+        origin.attr("xlink:href", "btn_red.png");
+      }
+    }
+  });
 
-  // Botões do pavimento: DOWN
-  // bms.observe('formula', {
-  //   selector: "#btn_floor" + ((2 * i) - 1),
-  //   formulas: ["floor_leds(" + i + ")"],
-  //   trigger: function (origin, values) {
-  //     if(values[0].length > 0){
-  //       for (let index = 0; index < values[0].length; index++) {
-  //         if(values[0][index] === "down"){
-  //           origin.attr("xlink:href", "btn_green.png");
-  //         }else {
-  //           origin.attr("xlink:href", "btn_red.png");
-  //         }
-  //       }
-  //     } else {
-  //       origin.attr("xlink:href", "btn_red.png");
-  //     }
-  //   }
-  // });
+   //Botões do pavimento: DOWN
+   bms.observe('formula', {
+     selector: "#btn_floor" + ((2 * i) - 1),
+     formulas: ["floor_leds(" + i + ")"],
+     trigger: function (origin, values) {
+       if(values[0].length > 0){
+         (function(index){
+           if(values[0][index] === "down"){
+             origin.attr("xlink:href", "btn_green.png");
+           }else {
+             origin.attr("xlink:href", "btn_red.png");
+           }
+         })(i);
+       } else {
+         origin.attr("xlink:href", "btn_red.png");
+       }
+     }
+   });
 
 }
