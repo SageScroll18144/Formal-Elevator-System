@@ -119,7 +119,33 @@ for (var i = 1; i <= 8; i++){
              origin.attr("xlink:href", "btn_red.png");
            }
          })(i)
-     }
-   });
+    }
+  });
 
+  // Alarme do reparo
+  bms.observe('formula', {
+    selector: "#alarm_repair_id", 
+    formulas: ["btn_special(btn_alarm)"],
+    trigger: function (origin, values) {
+      if (values[0] === "TRUE"){
+        origin.attr("xlink:href", "alarm_ob_repair_on.png");
+      } else {
+        origin.attr("xlink:href", "alarm_ob_repair_off.png");
+      }
+    }
+  });
+
+  // Alarme da porta
+  bms.observe('formula', {
+    selector: "#alarm_door_id", 
+    formulas: ["alarm_door"],
+    trigger: function (origin, values) {
+      if (values[0] === "TRUE"){
+        origin.attr("xlink:href", "alarm_door_ob_repair_on.png");
+      } else {
+        origin.attr("xlink:href", "alarm_door_ob_repair_off.png");
+      }
+    }
+  });
+  
 }

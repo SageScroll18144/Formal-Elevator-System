@@ -156,7 +156,7 @@ OPERATIONS
                     IF behavior(min(dom(behavior))) = up & current_direction = down THEN
                         current_floor := current_floor - 1
                         || current_direction := down
-                        || display_direction_elevator := empty
+                        || display_direction_elevator := down
                         || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {(display_floor~(TRUE) - 1) |-> TRUE}
                         || behavior := { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {down}) & (xx+1) |-> yy : (behavior /\ NAT * {down}) } \/ { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {up}) & (xx-1) |-> yy : (behavior /\ NAT * {up}) }
                         || time := 0

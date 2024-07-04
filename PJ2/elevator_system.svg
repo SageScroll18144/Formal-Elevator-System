@@ -105,7 +105,7 @@
        y="259.4819" />
     <image
        width="152.90379"
-       height="253.1812"
+       height="248.71712"
        preserveAspectRatio="none"
        xlink:href="into_elevator.png"
        id="image239"
@@ -128,21 +128,21 @@
        x="148.67201"
        y="253.27519" />
     <image
-       width="45.847584"
-       height="42.932358"
+       width="27.086191"
+       height="22.761658"
        preserveAspectRatio="none"
        xlink:href="open_door_btn.png"
        id="image393"
-       x="102.82444"
-       y="253.70763" />
+       x="121.58582"
+       y="273.87833" />
     <image
-       width="47.442345"
-       height="42.283264"
+       width="27.086201"
+       height="23.977421"
        preserveAspectRatio="none"
        xlink:href="close_door_btn.png"
        id="image449"
-       x="57.074509"
-       y="254.11652" />
+       x="121.58582"
+       y="249.90091" />
     <image
        width="17.162003"
        height="296.30579"
@@ -412,5 +412,45 @@
        y="0"
        xlink:href="#image1895-93"
        id="use2097" />
+    <image
+       width="10.054167"
+       height="11.377084"
+       preserveAspectRatio="none"
+       xlink:href="alarm_door_ob_repair_off.png"
+       id="alarm_door_id"
+       x="182.25655"
+       y="27.909998" />
+    <image
+       width="10.054167"
+       height="11.377084"
+       preserveAspectRatio="none"
+       xlink:href="alarm_ob_repair_off.png"
+       id="alarm_repair_id"
+       x="172.20238"
+       y="27.909998" />
+    <image
+       width="29.35004"
+       height="26.477837"
+       preserveAspectRatio="none"
+       xlink:href="sair.png"
+       id="image217"
+       x="92.235779"
+       y="273.87833" />
+    <image
+       width="28.904348"
+       height="27.159662"
+       preserveAspectRatio="none"
+       xlink:href="enttrar.png"
+       id="image289"
+       x="92.235779"
+       y="246.71866" />
+    <image
+       width="35.16127"
+       height="47.588688"
+       preserveAspectRatio="none"
+       xlink:href="move_btn.png"
+       id="image361"
+       x="57.074509"
+       y="248.81111" />
   </g>
 </svg>
