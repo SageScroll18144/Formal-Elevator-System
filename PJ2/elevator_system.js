@@ -93,13 +93,13 @@ for (var i = 1; i <= 8; i++){
   //Botões do pavimento: UP
   bms.observe('formula', {
     selector: "#btn_floor" + (2 * i), 
-    formulas: ["floor_leds(" + i + ")"],
+    formulas: ["floor_leds(" + i + ")"], 
     trigger: function (origin, values) {
       console.log(values[0].indexOf("up") !== -1);
       console.log(values[0].indexOf("down") !== -1);
       if(values[0].length > 0){
        (function(index) {
-          if(index <= values[0].length && values[0][index-1] === "up"){
+          if (index !== 8 && values[0].indexOf("up") !== -1){
             origin.attr("xlink:href", "btn_green.png");
           }else {
             origin.attr("xlink:href", "btn_red.png");
@@ -120,7 +120,7 @@ for (var i = 1; i <= 8; i++){
       console.log(values[0].indexOf("down") !== -1);
        if(values[0].length > 0){
          (function(index){
-           if(index <= values[0].length && values[0][index-1] === "down"){
+         if (index !== 1 && values[0].indexOf("down") !== -1){
              origin.attr("xlink:href", "btn_green.png");
            }else {
              origin.attr("xlink:href", "btn_red.png");
