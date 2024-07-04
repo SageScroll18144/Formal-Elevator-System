@@ -361,7 +361,8 @@ OPERATIONS
         || id_inside := 0
         || behavior := {}
         || floor_leds := {}
-                   // prod cart
+        || floor_leds_up := ELEVATOR_ORDINARY_BUTTONS * {FALSE}
+        || floor_leds_down := ELEVATOR_ORDINARY_BUTTONS * {FALSE}
         || cancel_set := {}
         || state_blink := ELEVATOR_FLOOR_DISPLAY  * {FALSE}
         || alarm_door := FALSE
