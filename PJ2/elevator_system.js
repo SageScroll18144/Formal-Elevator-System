@@ -96,7 +96,7 @@ for (var i = 1; i <= 8; i++){
     formulas: ["floor_leds_down(" + i + ")"], 
     trigger: function (origin, values) {
       (function(index) {
-          if (index !== 8 && values[0] !== "TRUE"){
+          if (index !== 8 && values[0] === "TRUE"){
             origin.attr("xlink:href", "btn_green.png");
           }else {
             origin.attr("xlink:href", "btn_red.png");
@@ -111,7 +111,7 @@ for (var i = 1; i <= 8; i++){
      formulas: ["floor_leds_up(" + i + ")"], 
       trigger: function (origin, values) { 
          (function(index){
-         if (index !== 1 && values[0] == "TRUE"){
+         if (index !== 1 && values[0] === "TRUE"){
              origin.attr("xlink:href", "btn_green.png");
            }else {
              origin.attr("xlink:href", "btn_red.png");
