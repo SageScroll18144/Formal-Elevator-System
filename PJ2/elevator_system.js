@@ -152,7 +152,7 @@ for (var i = 1; i <= 8; i++){
   bms.executeEvent({
     selector: "#move_id",
     events: [
-      { name: "move" }, 
+      { name: "move" }
     ]
   });
   
@@ -160,7 +160,7 @@ for (var i = 1; i <= 8; i++){
   bms.executeEvent({
     selector: "#open_door_btn",
     events: [
-      { name: "elevator_operation_open_door" }, 
+      { name: "elevator_operation_open_door" }
     ]
   });
 
@@ -168,9 +168,25 @@ for (var i = 1; i <= 8; i++){
 bms.executeEvent({
   selector: "#close_door_btn",
   events: [
-    { name: "elevator_operation_close_door" }, 
+    { name: "elevator_operation_close_door" }
   ]
 });
 
+// Evento: Alarme de segurança e report
+bms.executeEvent({
+  selector: "#alarm_socorro",
+  events: [
+    { name: "elevator_operation_alarm" }, 
+    { name: "elevator_operation_report" }
+  ]
+});
+
+// Evento: get_call_phone
+bms.executeEvent({
+  selector: "#phone_id",
+  events: [
+    { name: "get_phone_call_from_elevator" }
+  ]
+});
 
 }
