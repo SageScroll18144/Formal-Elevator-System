@@ -1,5 +1,5 @@
 MACHINE
-    Elevator_system
+    Elevator_System
     
 SETS
     ELEVATOR_DIRECTIONS = {up, down, empty}; // Visor
@@ -37,6 +37,8 @@ VARIABLES
     id_inside,
     behavior,
     floor_leds,
+    floor_leds_up,
+    floor_leds_down,
     cancel_set,
     cancel_set_floor,
     state_blink,
@@ -67,6 +69,8 @@ INVARIANT
     & id_inside : NAT
     & behavior : NAT <-> ELEVATOR_DIRECTIONS
     & floor_leds : 1..NUM_FLOOR <-> ELEVATOR_DIRECTIONS
+    & floor_leds_up : 1..NUM_FLOOR --> BOOL
+    & floor_leds_down : 1..NUM_FLOOR --> BOOL
     & cancel_set : NAT <-> 1..NUM_FLOOR
     & cancel_set_floor : NAT <-> (1..NUM_FLOOR <-> ELEVATOR_DIRECTIONS)
     & state_blink : ELEVATOR_FLOOR_DISPLAY --> BOOL
@@ -92,6 +96,8 @@ INITIALISATION
     || id_inside := 0
     || behavior := {}
     || floor_leds := {}
+    || floor_leds_up := ELEVATOR_ORDINARY_BUTTONS * {FALSE}
+    || floor_leds_down := ELEVATOR_ORDINARY_BUTTONS * {FALSE}
     || cancel_set := {}
     || cancel_set_floor := {}
     || state_blink := ELEVATOR_FLOOR_DISPLAY  * {FALSE}
@@ -117,6 +123,8 @@ OPERATIONS
             || btn_special(btn_close) := FALSE
             || btn_actions(current_floor) := FALSE
             || floor_leds := floor_leds - {current_floor |-> up, current_floor |-> down} \/ {current_floor |-> empty}
+            || floor_leds_up(current_floor) := FALSE
+            || floor_leds_down(current_floor) := FALSE
             || time := 0
             || time_floor := 0
             || state_blink(current_floor) := FALSE
@@ -353,6 +361,7 @@ OPERATIONS
         || id_inside := 0
         || behavior := {}
         || floor_leds := {}
+                   // prod cart
         || cancel_set := {}
         || state_blink := ELEVATOR_FLOOR_DISPLAY  * {FALSE}
         || alarm_door := FALSE
@@ -412,41 +421,88 @@ OPERATIONS
         & status_operation = TRUE
         & btn_special(btn_phone) = FALSE
         & ({number_floor |-> direction} /\ floor_leds) = {}
+        & (direction = up => floor_leds_up(number_floor) = FALSE)
+        & (direction = down => floor_leds_down(number_floor) = FALSE)
         & number_floor /= current_floor
     THEN
         IF sensor_pir = FALSE THEN
             IF (number_floor - current_floor) < 0 THEN
-                behavior := behavior \/ {(current_floor - number_floor) |-> down}
-                || status_door := FALSE
-                || status_work := TRUE
-                || floor_leds := floor_leds \/ {(number_floor) |-> direction}
-                || time := 0
-                || time_floor := 0
+                IF direction = up THEN
+                    behavior := behavior \/ {(current_floor - number_floor) |-> down}
+                    || status_door := FALSE
+                    || status_work := TRUE
+                    || floor_leds := floor_leds \/ {(number_floor) |-> direction}
+                    || floor_leds_up(number_floor) := TRUE
+                    || time := 0
+                    || time_floor := 0
+                ELSE
+                    behavior := behavior \/ {(current_floor - number_floor) |-> down}
+                    || status_door := FALSE
+                    || status_work := TRUE
+                    || floor_leds := floor_leds \/ {(number_floor) |-> direction}
+                    || floor_leds_down(number_floor) := TRUE
+                    || time := 0
+                    || time_floor := 0
+                END
             ELSE 
-                behavior := behavior \/ {(number_floor - current_floor) |-> up}
-                || status_door := FALSE
-                || status_work := TRUE
-                || floor_leds := floor_leds \/ {(number_floor) |-> direction}
-                || time := 0
-                || time_floor := 0
+                IF direction = up THEN
+                    behavior := behavior \/ {(number_floor - current_floor) |-> up}
+                    || status_door := FALSE
+                    || status_work := TRUE
+                    || floor_leds := floor_leds \/ {(number_floor) |-> direction}
+                    || floor_leds_up(number_floor) := TRUE
+                    || time := 0
+                    || time_floor := 0
+                ELSE
+                    behavior := behavior \/ {(number_floor - current_floor) |-> up}
+                    || status_door := FALSE
+                    || status_work := TRUE
+                    || floor_leds := floor_leds \/ {(number_floor) |-> direction}
+                    || floor_leds_down(number_floor) := TRUE
+                    || time := 0
+                    || time_floor := 0
+                END
             END
         ELSE
             IF (number_floor - current_floor) < 0 THEN
-                behavior := behavior \/ {(current_floor - number_floor) |-> down}
-                || status_door := TRUE
-                || status_work := FALSE
-                || floor_leds := floor_leds \/ {number_floor |-> direction}
-                || time := 0
-                || time_floor := 0
+                IF direction = up THEN
+                    behavior := behavior \/ {(current_floor - number_floor) |-> down}
+                    || status_door := TRUE
+                    || status_work := FALSE
+                    || floor_leds := floor_leds \/ {number_floor |-> direction}
+                    || floor_leds_up(number_floor) := TRUE
+                    || time := 0
+                    || time_floor := 0 
+                ELSE
+                    behavior := behavior \/ {(current_floor - number_floor) |-> down}
+                    || status_door := TRUE
+                    || status_work := FALSE
+                    || floor_leds := floor_leds \/ {number_floor |-> direction}
+                    || floor_leds_down(number_floor) := TRUE
+                    || time := 0
+                    || time_floor := 0 
+                END
             ELSE 
-                behavior := behavior \/ {(number_floor - current_floor) |-> up}
-                || status_door := TRUE
-                || status_work := FALSE
-                || floor_leds := floor_leds \/ {(number_floor) |-> direction}
-                || time := 0
-                || time_floor := 0
+                IF direction = up THEN
+                    behavior := behavior \/ {(number_floor - current_floor) |-> up}
+                    || status_door := TRUE
+                    || status_work := FALSE
+                    || floor_leds := floor_leds \/ {(number_floor) |-> direction}
+                    || floor_leds_up(number_floor) := TRUE
+                    || time := 0
+                    || time_floor := 0
+                ELSE
+                    behavior := behavior \/ {(number_floor - current_floor) |-> up}
+                    || status_door := TRUE
+                    || status_work := FALSE
+                    || floor_leds := floor_leds \/ {(number_floor) |-> direction}
+                    || floor_leds_down(number_floor) := TRUE
+                    || time := 0
+                    || time_floor := 0
+                END
             END
         END
+
     END;
 
     ground_floor_call_elevator = 
@@ -459,6 +515,7 @@ OPERATIONS
             || time := 0
             || time_floor := 0
             || floor_leds := floor_leds <+ {1 |-> up}
+            || floor_leds_up(1) := TRUE
             || status_door := TRUE
             || status_work := FALSE
         ELSE
@@ -466,6 +523,7 @@ OPERATIONS
             || time := 0
             || time_floor := 0
             || floor_leds := floor_leds <+ {1 |-> up}
+            || floor_leds_up(1) := TRUE
             || status_door := FALSE
             || status_work := TRUE
             
@@ -482,6 +540,7 @@ OPERATIONS
             || time := 0
             || time_floor := 0
             || floor_leds := floor_leds <+ {NUM_FLOOR |-> down}
+            || floor_leds_down(NUM_FLOOR) := TRUE
             || status_door := TRUE
             || status_work := FALSE
         ELSE
@@ -489,6 +548,7 @@ OPERATIONS
             || time := 0
             || time_floor := 0
             || floor_leds := floor_leds <+ {NUM_FLOOR |-> down}
+            || floor_leds_down(NUM_FLOOR) := TRUE
             || status_door := FALSE
             || status_work := TRUE
         END
@@ -533,6 +593,7 @@ OPERATIONS
         & num_floor : dom(floor_leds)
         & num_floor /= current_floor 
         & {num_floor |-> direction} /\ floor_leds /= {}
+        & (floor_leds_down(num_floor) = TRUE or floor_leds_up(num_floor) = TRUE)
         & status_operation = TRUE
         & direction /= empty
     THEN
@@ -541,6 +602,8 @@ OPERATIONS
                 IF current_direction = up THEN
                     behavior := {}
                     || floor_leds := floor_leds - {num_floor |-> direction}
+                    || floor_leds_up(num_floor) := FALSE
+                    || floor_leds_down(num_floor) := FALSE
                     || cancel_set_floor := {}
                     || time_floor := 0
                     || current_direction := empty
@@ -551,6 +614,8 @@ OPERATIONS
                  ELSE IF current_direction = down THEN
                     behavior := {}
                     || floor_leds := floor_leds - {num_floor |-> direction}
+                    || floor_leds_up(num_floor) := FALSE
+                    || floor_leds_down(num_floor) := FALSE
                     || cancel_set_floor := {}
                     || time_floor := 0
                     || current_direction := empty
@@ -561,6 +626,8 @@ OPERATIONS
                  ELSE
                      behavior := {}
                     || floor_leds := floor_leds - {num_floor |-> direction}
+                    || floor_leds_up(num_floor) := FALSE
+                    || floor_leds_down(num_floor) := FALSE
                     || cancel_set_floor := {}
                     || time_floor := 0
                     || current_direction := empty
@@ -570,9 +637,11 @@ OPERATIONS
                  END
             END
             
-            ELSE IF (num_floor - current_floor) < 0 THEN
+            ELSE IF direction = down THEN
                 behavior := behavior - {(current_floor - num_floor) |-> down}
                 || floor_leds := floor_leds - {num_floor |-> direction}
+                || floor_leds_up(num_floor) := FALSE
+                || floor_leds_down(num_floor) := FALSE
                 || cancel_set_floor := {}
                 || time_floor := 0
                 || current_direction := empty
@@ -581,6 +650,8 @@ OPERATIONS
             ELSE 
                 behavior := behavior - {(num_floor - current_floor) |-> up}
                 || floor_leds := floor_leds - {num_floor |-> direction}
+                || floor_leds_up(num_floor) := FALSE
+                || floor_leds_down(num_floor) := FALSE
                 || cancel_set_floor := {}
                 || time_floor := 0
                 || current_direction := empty
