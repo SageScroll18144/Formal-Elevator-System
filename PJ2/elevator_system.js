@@ -92,8 +92,8 @@ for (var i = 1; i <= 8; i++){
 
   //Botões do pavimento: UP
   bms.observe('formula', {
-    selector: "#btn_floor" + ((2 * i)-1), 
-    formulas: ["floor_leds_down(" + i + ")"], 
+    selector: "#btn_floor" + (2 * i), 
+    formulas: ["floor_leds_up(" + i + ")"], 
     trigger: function (origin, values) {
       console.log("Valor: ", values);
       (function(index) {
@@ -108,8 +108,8 @@ for (var i = 1; i <= 8; i++){
 
    //Botões do pavimento: DOWN
    bms.observe('formula', {
-     selector: "#btn_floor" + (2 * i),
-     formulas: ["floor_leds_up(" + i + ")"], 
+     selector: "#btn_floor" + ((2 * i)-1),
+     formulas: ["floor_leds_down(" + i + ")"], 
       trigger: function (origin, values) { 
         console.log("Valor: ", values);
          (function(index){
