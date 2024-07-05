@@ -244,11 +244,11 @@ bms.executeEvent({
 bms.executeEvent({
   selector: "#btn_red" + i,
   events: [{
-    name: "elevator_operation_request",
+    {name: "elevator_operation_request",
     predicate: function(origin) {
       console.log("Valor de i: ", i);
       return 'user_orders=' + 2;
-  }, {
+  }}, {
     name: "cancel",
     predicate: function(origin) {
       return 'num_floor=' + 1 ;
