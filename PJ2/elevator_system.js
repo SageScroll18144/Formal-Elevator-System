@@ -246,8 +246,10 @@ bms.executeEvent({
   events: [{
     name: "elevator_operation_request",
     predicate: function(origin) {
-        var ret = i;
+      (function(index){
+         var ret = index;
          return 'user_orders=' + ret;
+      })(i)
     }
   }]
 });
