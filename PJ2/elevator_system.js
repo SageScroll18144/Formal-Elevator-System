@@ -247,7 +247,9 @@ bms.executeEvent({
   events: [{
     name: "elevator_operation_request",
     predicate: function(origin) {
+      console.log("Valor de i: ", i);
       (function(index) {
+        console.log("Valor2 de i: ", i);
         if(index !== 1) return 'user_orders=' + index;
       })(i)
     }
