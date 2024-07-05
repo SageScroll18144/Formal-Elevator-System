@@ -265,7 +265,7 @@ bms.executeEvent({
   events: [{
     name: "enter_elevator",
     predicate: function(origin) {
-         var weight = origin.attr('data-weight');
+        var weight = parseInt(origin.attr('data-weight'));
          return weight >= 1 && weight <= 8;
     }
   }]
