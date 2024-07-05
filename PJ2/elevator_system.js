@@ -247,12 +247,12 @@ bms.executeEvent({
   events: [{
     name: "elevator_operation_request",
     predicate: function(origin) {
-      return 'user_orders=' + origin.attr("data-frog");
+      return 'user_orders=' + origin.attr('data-frog');
     }
   }, {
     name: "cancel",
     predicate: function(origin) {
-      return 'num_floor=' + origin.attr("data-frog");
+      return 'num_floor=' + origin.attr('data-frog');
     }
   },
   {name: "elevator_operation_hold_door"}
@@ -265,7 +265,7 @@ bms.executeEvent({
   events: [{
     name: "enter_elevator",
     predicate: function(origin) {
-         return 'weight=' + 'i';
+         return 'weight=' + origin.attr('data-weight');
     }
   }]
 });
