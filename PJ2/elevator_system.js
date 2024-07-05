@@ -241,18 +241,18 @@ bms.executeEvent({
 // });
 
 // Evento: chama interna do display ou cancelamento
-bms.executeEvent({
-  selector: "#btn_red" + i,
-  events: [{
-    name: "elevator_operation_request",
-    predicate: function(origin) {
-      (function(index){
-         var ret = index;
-         return 'user_orders=' + ret;
-      })(i)
-    }
-  }]
-});
+(function(index){
+    bms.executeEvent({
+      selector: "#btn_red" + index,
+      events: [{
+        name: "elevator_operation_request",
+        predicate: function(origin) {
+          console.log("Valor de i: ", index);
+          return 'user_orders=' + index;
+        }
+      }]
+    });
+  })(i);
 
 //Enter elevator 
 bms.executeEvent({
