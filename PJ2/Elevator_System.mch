@@ -299,6 +299,7 @@ OPERATIONS
         sensor_pir = TRUE
     THEN 
         sensor_pir := FALSE
+        || time_door := 1
     END;
     
     elevator_operation_break_to_repair =
