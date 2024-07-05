@@ -105,7 +105,7 @@
        y="259.4819" />
     <image
        width="152.90379"
-       height="253.1812"
+       height="248.71712"
        preserveAspectRatio="none"
        xlink:href="into_elevator.png"
        id="image239"
@@ -116,7 +116,7 @@
        height="42.33519"
        preserveAspectRatio="none"
        xlink:href="phone.png"
-       id="image295"
+       id="phone_id"
        x="181.20966"
        y="253.27519" />
     <image
@@ -124,25 +124,25 @@
        height="43.364792"
        preserveAspectRatio="none"
        xlink:href="alarm.png"
-       id="image337"
+       id="alarm_socorro"
        x="148.67201"
        y="253.27519" />
     <image
-       width="45.847584"
-       height="42.932358"
+       width="27.086191"
+       height="22.761658"
        preserveAspectRatio="none"
        xlink:href="open_door_btn.png"
-       id="image393"
-       x="102.82444"
-       y="253.70763" />
+       id="open_door_btn"
+       x="121.58582"
+       y="273.87833" />
     <image
-       width="47.442345"
-       height="42.283264"
+       width="27.086201"
+       height="23.977421"
        preserveAspectRatio="none"
        xlink:href="close_door_btn.png"
-       id="image449"
-       x="57.074509"
-       y="254.11652" />
+       id="close_door_btn"
+       x="121.58582"
+       y="249.90091" />
     <image
        width="17.162003"
        height="296.30579"
@@ -284,7 +284,7 @@
        height="5.0296659"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="btn_red1"
+       id="btn_red7"
        x="105.70311"
        y="156.41898" />
     <image
@@ -292,7 +292,7 @@
        height="5.0296659"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="btn_red3"
+       id="btn_red5"
        x="106.49906"
        y="179.40419" />
     <image
@@ -300,7 +300,7 @@
        height="5.0296659"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="btn_red5"
+       id="btn_red3"
        x="105.82997"
        y="202.85063" />
     <image
@@ -308,7 +308,7 @@
        height="5.0296659"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="btn_red7"
+       id="btn_red1"
        x="105.76468"
        y="225.95287" />
     <image
@@ -316,7 +316,7 @@
        height="5.0296659"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="btn_red2"
+       id="btn_red8"
        x="150.85054"
        y="156.87608" />
     <image
@@ -324,7 +324,7 @@
        height="5.0296659"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="btn_red4"
+       id="btn_red6"
        x="151.50481"
        y="179.45018" />
     <image
@@ -332,7 +332,7 @@
        height="5.0296659"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="btn_red6"
+       id="btn_red4"
        x="151.75406"
        y="202.32246" />
     <image
@@ -340,7 +340,7 @@
        height="5.0296659"
        preserveAspectRatio="none"
        xlink:href="btn_red.png"
-       id="btn_red8"
+       id="btn_red2"
        x="152.09232"
        y="225.96176" />
     <image
@@ -412,5 +412,45 @@
        y="0"
        xlink:href="#image1895-93"
        id="use2097" />
+    <image
+       width="10.054167"
+       height="11.377084"
+       preserveAspectRatio="none"
+       xlink:href="alarm_door_ob_repair_off.png"
+       id="alarm_door_id"
+       x="182.25655"
+       y="27.909998" />
+    <image
+       width="10.054167"
+       height="11.377084"
+       preserveAspectRatio="none"
+       xlink:href="alarm_ob_repair_off.png"
+       id="alarm_repair_id"
+       x="172.20238"
+       y="27.909998" />
+    <image
+       width="29.35004"
+       height="26.477837"
+       preserveAspectRatio="none"
+       xlink:href="sair.png"
+       id="exit_id"
+       x="92.235779"
+       y="273.87833" />
+    <image
+       width="28.904348"
+       height="27.159662"
+       preserveAspectRatio="none"
+       xlink:href="enttrar.png"
+       id="enter_id"
+       x="92.235779"
+       y="246.71866" />
+    <image
+       width="35.16127"
+       height="47.588688"
+       preserveAspectRatio="none"
+       xlink:href="move_btn.png"
+       id="move_id"
+       x="57.074509"
+       y="248.81111" />
   </g>
 </svg>

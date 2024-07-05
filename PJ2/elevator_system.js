@@ -95,7 +95,6 @@ for (var i = 1; i <= 8; i++){
     selector: "#btn_floor" + (2 * i), 
     formulas: ["floor_leds_up(" + i + ")"], 
     trigger: function (origin, values) {
-      console.log("Valor: ", values);
       (function(index) {
           if (index !== 8 && values[0] === "TRUE"){
             origin.attr("xlink:href", "btn_green.png");
@@ -111,7 +110,6 @@ for (var i = 1; i <= 8; i++){
      selector: "#btn_floor" + ((2 * i)-1),
      formulas: ["floor_leds_down(" + i + ")"], 
       trigger: function (origin, values) { 
-        console.log("Valor: ", values);
          (function(index){
          if (index !== 1 && values[0] === "TRUE"){
              origin.attr("xlink:href", "btn_green.png");
@@ -119,7 +117,169 @@ for (var i = 1; i <= 8; i++){
              origin.attr("xlink:href", "btn_red.png");
            }
          })(i)
-     }
-   });
+    }
+  });
+
+  // Alarme do reparo
+  bms.observe('formula', {
+    selector: "#alarm_repair_id", 
+    formulas: ["btn_special(btn_alarm)"],
+    trigger: function (origin, values) {
+      if (values[0] === "TRUE"){
+        origin.attr("xlink:href", "alarm_ob_repair_on.png");
+      } else {
+        origin.attr("xlink:href", "alarm_ob_repair_off.png");
+      }
+    }
+  });
+
+  // Alarme da porta
+  bms.observe('formula', {
+    selector: "#alarm_door_id", 
+    formulas: ["alarm_door"],
+    trigger: function (origin, values) {
+      if (values[0] === "TRUE"){
+        origin.attr("xlink:href", "alarm_door_ob_repair_on.png");
+      } else {
+        origin.attr("xlink:href", "alarm_door_ob_repair_off.png");
+      }
+    }
+  });
+
+  // Evento: Botão mover
+  bms.executeEvent({
+    selector: "#move_id",
+    events: [
+      { name: "move" }
+    ]
+  });
+  
+  // Evento: open door
+  bms.executeEvent({
+    selector: "#open_door_btn",
+    events: [
+      { name: "elevator_operation_open_door" }
+    ]
+  });
+
+// Evento: close_door
+bms.executeEvent({
+  selector: "#close_door_btn",
+  events: [
+    { name: "elevator_operation_close_door" }
+  ]
+});
+
+// Evento: Alarme de segurança e report
+bms.executeEvent({
+  selector: "#alarm_socorro",
+  events: [
+    { name: "elevator_operation_alarm" }, 
+    { name: "elevator_operation_report" }
+  ]
+});
+
+// Evento: get_call_phone
+bms.executeEvent({
+  selector: "#phone_id",
+  events: [
+    { name: "get_phone_call_from_elevator" }
+  ]
+});
+
+// Evento: Break to repair e repaired
+bms.executeEvent({
+  selector: "#floor" + i,
+  events: [
+    { name: "elevator_operation_break_to_repair" },
+    { name: "elevator_operation_repaired" }
+  ]
+});
+
+// Evento: chamada dos up
+(function(index){
+    // Defina a configuração do evento com base no valor de index
+    var eventConfig;
+    if (index > 1) {
+      eventConfig = {
+        name: "intermediary_call_elevator",
+        predicate: function(origin) {
+          return 'number_floor=' + index + '&direction=up';
+        }
+      };
+    } else {
+      eventConfig = {
+        name: "ground_floor_call_elevator"
+      };
+    }
+
+    // Execute o evento com a configuração apropriada
+    bms.executeEvent({
+      selector: "#btn_floor" + (2 * index),
+      events: [eventConfig]
+    });
+  })(i);
+
+// Evento: chamada dos down
+(function(index){
+    // Defina a configuração do evento com base no valor de index
+    var eventConfig;
+    if (index < 8) {
+      eventConfig = {
+        name: "intermediary_call_elevator",
+        predicate: function(origin) {
+          return 'number_floor=' + index + '&direction=down';
+        }
+      };
+    } else {
+      eventConfig = {
+        name: "last_floor_call_elevator"
+      };
+    }
+
+    // Execute o evento com a configuração apropriada
+    bms.executeEvent({
+      selector: "#btn_floor" + (2 * index - 1),
+      events: [eventConfig]
+    });
+  })(i);
+
+// Evento: chama interna do display ou cancelamento
+(function(index){
+    bms.executeEvent({
+      selector: "#btn_red" + index,
+      events: [{
+        name: "elevator_operation_request",
+        predicate: function(origin) {
+          return 'user_orders=' + index;
+        }
+      }, {
+        name: "cancel",
+        predicate: function(origin) {
+          return 'num_floor=' + index;
+        }
+      }]
+    });
+  })(i);
+
+//Enter elevator 
+bms.executeEvent({
+  selector: "#enter_id",
+  events: [{
+    name: "enter_elevator",
+    predicate: function(origin) {
+         return 'weight=' + Math.floor(Math.random() * 3);
+    }
+  }]
+});
+
+
+//Exit elevator 
+bms.executeEvent({
+  selector: "#exit_id",
+  events: [
+    { name: "exit_elevator" }
+  ]
+});
 
 }

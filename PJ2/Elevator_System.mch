@@ -156,7 +156,7 @@ OPERATIONS
                     IF behavior(min(dom(behavior))) = up & current_direction = down THEN
                         current_floor := current_floor - 1
                         || current_direction := down
-                        || display_direction_elevator := empty
+                        || display_direction_elevator := down
                         || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {(display_floor~(TRUE) - 1) |-> TRUE}
                         || behavior := { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {down}) & (xx+1) |-> yy : (behavior /\ NAT * {down}) } \/ { xx,yy | xx : NAT & yy : ran(behavior /\ NAT * {up}) & (xx-1) |-> yy : (behavior /\ NAT * {up}) }
                         || time := 0
@@ -282,15 +282,23 @@ OPERATIONS
         & status_work = FALSE
         & status_operation = TRUE
         & status_door = TRUE
+        & sensor_pir = FALSE
        ) or alarm_door = TRUE
         
     THEN
         btn_special := btn_special <+ {btn_open |-> FALSE, btn_close |-> TRUE}
         || status_door := FALSE
-        || status_work := TRUE
         || alarm_door := FALSE
         || time_door := 1
         
+    END;
+
+    elevator_operation_let_go = 
+    PRE
+        sensor_pir = TRUE
+    THEN 
+        sensor_pir := FALSE
+        || time_door := 1
     END;
     
     elevator_operation_break_to_repair =
