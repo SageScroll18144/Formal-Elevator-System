@@ -206,7 +206,7 @@ bms.executeEvent({
 //     {
 //       name: "cancel_floor",
 //       predicate: function(origin) {
-//         return "num_floor=" + origin.attr("data-frog") + " & direction= " + nr.val();
+//         return 'num_floor=' + origin.attr("data-frog") + " & direction= " + nr.val();
 //       }
 //     }
 //   ]
@@ -220,7 +220,7 @@ bms.executeEvent({
 //     {
 //       name: "cancel_floor",
 //       predicate: function(origin) {
-//         return "num_floor=" + origin.attr("data-frog") + " & direction= " + nr.val();
+//         return 'num_floor=' + origin.attr("data-frog") + " & direction= " + nr.val();
 //       }
 //     }
 //   ]
@@ -232,12 +232,12 @@ bms.executeEvent({
 //   events: [{
 //     name: "intermediary_call_elevator",
 //     predicate: function(origin) {
-//       return "user_orders=" + origin.attr("data-frog");
+//       return 'user_orders=' + origin.attr("data-frog");
 //     }
 //   }, {
 //     name: "cancel_floor",
 //     predicate: function(origin) {
-//       return "num_floor=" + origin.attr("data-frog") + " & direction= " + nr.val();
+//       return 'num_floor=' + origin.attr("data-frog") + " & direction= " + nr.val();
 //     }
 //   }]
 // });
@@ -248,12 +248,12 @@ bms.executeEvent({
   events: [{
     name: "elevator_operation_request",
     predicate: function(origin) {
-      return "user_orders=" + origin.attr("data-frog");
+      return 'user_orders=' + origin.attr("data-frog");
     }
   }, {
     name: "cancel",
     predicate: function(origin) {
-      return "num_floor=" + origin.attr("data-frog");
+      return 'num_floor=' + origin.attr("data-frog");
     }
   },
   {name: "elevator_operation_hold_door"}
