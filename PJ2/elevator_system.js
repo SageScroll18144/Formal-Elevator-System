@@ -196,49 +196,53 @@ bms.executeEvent({
   ]
 });
 
-// Evento: chamada do pavimento terreo
-// bms.executeEvent({
-//   selector: "#btn_floor2",
-//   events: [
-//     { name: "ground_floor_call_elevator" },
-//     {
-//       name: "cancel_floor",
-//       predicate: function(origin) {
-//         return 'num_floor=' + origin.attr("data-frog") + " & direction= " + nr.val();
-//       }
-//     }
-//   ]
-// });
+// Evento: chamada dos up
+(function(index){
+    // Defina a configuração do evento com base no valor de index
+    var eventConfig;
+    if (index > 1) {
+      eventConfig = {
+        name: "intermediary_call_elevator",
+        predicate: function(origin) {
+          return 'number_floor=' + index + '&direction=up';
+        }
+      };
+    } else {
+      eventConfig = {
+        name: "ground_floor_call_elevator"
+      };
+    }
 
-// // Evento: chamada do ultimo pavimento 
-// bms.executeEvent({
-//   selector: "#btn_floor15",
-//   events: [
-//     { name: "last_floor_call_elevator" },
-//     {
-//       name: "cancel_floor",
-//       predicate: function(origin) {
-//         return 'num_floor=' + origin.attr("data-frog") + " & direction= " + nr.val();
-//       }
-//     }
-//   ]
-// });
+    // Execute o evento com a configuração apropriada
+    bms.executeEvent({
+      selector: "#btn_floor" + (2 * index),
+      events: [eventConfig]
+    });
+  })(i);
 
-// // Evento: chamada intermediaria pavimento
-// bms.executeEvent({
-//   selector: "#btn_floor" + i,
-//   events: [{
-//     name: "intermediary_call_elevator",
-//     predicate: function(origin) {
-//       return 'user_orders=' + origin.attr("data-frog");
-//     }
-//   }, {
-//     name: "cancel_floor",
-//     predicate: function(origin) {
-//       return 'num_floor=' + origin.attr("data-frog") + " & direction= " + nr.val();
-//     }
-//   }]
-// });
+// Evento: chamada dos down
+(function(index){
+    // Defina a configuração do evento com base no valor de index
+    var eventConfig;
+    if (index < 8) {
+      eventConfig = {
+        name: "intermediary_call_elevator",
+        predicate: function(origin) {
+          return 'number_floor=' + index + '&direction=down';
+        }
+      };
+    } else {
+      eventConfig = {
+        name: "last_floor_call_elevator"
+      };
+    }
+
+    // Execute o evento com a configuração apropriada
+    bms.executeEvent({
+      selector: "#btn_floor" + (2 * index - 1),
+      events: [eventConfig]
+    });
+  })(i);
 
 // Evento: chama interna do display ou cancelamento
 (function(index){
@@ -247,8 +251,12 @@ bms.executeEvent({
       events: [{
         name: "elevator_operation_request",
         predicate: function(origin) {
-          console.log("Valor de i: ", index);
           return 'user_orders=' + index;
+        }
+      }, {
+        name: "cancel",
+        predicate: function(origin) {
+          return 'num_floor=' + index;
         }
       }]
     });
@@ -260,11 +268,11 @@ bms.executeEvent({
   events: [{
     name: "enter_elevator",
     predicate: function(origin) {
-        var weight = parseInt(origin.attr('data-weight'));
-         return weight >= 1 && weight <= 8;
+         return 'weight=' + Math.floor(Math.random() * 3);
     }
   }]
 });
+
 
 //Exit elevator 
 bms.executeEvent({
