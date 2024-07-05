@@ -298,7 +298,7 @@ OPERATIONS
     PRE
         sensor_pir = TRUE
     THEN 
-        sensor_pir = FALSE
+        sensor_pir := FALSE
 END;
     
     elevator_operation_break_to_repair =
