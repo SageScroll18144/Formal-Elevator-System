@@ -288,7 +288,6 @@ OPERATIONS
     THEN
         btn_special := btn_special <+ {btn_open |-> FALSE, btn_close |-> TRUE}
         || status_door := FALSE
-        || status_work := TRUE
         || alarm_door := FALSE
         || time_door := 1
         
