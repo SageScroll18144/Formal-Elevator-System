@@ -266,7 +266,7 @@ bms.executeEvent({
   events: [{
     name: "enter_elevator",
     predicate: function(origin) {
-      return "weight=" + 10;
+      return "weight=" + 1;
     }
   }]
 });
