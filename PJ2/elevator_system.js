@@ -266,7 +266,7 @@ bms.executeEvent({
   events: [{
     name: "enter_elevator",
     predicate: function(origin) {
-      return "weight=" + origin.attr("data-xlink:href");
+      return "weight=" + origin.attr("data-current");
     }
   }]
 });
