@@ -241,7 +241,7 @@ bms.executeEvent({
 // });
 
 // Evento: chama interna do display ou cancelamento
-bms.executeEvent({
+/*bms.executeEvent({
   selector: "#btn_red" + i,
   events: [{
     name: "elevator_operation_request",
@@ -256,7 +256,7 @@ bms.executeEvent({
   },
   {name: "elevator_operation_hold_door"}
   ]
-});
+});*/
 
 //Enter elevator 
 bms.executeEvent({
