@@ -265,9 +265,9 @@ bms.executeEvent({
   events: [{
     name: "enter_elevator",
     predicate: function(origin) {
-      var output = prompt('output');
-      console.log("Tabela: ", output);
-      return 'weight=' + origin.attr("data-current");
+      for(var index = 1; index <= 8; index++) {
+         return 'weight=' + i;
+      }
     }
   }]
 });
