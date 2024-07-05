@@ -247,12 +247,12 @@ bms.executeEvent({
   events: [{
     name: "elevator_operation_request",
     predicate: function(origin) {
-      return 'user_orders=' + i;
+      return 'user_orders=' + 1;
     }
   }, {
     name: "cancel",
     predicate: function(origin) {
-      return 'num_floor=' + i ;
+      return 'num_floor=' + 1 ;
     }
   },
   {name: "elevator_operation_hold_door"}
