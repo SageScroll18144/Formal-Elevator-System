@@ -282,6 +282,7 @@ OPERATIONS
         & status_work = FALSE
         & status_operation = TRUE
         & status_door = TRUE
+        & sensor_pir := FALSE
        ) or alarm_door = TRUE
         
     THEN
@@ -292,6 +293,13 @@ OPERATIONS
         || time_door := 1
         
     END;
+
+    elevator_operation_let_go = 
+    PRE
+        sensor_pir = TRUE
+    THEN 
+        sensor_pir = FALSE
+END;
     
     elevator_operation_break_to_repair =
     PRE
