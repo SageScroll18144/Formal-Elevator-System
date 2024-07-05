@@ -246,7 +246,7 @@ bms.executeEvent({
   events: [{
     name: "elevator_operation_request",
     predicate: function(origin) {
-        var ret = 2;
+        var ret = i;
          return 'user_orders=' + ret;
     }
   }]
