@@ -253,26 +253,28 @@ OPERATIONS
 
     elevator_operation_open_door = 
     PRE
-        status_work = FALSE
-        & status_operation = TRUE
+        status_operation = TRUE
         & alarm_door = FALSE
+        & current_direction = empty
         & sensor_balance > 0
     THEN
         IF time_door = 10 & card(behavior) > 0 THEN 
             time_door := 1
             || alarm_door := TRUE
             || btn_special := btn_special <+ {btn_open |-> FALSE, btn_close |-> FALSE}
+            || status_work := FALSE
         ELSE IF card(behavior) > 0 THEN
             btn_special := btn_special <+ {btn_open |-> TRUE, btn_close |-> FALSE}
             || status_door := TRUE
             || time_door := time_door + 1
+            || status_work := FALSE
            ELSE
             btn_special := btn_special <+ {btn_open |-> TRUE, btn_close |-> FALSE}
             || status_door := TRUE
             || time_door := 1
+            || status_work := FALSE
        
             END 
-        
         END
     END;
 
@@ -290,6 +292,7 @@ OPERATIONS
         || status_door := FALSE
         || alarm_door := FALSE
         || time_door := 1
+        || status_work := TRUE
         
     END;
 
