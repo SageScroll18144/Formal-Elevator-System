@@ -261,13 +261,6 @@ bms.executeEvent({
       }]
     });
   })(i);
-
-  bms.observe('formula', {
-    selector: "#enter_id", 
-    trigger: function (origin) {
-       origin.attr("data-enter", i)
-    }
-  });
   
 //Enter elevator 
 bms.executeEvent({
@@ -275,7 +268,7 @@ bms.executeEvent({
   events: [{
     name: "enter_elevator",
     predicate: function(origin) {
-         return 'weight=' + origin.attr("data-enter");
+         return 'weight=' + 1;
     }
   }]
 });
