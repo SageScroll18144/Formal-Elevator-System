@@ -262,6 +262,13 @@ bms.executeEvent({
     });
   })(i);
 
+  bms.observe('formula', {
+    selector: "#enter_id", 
+    trigger: function (origin) {
+       origin.attr("data-enter", i)
+    }
+  });
+  
 //Enter elevator 
 bms.executeEvent({
   selector: "#enter_id",
