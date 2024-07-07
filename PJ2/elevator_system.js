@@ -275,7 +275,7 @@ bms.executeEvent({
   events: [{
     name: "enter_elevator",
     predicate: function(origin) {
-         return 'weight=' + Math.floor(Math.random() * 3);
+         return 'weight=' + origin.attr("data-enter");
     }
   }]
 });
