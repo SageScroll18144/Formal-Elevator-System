@@ -88,7 +88,7 @@ OPERATIONS
         
         & status_door = FALSE
         & ask_to_repair = FALSE
-        & (behavior_up_ref /= {} or behavior_down_ref /= {})
+        & (card(dom(behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}) \/ dom(behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE})) > 0)
     THEN 
         IF min(dom(behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}) \/ dom(behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE}) ) = 0 THEN
             behavior_up_ref(0) := FALSE
@@ -109,8 +109,8 @@ OPERATIONS
                 || current_direction := up
                 || display_direction_elevator := up
                 || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {(display_floor~(TRUE) + 1) |-> TRUE} 
-                || behavior_up_ref := { xx,yy | xx : 0..(NUM_FLOOR - 1) & yy : BOOL & (xx + 1) |-> yy : behavior_up_ref(xx)}
-                || behavior_down_ref :=  { xx,yy | xx : 0..(NUM_FLOOR - 1) & yy : BOOL & (xx - 1) |-> yy : behavior_down_ref(xx)}
+                || behavior_up_ref := { xx,yy | xx : 0..(NUM_FLOOR - 1) & yy : {TRUE} & (xx + 1) |-> yy : behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}}
+                || behavior_down_ref :=  { xx,yy | xx : 0..(NUM_FLOOR - 1) & yy : {TRUE} & (xx - 1) |-> yy : behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE}}
                 || status_work := TRUE
                 
             ELSE
