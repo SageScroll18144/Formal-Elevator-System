@@ -541,64 +541,125 @@ OPERATIONS
         & status_operation = TRUE
         & direction /= empty
     THEN
-        IF time_floor_up > 1 & cancel_set_floor_up_ref(time_floor_up-2) = num_floor & cancel_set_floor_up_ref(time_floor_up-2) = cancel_set_floor_up_ref(time_floor_up-1) THEN
-            IF card(behavior) = 1 THEN
-                IF current_direction = up THEN
-                    behavior := {}
+        IF direction = up THEN 
+            IF time_floor_up > 1 & cancel_set_floor_up_ref(time_floor_up-2) = num_floor & cancel_set_floor_up_ref(time_floor_up-2) = cancel_set_floor_up_ref(time_floor_up-1) THEN
+                IF card(behavior) = 1 THEN
+                    IF current_direction = up THEN
+                        behavior := {}
+                        || floor_leds_up(num_floor) := FALSE
+                        || floor_leds_down(num_floor) := FALSE
+                        || cancel_set_floor_up_ref := {}
+                        || current_direction := empty
+                        || display_direction_elevator := empty
+                        || current_floor := current_floor + 1 
+                        || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {display_floor~(TRUE) +1 |-> TRUE}
+                        
+                     ELSE IF current_direction = down THEN
+                        behavior := {}
+                        || floor_leds_up(num_floor) := FALSE
+                        || floor_leds_down(num_floor) := FALSE
+                        || cancel_set_floor_up_ref := {}
+                        || current_direction := empty
+                        || display_direction_elevator := empty
+                        || current_floor := current_floor - 1
+                        || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {display_floor~(TRUE) -1 |-> TRUE}
+                         
+                     ELSE
+                         behavior := {}
+                        || floor_leds_up(num_floor) := FALSE
+                        || floor_leds_down(num_floor) := FALSE
+                        || cancel_set_floor_up_ref := {}
+                        || current_direction := empty
+                        || display_direction_elevator := empty
+                         
+                   
+                     END
+                END
+                
+                ELSE IF direction = down THEN
+                    behavior := behavior - {(current_floor - num_floor) |-> down}
                     || floor_leds_up(num_floor) := FALSE
                     || floor_leds_down(num_floor) := FALSE
                     || cancel_set_floor_up_ref := {}
                     || current_direction := empty
                     || display_direction_elevator := empty
-                    || current_floor := current_floor + 1 
-                    || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {display_floor~(TRUE) +1 |-> TRUE}
-                    
-                 ELSE IF current_direction = down THEN
-                    behavior := {}
+           
+                ELSE 
+                    behavior := behavior - {(num_floor - current_floor) |-> up}
                     || floor_leds_up(num_floor) := FALSE
                     || floor_leds_down(num_floor) := FALSE
                     || cancel_set_floor_up_ref := {}
                     || current_direction := empty
                     || display_direction_elevator := empty
-                    || current_floor := current_floor - 1
-                    || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {display_floor~(TRUE) -1 |-> TRUE}
-                     
-                 ELSE
-                     behavior := {}
-                    || floor_leds_up(num_floor) := FALSE
-                    || floor_leds_down(num_floor) := FALSE
-                    || cancel_set_floor_up_ref := {}
-                    || current_direction := empty
-                    || display_direction_elevator := empty
-                     
-               
-                 END
+           
+                END
+                END
+                
+            ELSE
+                cancel_set_floor_up_ref := cancel_set_floor_up_ref <+ {time_floor_up |-> num_floor}
+                || time_floor_up := time_floor_up + 1
+         
             END
             
-            ELSE IF direction = down THEN
-                behavior := behavior - {(current_floor - num_floor) |-> down}
-                || floor_leds_up(num_floor) := FALSE
-                || floor_leds_down(num_floor) := FALSE
-                || cancel_set_floor_up_ref := {}
-                || current_direction := empty
-                || display_direction_elevator := empty
-       
-            ELSE 
-                behavior := behavior - {(num_floor - current_floor) |-> up}
-                || floor_leds_up(num_floor) := FALSE
-                || floor_leds_down(num_floor) := FALSE
-                || cancel_set_floor_up_ref := {}
-                || current_direction := empty
-                || display_direction_elevator := empty
-       
+         ELSE 
+             IF time_floor_down > 1 & cancel_set_floor_down_ref(time_floor_down-2) = num_floor & cancel_set_floor_down_ref(time_floor_down-2) = cancel_set_floor_down_ref(time_floor_down-1) THEN
+                IF card(behavior) = 1 THEN
+                    IF current_direction = up THEN
+                        behavior := {}
+                        || floor_leds_up(num_floor) := FALSE
+                        || floor_leds_down(num_floor) := FALSE
+                        || cancel_set_floor_down_ref := {}
+                        || current_direction := empty
+                        || display_direction_elevator := empty
+                        || current_floor := current_floor + 1 
+                        || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {display_floor~(TRUE) +1 |-> TRUE}
+                        
+                     ELSE IF current_direction = down THEN
+                        behavior := {}
+                        || floor_leds_up(num_floor) := FALSE
+                        || floor_leds_down(num_floor) := FALSE
+                        || cancel_set_floor_down_ref := {}
+                        || current_direction := empty
+                        || display_direction_elevator := empty
+                        || current_floor := current_floor - 1
+                        || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {display_floor~(TRUE) -1 |-> TRUE}
+                         
+                     ELSE
+                         behavior := {}
+                        || floor_leds_up(num_floor) := FALSE
+                        || floor_leds_down(num_floor) := FALSE
+                        || cancel_set_floor_down_ref := {}
+                        || current_direction := empty
+                        || display_direction_elevator := empty
+                         
+                   
+                     END
+                END
+                
+                ELSE IF direction = down THEN
+                    behavior := behavior - {(current_floor - num_floor) |-> down}
+                    || floor_leds_up(num_floor) := FALSE
+                    || floor_leds_down(num_floor) := FALSE
+                    || cancel_set_floor_down_ref := {}
+                    || current_direction := empty
+                    || display_direction_elevator := empty
+           
+                ELSE 
+                    behavior := behavior - {(num_floor - current_floor) |-> up}
+                    || floor_leds_up(num_floor) := FALSE
+                    || floor_leds_down(num_floor) := FALSE
+                    || cancel_set_floor_down_ref := {}
+                    || current_direction := empty
+                    || display_direction_elevator := empty
+           
+                END
+                END
+                
+            ELSE
+                cancel_set_floor_down_ref := cancel_set_floor_down_ref <+ {time_floor_down |-> num_floor}
+                || time_floor_down := time_floor_down + 1
+         
             END
-            END
-            
-        ELSE
-            cancel_set_floor_up_ref := cancel_set_floor_up_ref <+ {time_floor_up |-> num_floor}
-            || time_floor_up := time_floor_up + 1
-     
-        END
-     END
-
+         END
+      END
  END
