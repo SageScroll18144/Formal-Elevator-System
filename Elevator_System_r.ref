@@ -1,5 +1,5 @@
-REFINEMENT Elevator_System_r
-REFINES Elevator_System
+REFINEMENT Elevator_system_r
+REFINES Elevator_system
 
 VARIABLES 
     current_floor,
