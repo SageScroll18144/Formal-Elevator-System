@@ -551,7 +551,8 @@ OPERATIONS
         num_floor : NAT
         & direction : ELEVATOR_DIRECTIONS 
         & num_floor /= current_floor 
-        & (floor_leds_down(num_floor) = TRUE or floor_leds_up(num_floor) = TRUE)
+        & ((direction = up) => (floor_leds_up(num_floor) = TRUE)) 
+        & ((direction = down) => (floor_leds_down(num_floor) = TRUE))
         & status_operation = TRUE
         & direction /= empty
     THEN
