@@ -1,5 +1,5 @@
-REFINEMENT Elevator_system_r
-REFINES Elevator_system
+REFINEMENT Elevator_System_r
+REFINES Elevator_System
 
 VARIABLES 
     current_floor,
@@ -525,14 +525,12 @@ OPERATIONS
             ELSE IF (num_floor - current_floor) < 0 THEN
                 behavior_down_ref(current_floor - num_floor) := FALSE
                 || btn_actions(num_floor) := FALSE
-                || cancel_set_ref := {}
                 || current_direction := empty
                 || display_direction_elevator := empty
                 || state_blink(num_floor) := FALSE
             ELSE 
                 behavior_up_ref(num_floor - current_floor) := FALSE
                 || btn_actions(num_floor) := FALSE
-                || cancel_set_ref := {}
                 || current_direction := empty
                 || display_direction_elevator := empty
                 || state_blink(num_floor) := FALSE
@@ -591,7 +589,7 @@ OPERATIONS
                      END
                 END
                 
-                ELSE IF direction = down THEN
+                ELSE IF current_floor > num_floor THEN
                     behavior_down_ref(current_floor - num_floor) := FALSE
                     || floor_leds_up(num_floor) := FALSE
                     || floor_leds_down(num_floor) := FALSE
@@ -648,7 +646,7 @@ OPERATIONS
                          END
                     END
                     
-                    ELSE IF direction = down THEN
+                    ELSE IF current_floor > num_floor  THEN
                         behavior_down_ref(current_floor - num_floor) := FALSE
                         || floor_leds_up(num_floor) := FALSE
                         || floor_leds_down(num_floor) := FALSE
