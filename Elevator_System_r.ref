@@ -564,7 +564,6 @@ OPERATIONS
                         || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
                         || floor_leds_up(num_floor) := FALSE
                         || floor_leds_down(num_floor) := FALSE
-                        || cancel_set_floor_up_ref := {}
                         || current_direction := empty
                         || display_direction_elevator := empty
                         || current_floor := current_floor + 1 
@@ -575,7 +574,6 @@ OPERATIONS
                         || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
                         || floor_leds_up(num_floor) := FALSE
                         || floor_leds_down(num_floor) := FALSE
-                        || cancel_set_floor_up_ref := {}
                         || current_direction := empty
                         || display_direction_elevator := empty
                         || current_floor := current_floor - 1
@@ -586,7 +584,6 @@ OPERATIONS
                         || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
                         || floor_leds_up(num_floor) := FALSE
                         || floor_leds_down(num_floor) := FALSE
-                        || cancel_set_floor_up_ref := {}
                         || current_direction := empty
                         || display_direction_elevator := empty
                          
@@ -598,7 +595,6 @@ OPERATIONS
                     behavior_down_ref(current_floor - num_floor) := FALSE
                     || floor_leds_up(num_floor) := FALSE
                     || floor_leds_down(num_floor) := FALSE
-                    || cancel_set_floor_up_ref := {}
                     || current_direction := empty
                     || display_direction_elevator := empty
            
@@ -606,7 +602,6 @@ OPERATIONS
                     behavior_up_ref(num_floor - current_floor) := FALSE
                     || floor_leds_up(num_floor) := FALSE
                     || floor_leds_down(num_floor) := FALSE
-                    || cancel_set_floor_up_ref := {}
                     || current_direction := empty
                     || display_direction_elevator := empty
            
@@ -626,7 +621,6 @@ OPERATIONS
                             || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
                             || floor_leds_up(num_floor) := FALSE
                             || floor_leds_down(num_floor) := FALSE
-                            || cancel_set_floor_down_ref := {}
                             || current_direction := empty
                             || display_direction_elevator := empty
                             || current_floor := current_floor + 1 
@@ -637,7 +631,6 @@ OPERATIONS
                             || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
                             || floor_leds_up(num_floor) := FALSE
                             || floor_leds_down(num_floor) := FALSE
-                            || cancel_set_floor_down_ref := {}
                             || current_direction := empty
                             || display_direction_elevator := empty
                             || current_floor := current_floor - 1
@@ -648,7 +641,6 @@ OPERATIONS
                             || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
                             || floor_leds_up(num_floor) := FALSE
                             || floor_leds_down(num_floor) := FALSE
-                            || cancel_set_floor_down_ref := {}
                             || current_direction := empty
                             || display_direction_elevator := empty
                              
@@ -660,7 +652,6 @@ OPERATIONS
                         behavior_down_ref(current_floor - num_floor) := FALSE
                         || floor_leds_up(num_floor) := FALSE
                         || floor_leds_down(num_floor) := FALSE
-                        || cancel_set_floor_down_ref := {}
                         || current_direction := empty
                         || display_direction_elevator := empty
                
@@ -668,7 +659,6 @@ OPERATIONS
                         behavior_up_ref(num_floor - current_floor) := FALSE
                         || floor_leds_up(num_floor) := FALSE
                         || floor_leds_down(num_floor) := FALSE
-                        || cancel_set_floor_down_ref := {}
                         || current_direction := empty
                         || display_direction_elevator := empty
                
