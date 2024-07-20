@@ -519,7 +519,7 @@ OPERATIONS
         & btn_actions(num_floor) = TRUE
         & status_operation = TRUE
     THEN
-        IF time > 1 & cancel_set_ref(time-2) = num_floor & cancel_set_ref(time-2) = cancel_set_ref(time-1)  THEN
+        IF card(cancel_set_ref) > 1 & time > 1 & cancel_set_ref(time-2) = num_floor & cancel_set_ref(time-2) = cancel_set_ref(time-1)  THEN
             IF card(dom(behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}) \/ dom(behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE})) = 1 THEN
                 state_blink(num_floor) := TRUE
             ELSE IF (num_floor - current_floor) < 0 THEN
@@ -555,7 +555,7 @@ OPERATIONS
         & direction /= empty
     THEN
         IF direction = up THEN
-            IF time_floor_up > 1 & cancel_set_floor_up_ref(time_floor_up-2) = num_floor & cancel_set_floor_up_ref(time_floor_up-2) = cancel_set_floor_up_ref(time_floor_up-1) THEN
+            IF card(cancel_set_floor_up_ref) > 1 & time_floor_up > 1 & cancel_set_floor_up_ref(time_floor_up-2) = num_floor & cancel_set_floor_up_ref(time_floor_up-2) = cancel_set_floor_up_ref(time_floor_up-1) THEN
                 IF card(dom(behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}) \/ dom(behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE})) = 1 THEN
                     IF current_direction = up THEN
                         behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
@@ -612,7 +612,7 @@ OPERATIONS
          
             END
         ELSE
-            IF time_floor_down > 1 & cancel_set_floor_down_ref(time_floor_down-2) = num_floor & cancel_set_floor_down_ref(time_floor_down-2) = cancel_set_floor_down_ref(time_floor_down-1) THEN
+            IF card(cancel_set_floor_down_ref) > 1 & time_floor_down > 1 & cancel_set_floor_down_ref(time_floor_down-2) = num_floor & cancel_set_floor_down_ref(time_floor_down-2) = cancel_set_floor_down_ref(time_floor_down-1) THEN
                     IF card(dom(behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}) \/ dom(behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE})) = 1 THEN
                         IF current_direction = up THEN
                             behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
