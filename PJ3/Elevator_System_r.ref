@@ -12,6 +12,7 @@ VARIABLES
     display_floor,// andares
     display_direction_elevator, // direçao do elevador
     time,
+
     sensor_pir,
     sensor_balance,
     ask_to_repair,
