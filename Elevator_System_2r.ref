@@ -6,6 +6,12 @@
 REFINEMENT Elevator_System_2r
 REFINES Elevator_System_r
 
+CONSTANTS
+    QTD
+
+PROPERTIES
+    QTD = 10
+
 VARIABLES 
     current_floor,
     current_direction,
@@ -21,7 +27,6 @@ VARIABLES
     sensor_balance,
     ask_to_repair,
     people_in_elevator_2ref,
-    id_inside,
     behavior_up_ref,
     behavior_down_ref,
     floor_leds_up,
@@ -30,15 +35,17 @@ VARIABLES
     cancel_set_floor_up_ref,
     cancel_set_floor_down_ref,
     state_blink,
+    ptr_qtd,
     time_door,
     time_floor_up,
     time_floor_down,
     alarm_door
 
-INVARIANT
-    people_in_elevator_2ref : NAT --> INT
-    & ran(people_in_elevator_2ref - NAT * {-1}) = ran(people_in_elevator_ref)
-    & dom(people_in_elevator_2ref) = dom(people_in_elevator_ref)
+INVARIANT 
+    people_in_elevator_2ref : (1..QTD) --> NAT
+    & (card(people_in_elevator_ref) = 0 => SIGMA(xx) . (xx : ran(people_in_elevator_2ref) | xx) = 0)
+    & (card(people_in_elevator_ref) > 0 => SIGMA(xx) . (xx : ran(people_in_elevator_2ref) | xx) = SIGMA(yy) . (yy : ran(people_in_elevator_ref) | yy))
+    & ptr_qtd : NAT1
 
 INITIALISATION
     current_floor := 3
@@ -57,8 +64,7 @@ INITIALISATION
     || sensor_balance := 0
     || display_direction_elevator := empty
     || ask_to_repair := FALSE
-    || people_in_elevator_2ref := {}
-    || id_inside := 0
+    || people_in_elevator_2ref := (1..QTD) * {0}
     || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
     || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
     || floor_leds_up := ELEVATOR_ORDINARY_BUTTONS * {FALSE}
@@ -68,6 +74,7 @@ INITIALISATION
     || cancel_set_floor_down_ref := {}
     || state_blink := ELEVATOR_FLOOR_DISPLAY  * {FALSE}
     || alarm_door := FALSE
+    || ptr_qtd := 1
 
 
 
@@ -288,8 +295,8 @@ OPERATIONS
             || ask_to_repair := FALSE
             || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
             || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
-            || people_in_elevator_2ref := {}
-            || id_inside := 0
+            || people_in_elevator_2ref := (1..QTD) * {0}
+            || ptr_qtd := 1
             || sensor_balance := 0
             || sensor_pir := FALSE
         ELSE
@@ -303,8 +310,8 @@ OPERATIONS
                 || ask_to_repair := FALSE
                 || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
                 || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
-                || people_in_elevator_2ref := {}
-                || id_inside := 0
+                || people_in_elevator_2ref := (1..QTD) * {0}
+                || ptr_qtd := 1
                 || sensor_balance := 0
                 || sensor_pir := FALSE
            ELSE IF (current_direction = down & current_floor /= 1) or (current_floor = NUM_FLOOR) THEN
@@ -316,8 +323,8 @@ OPERATIONS
                 || ask_to_repair := FALSE
                 || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
                 || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
-                || people_in_elevator_2ref := {}
-                || id_inside := 0
+                || people_in_elevator_2ref := (1..QTD) * {0}
+                || ptr_qtd := 1
                 || sensor_balance := 0
                 || sensor_pir := FALSE
             END
@@ -344,8 +351,8 @@ OPERATIONS
         || sensor_balance := 0
         || display_direction_elevator := empty
         || ask_to_repair := FALSE
-        || people_in_elevator_2ref := {}
-        || id_inside := 0
+        || people_in_elevator_2ref := (1..QTD) * {0}
+        || ptr_qtd := 1
         || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
         || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
         || floor_leds_up := ELEVATOR_ORDINARY_BUTTONS * {FALSE}
@@ -359,44 +366,35 @@ OPERATIONS
 
     enter_elevator(weight) = 
     PRE
-        weight : INT
+        weight : NAT
         & weight > 0
         & status_work = FALSE
         & status_door = TRUE
         & status_operation = TRUE
         & alarm_door = FALSE
+        & ptr_qtd < 10
     THEN
-        sensor_balance := sensor_balance + weight
-        || id_inside := id_inside + 1
-        || people_in_elevator_2ref := people_in_elevator_2ref <+ {id_inside |-> weight}
+        sensor_balance := sensor_balance + weight;
+        people_in_elevator_2ref := people_in_elevator_2ref <+ {ptr_qtd |-> weight};
+        ptr_qtd := ptr_qtd + 1
     END;
 
 
 
     exit_elevator =
     PRE 
-        people_in_elevator_2ref /= NAT * {-1} 
+        people_in_elevator_2ref /= (1..QTD) * {0} 
         & status_door = TRUE
         & status_operation = TRUE
         & status_work = FALSE
         & alarm_door = FALSE
     THEN
-        IF card(people_in_elevator_2ref) > 1 THEN
-            ANY p1 WHERE p1 : dom(people_in_elevator_2ref) THEN
-                sensor_balance := sensor_balance - people_in_elevator_2ref(p1)
-                || people_in_elevator_2ref := people_in_elevator_2ref <+ {p1 |-> -1}
-            END
-        ELSE
-            sensor_balance := 0
-            || people_in_elevator_2ref := {}
-        END
+        sensor_balance := sensor_balance - people_in_elevator_2ref(ptr_qtd - 1);
+        people_in_elevator_2ref(ptr_qtd - 1) := 0;
+        ptr_qtd := ptr_qtd - 1
     END;
 
-
-
-
     // Operações referentes a portaria
-
     get_phone_call_from_elevator =
     PRE
         btn_special(btn_phone) = TRUE
