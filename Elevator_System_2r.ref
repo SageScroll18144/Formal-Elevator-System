@@ -57,7 +57,7 @@ INITIALISATION
     || sensor_balance := 0
     || display_direction_elevator := empty
     || ask_to_repair := FALSE
-    || people_in_elevator_2ref := NAT * {-1}
+    || people_in_elevator_2ref := {}
     || id_inside := 0
     || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
     || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
@@ -288,7 +288,7 @@ OPERATIONS
             || ask_to_repair := FALSE
             || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
             || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
-            || people_in_elevator_2ref := NAT * {-1}
+            || people_in_elevator_2ref := {}
             || id_inside := 0
             || sensor_balance := 0
             || sensor_pir := FALSE
@@ -303,7 +303,7 @@ OPERATIONS
                 || ask_to_repair := FALSE
                 || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
                 || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
-                || people_in_elevator_2ref := NAT * {-1}
+                || people_in_elevator_2ref := {}
                 || id_inside := 0
                 || sensor_balance := 0
                 || sensor_pir := FALSE
@@ -316,7 +316,7 @@ OPERATIONS
                 || ask_to_repair := FALSE
                 || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
                 || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
-                || people_in_elevator_2ref := NAT * {-1}
+                || people_in_elevator_2ref := {}
                 || id_inside := 0
                 || sensor_balance := 0
                 || sensor_pir := FALSE
@@ -344,7 +344,7 @@ OPERATIONS
         || sensor_balance := 0
         || display_direction_elevator := empty
         || ask_to_repair := FALSE
-        || people_in_elevator_2ref := NAT * {-1}
+        || people_in_elevator_2ref := {}
         || id_inside := 0
         || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
         || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
@@ -388,7 +388,7 @@ OPERATIONS
             END
         ELSE
             sensor_balance := 0
-            || people_in_elevator_2ref := NAT * {-1}
+            || people_in_elevator_2ref := {}
         END
     END;
 
