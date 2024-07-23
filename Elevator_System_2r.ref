@@ -7,10 +7,12 @@ REFINEMENT Elevator_System_2r
 REFINES Elevator_System_r
 
 CONSTANTS
-    QTD
+    QTD,
+    TIME_CANCEL
 
 PROPERTIES
     QTD = 10
+    & TIME_CANCEL = 2
 
 VARIABLES 
     current_floor,
@@ -31,7 +33,7 @@ VARIABLES
     behavior_down_ref,
     floor_leds_up,
     floor_leds_down,
-    cancel_set_ref,
+    cancel_set_2ref,
     cancel_set_floor_up_ref,
     cancel_set_floor_down_ref,
     state_blink,
@@ -39,14 +41,19 @@ VARIABLES
     time_door,
     time_floor_up,
     time_floor_down,
-    alarm_door
+    alarm_door   
 
 INVARIANT 
     people_in_elevator_2ref : (1..QTD) --> NAT
     & (card(people_in_elevator_ref) = 0 => SIGMA(xx) . (xx : ran(people_in_elevator_2ref) | xx) = 0)
     & (card(people_in_elevator_ref) > 0 => SIGMA(xx) . (xx : ran(people_in_elevator_2ref) | xx) = SIGMA(yy) . (yy : ran(people_in_elevator_ref) | yy))
     & ptr_qtd : NAT1
-
+    
+    & cancel_set_2ref : (1..TIME_CANCEL) --> 0..NUM_FLOOR  
+    & (card(cancel_set_ref) = 0 => SIGMA(xx) . (xx : ran(cancel_set_ref) | xx) = 0)
+    & (card(cancel_set_ref) = 1 => cancel_set_2ref(1) = cancel_set_ref(1))
+    & (card(cancel_set_ref) >= 2 => (cancel_set_2ref(2) = cancel_set_ref(card(cancel_set_ref)) & cancel_set_2ref(1) = cancel_set_ref(card(cancel_set_ref)-1)))
+    
 INITIALISATION
     current_floor := 3
     || current_direction := empty
@@ -69,7 +76,7 @@ INITIALISATION
     || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
     || floor_leds_up := ELEVATOR_ORDINARY_BUTTONS * {FALSE}
     || floor_leds_down := ELEVATOR_ORDINARY_BUTTONS * {FALSE}
-    || cancel_set_ref := {}
+    || cancel_set_2ref := (1..TIME_CANCEL) * {0}
     || cancel_set_floor_up_ref := {}
     || cancel_set_floor_down_ref := {}
     || state_blink := ELEVATOR_FLOOR_DISPLAY  * {FALSE}
@@ -95,6 +102,7 @@ OPERATIONS
             || display_direction_elevator := empty
             || status_door := TRUE
             || status_work := FALSE
+            || cancel_set_2ref := (1..TIME_CANCEL) * {0}
             || btn_special(btn_close) := FALSE
             || btn_actions(current_floor) := FALSE
             || floor_leds_up(current_floor) := FALSE
@@ -106,6 +114,7 @@ OPERATIONS
                  current_floor := current_floor + 1
                 || current_direction := up
                 || display_direction_elevator := up
+                || cancel_set_2ref := (1..TIME_CANCEL) * {0}
                 || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {(display_floor~(TRUE) + 1) |-> TRUE} 
                 || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE} <+ { xx,yy | xx : 0..(NUM_FLOOR - 1) & yy : {TRUE} & (xx + 1) |-> yy : behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}}
                 || behavior_down_ref :=  (0..NUM_FLOOR-1) * {FALSE} <+ { xx,yy | xx : 0..(NUM_FLOOR - 1) & yy : {TRUE} & (xx - 1) |-> yy : behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE}}
@@ -116,6 +125,7 @@ OPERATIONS
                     current_floor := current_floor - 1
                     || current_direction := down
                     || display_direction_elevator := down
+                    || cancel_set_2ref := (1..TIME_CANCEL) * {0}
                     || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {((display_floor~(TRUE)) - 1) |-> TRUE}
                     || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE} <+ { xx,yy | xx : 0..(NUM_FLOOR - 1) & yy : {TRUE} & (xx - 1) |-> yy : behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}}
                 || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE} <+ { xx,yy | xx : 0..(NUM_FLOOR - 1) & yy : {TRUE} & (xx + 1) |-> yy : behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE}}
@@ -126,6 +136,7 @@ OPERATIONS
                         current_floor := current_floor - 1
                         || current_direction := down
                         || display_direction_elevator := down
+                        || cancel_set_2ref := (1..TIME_CANCEL) * {0}
                         || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {(display_floor~(TRUE) - 1) |-> TRUE}
                         || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE} <+ { xx,yy | xx : 0..(NUM_FLOOR - 1) & yy : {TRUE} & (xx - 1) |-> yy : behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}}
                 || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE} <+ { xx,yy | xx : 0..(NUM_FLOOR - 1) & yy : {TRUE} & (xx + 1) |-> yy : behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE}}
@@ -135,6 +146,7 @@ OPERATIONS
                         current_floor := current_floor + 1
                         || current_direction := up
                         || display_direction_elevator := up
+                        || cancel_set_2ref := (1..TIME_CANCEL) * {0}
                         || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {(display_floor~(TRUE) + 1) |-> TRUE} 
                         || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE} <+ { xx,yy | xx : 0..(NUM_FLOOR - 1) & yy : {TRUE} & (xx + 1) |-> yy : behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}}
                 || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE} <+ { xx,yy | xx : 0..(NUM_FLOOR - 1) & yy : {TRUE} & (xx - 1) |-> yy : behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE}}
@@ -357,7 +369,7 @@ OPERATIONS
         || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
         || floor_leds_up := ELEVATOR_ORDINARY_BUTTONS * {FALSE}
         || floor_leds_down := ELEVATOR_ORDINARY_BUTTONS * {FALSE}
-        || cancel_set_ref := {}
+        || cancel_set_2ref := (1..TIME_CANCEL) * {0}
         || state_blink := ELEVATOR_FLOOR_DISPLAY  * {FALSE}
         || alarm_door := FALSE
     END;
@@ -522,10 +534,11 @@ OPERATIONS
     cancel(num_floor) =
     PRE 
         num_floor : NAT
+        & num_floor > 0
         & btn_actions(num_floor) = TRUE
         & status_operation = TRUE
     THEN
-        IF card(cancel_set_ref) > 1 & time > 1 & cancel_set_ref(time-2) = num_floor & cancel_set_ref(time-2) = cancel_set_ref(time-1)  THEN
+        IF ran(cancel_set_2ref) = {num_floor}  THEN
             IF card(dom(behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}) \/ dom(behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE})) = 1 THEN
                 state_blink(num_floor) := TRUE
             ELSE IF (num_floor - current_floor) < 0 THEN
@@ -542,10 +555,15 @@ OPERATIONS
                 || state_blink(num_floor) := FALSE
             END
             END
-        ELSE
-            cancel_set_ref := cancel_set_ref <+ {time |-> num_floor}
-            || time := time + 1
-            || state_blink(num_floor) := FALSE
+        ELSE IF time < 2 THEN
+            time := time + 1;
+            cancel_set_2ref := cancel_set_2ref <+ {time |-> num_floor};
+            state_blink(num_floor) := FALSE
+        ELSE 
+            time := 1;
+            cancel_set_2ref := cancel_set_2ref <+ {time |-> num_floor};
+            state_blink(num_floor) := FALSE
+        END
         END
     END;
 
