@@ -6,7 +6,7 @@
 IMPLEMENTATION Elevator_System_i
 REFINES Elevator_System_2r
 
-VARIABLES 
+CONCRETE_VARIABLES 
     current_floor,
     current_direction,
     status_door,
@@ -37,35 +37,33 @@ VARIABLES
 
 
 INITIALISATION
-    current_floor := 3
-    || current_direction := empty
-    || status_door := TRUE
-    || status_work := FALSE
-    || status_operation := TRUE
-    || btn_actions := ELEVATOR_ORDINARY_BUTTONS * {FALSE} // relação com o elevador
-    || btn_special := ELEVATOR_SPECIAL_BUTTONS * {FALSE} // relação com o elevador
-    || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {3 |-> TRUE} // relação com o elevador
-    || time := 0
-    || time_floor_up := 0
-    || time_floor_down := 0
-    || time_door := 1
-    || sensor_pir := FALSE
-    || sensor_balance := 0
-    || display_direction_elevator := empty
-    || ask_to_repair := FALSE
-    || people_in_elevator_2ref := (1..QTD) * {0}
-    || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
-    || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
-    || floor_leds_up := ELEVATOR_ORDINARY_BUTTONS * {FALSE}
-    || floor_leds_down := ELEVATOR_ORDINARY_BUTTONS * {FALSE}
-    || cancel_set_2ref := (1..TIME_CANCEL) * {0}
-    || cancel_set_floor_up_2ref := (1..TIME_CANCEL) * {0}
-    || cancel_set_floor_down_2ref := (1..TIME_CANCEL) * {0}
-    || state_blink := ELEVATOR_FLOOR_DISPLAY  * {FALSE}
-    || alarm_door := FALSE
-    || ptr_qtd := 1
-
-
+    current_floor := 3;
+    current_direction := empty;
+    status_door := TRUE;
+    status_work := FALSE;
+    status_operation := TRUE;
+    btn_actions := ELEVATOR_ORDINARY_BUTTONS * {FALSE}; // relação com o elevador;
+    btn_special := ELEVATOR_SPECIAL_BUTTONS * {FALSE}; // relação com o elevador;
+    display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {3 |-> TRUE}; // relação com o elevador;
+    time := 0;
+    time_floor_up := 0;
+    time_floor_down := 0;
+    time_door := 1;
+    sensor_pir := FALSE;
+    sensor_balance := 0;
+    display_direction_elevator := empty;
+    ask_to_repair := FALSE;
+    people_in_elevator_2ref := (1..QTD) * {0};
+    behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE};
+    behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE};
+    floor_leds_up := ELEVATOR_ORDINARY_BUTTONS * {FALSE};
+    floor_leds_down := ELEVATOR_ORDINARY_BUTTONS * {FALSE};
+    cancel_set_2ref := (1..TIME_CANCEL) * {0};
+    cancel_set_floor_up_2ref := (1..TIME_CANCEL) * {0};
+    cancel_set_floor_down_2ref := (1..TIME_CANCEL) * {0};
+    state_blink := ELEVATOR_FLOOR_DISPLAY  * {FALSE};
+    alarm_door := FALSE;
+    ptr_qtd := 1
 
 
 OPERATIONS
