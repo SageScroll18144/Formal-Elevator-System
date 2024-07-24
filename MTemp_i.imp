@@ -1,0 +1,32 @@
+/* MTemp_i
+ * Author: lypess
+ * Creation date: 24/07/24
+ */
+
+IMPLEMENTATION MTemp_i
+REFINES MTemp
+
+CONCRETE_VARIABLES
+    counter,
+    set_t
+
+
+INITIALISATION
+    counter := 0
+    ;set_t := (0..8) * {1}
+    
+
+OPERATIONS
+    add(number) = 
+    BEGIN
+        IF counter < 1000 THEN
+            counter := counter + number 
+        END
+    END;
+    
+    ss <-- getCard = 
+    BEGIN
+        ss := set_t(0)
+    END    
+
+ END

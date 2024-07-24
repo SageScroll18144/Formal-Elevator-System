@@ -6,14 +6,17 @@ MACHINE
     MTemp
 
 VARIABLES
-    counter
+    counter,
+    set_t
 
 INVARIANT
     counter : NAT
+    & set_t : (0..8) --> NAT
 
 INITIALISATION
     counter := 0
-
+    || set_t := (0..8) * {1}
+    
 OPERATIONS
     add(number) = 
     PRE
@@ -21,8 +24,12 @@ OPERATIONS
         counter < 1000
     THEN
         counter := counter + number 
-    END
+    END;
     
+    ss <-- getCard = 
+    BEGIN
+        ss := card(dom(set_t))
+    END
     
 
 END
