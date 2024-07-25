@@ -88,8 +88,130 @@ INITIALISATION
     ptr_qtd := 1
 
 OPERATIONS
-    move = skip;
-    /*move = 
+    move = 
+    VAR flag_behavior, ii, tmp_up, tmp_down IN
+        ii := 0;
+        flag_behavior := FALSE;
+        
+        WHILE ii < 8
+        DO
+            tmp_up := behavior_up(ii);
+            tmp_down := behavior_down(ii);
+            IF tmp_up = TRUE or tmp_down = TRUE THEN
+                flag_behavior := TRUE
+            END;
+             ii := ii + 1
+            INVARIANT
+                ii < 8
+            VARIANT
+                8 - ii
+        END;
+        
+        IF status_work = TRUE & status_operation = TRUE & status_door = FALSE & ask_to_repair = FALSE & flag_behavior = TRUE THEN
+        
+            VAR flag_zero, tmpUp, tmpDown IN
+                flag_zero := FALSE;
+                tmpUp := behavior_up(0);
+                tmpDown := behavior_down(0);
+                
+                IF tmpUp = TRUE or tmp_down = TRUE THEN
+                    flag_zero := TRUE
+                END;
+                
+                VAR pivo_up, pivo_down, ii, greedy_ans IN
+                    pivo_up := 9;
+                    pivo_down := 9;
+                    ii := 0;
+                    WHILE ii < 8
+                    DO
+                        greedy_ans := behavior_up(ii);
+                        IF greedy_ans = TRUE & ii < pivo_up THEN
+                            pivo_up := ii
+                        END;
+                         ii := ii + 1
+                    INVARIANT
+                        ii < 8
+                    VARIANT
+                        8 - ii
+                    END;
+                
+                    ii := 0;
+                
+                    WHILE ii < 8
+                    DO
+                        greedy_ans := behavior_down(ii);
+                        IF greedy_ans = TRUE & ii < pivo_down THEN
+                            pivo_down := ii
+                        END;
+                         ii := ii + 1
+                    INVARIANT
+                        ii < 8
+                    VARIANT
+                        8 - ii
+                    END;    
+    
+                
+                IF flag_zero = TRUE THEN
+                   behavior_up(0) := FALSE
+                   ; behavior_down(0) := FALSE
+                   ; current_direction := empty
+                   ; display_direction_elevator := empty
+                   ; status_door := TRUE
+                   ; status_work := FALSE
+                   ; cancel_set_2ref_ := (0..1) * {0}
+                   ; cancel_set_floor_up_2ref_ := (0..1) * {0}
+                   ; cancel_set_floor_down_2ref_ := (0..1) * {0}
+                   ; btn_special(btn_close) := FALSE
+                   ; btn_actions_(current_floor) := FALSE
+                   ; floor_leds_up_(current_floor) := FALSE
+                   ; floor_leds_down_(current_floor) := FALSE
+                   ; state_blink_(current_floor) := FALSE
+                   
+                ELSE 
+                    IF pivo_down > pivo_up & current_direction /= down THEN
+                        current_floor := current_floor + 1
+                        ; current_direction := up
+                        ; display_direction_elevator := up
+                        ; cancel_set_2ref_ := (0..1) * {0}
+                        ; cancel_set_floor_up_2ref_ := (0..1) * {0}
+                        ; cancel_set_floor_down_2ref_ := (0..1) * {0}
+                        ; display_floor_(current_floor) := TRUE
+                        ; display_floor_(current_floor-1) := FALSE
+                        ; status_work := TRUE;
+                        
+                        VAR ii, tmp_up, tmp_down IN
+                            ii := 0;
+                            tmp_up := behavior_up(ii);
+                            tmp_down := behavior_up(ii);
+                            WHILE ii < 8
+                            DO
+                                
+                                IF tmp_up = TRUE THEN
+                                    behavior_up(ii-1) := TRUE;
+                                    behavior_up(ii) := FALSE
+                                END;
+                                
+                                IF tmp_down = TRUE THEN
+                                    behavior_(ii+1) := TRUE;
+                                    behavior_up(ii) := FALSE
+                                END;
+                                 ii := ii + 1
+                            INVARIANT
+                                ii < 8
+                            VARIANT
+                                8 - ii
+                            END
+                            
+                            
+                        END
+                END       
+                END
+               END
+            END
+        END
+END;
+
+    move = 
     PRE
         status_work = TRUE
         & status_operation = TRUE
@@ -169,7 +291,6 @@ OPERATIONS
             END
         END
     END;
-    */
 
 
         
@@ -252,9 +373,10 @@ OPERATIONS
                     tmp_down := behavior_down(ii);
                     IF tmp_up = TRUE or tmp_down = TRUE THEN
                         flag_ans := TRUE
-                    END
+                    END;
+                     ii := ii + 1
                 INVARIANT
-                    ii <= 8
+                    ii < 8
                 VARIANT
                     8 - ii
                 END;
@@ -294,9 +416,10 @@ OPERATIONS
                     tmp_down := behavior_down(ii);
                     IF tmp_up = TRUE or tmp_down = TRUE THEN
                         flag_ans := TRUE
-                    END
+                    END;
+                     ii := ii + 1
                 INVARIANT
-                    ii <= 8
+                    ii < 8
                 VARIANT
                     8 - ii
                 END;
@@ -476,7 +599,8 @@ OPERATIONS
                 tmp := people_in_elevator_2ref_(ii);
                 IF tmp /= 0 THEN
                     flag_ans := TRUE  
-                END
+                END;
+                 ii := ii + 1
             INVARIANT
                 ii < QTD
             VARIANT
@@ -651,10 +775,11 @@ OPERATIONS
                     IF cond = TRUE THEN
                         count := count + 1
                     END
-                END
+                END;
+                 ii := ii + 1
                 
             INVARIANT
-                ii <= 8
+                ii < 8
             VARIANT 
                 ii - 8
             END;
@@ -745,10 +870,11 @@ OPERATIONS
                     IF cond2 = TRUE THEN
                         count := count + 1
                     END 
-                END
+                END;
+                 ii := ii + 1
                 
             INVARIANT
-                ii <= 8
+                ii < 8
             VARIANT 
                 ii - 8
             END;
