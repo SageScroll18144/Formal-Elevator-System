@@ -630,17 +630,27 @@ OPERATIONS
             count := 0;
             flag_cancel := FALSE;
             
-            IF cancel_set_2ref_(0) = num_floor & cancel_set_2ref_(1) = num_floor THEN
-                flag_cancel := TRUE
+            VAR cond1, cond2 IN
+                cond1 := cancel_set_2ref_(0);
+                cond2 := cancel_set_2ref_(1);
+                IF cond1 = num_floor & cond2 = num_floor THEN
+                    flag_cancel := TRUE
+                END
             END;
                 
             WHILE ii < 8
             DO
-                IF behavior_up(ii) = TRUE THEN
-                   count := count + 1
+                VAR cond IN
+                    cond := behavior_up(ii);
+                    IF cond = TRUE THEN
+                       count := count + 1
+                    END
                 END;
-                IF behavior_down(ii) = TRUE THEN
-                    count := count + 1
+                VAR cond IN
+                    cond := behavior_down(ii);
+                    IF cond = TRUE THEN
+                        count := count + 1
+                    END
                 END
                 
             INVARIANT
@@ -694,29 +704,47 @@ OPERATIONS
             ii := 0;
             count := 0;
             
-            IF floor_leds_up_(num_floor) = TRUE THEN 
-               flag_leds_up := TRUE
+            VAR cond IN
+                cond := floor_leds_up_(num_floor);
+                IF cond = TRUE THEN 
+                   flag_leds_up := TRUE
+                END
             END;
             
-            IF floor_leds_down_(num_floor) = TRUE THEN 
-               flag_leds_down := TRUE
+            VAR cond IN
+                cond := floor_leds_down_(num_floor);
+                IF cond = TRUE THEN 
+                   flag_leds_down := TRUE
+                END
             END;
             
-            IF cancel_set_floor_up_2ref_(0) = num_floor & cancel_set_floor_up_2ref_(1) = num_floor THEN
-                flag_cancel_up := TRUE
+            VAR cond1, cond2 IN
+                cond1 := cancel_set_floor_up_2ref_(0);
+                cond2 := cancel_set_floor_up_2ref_(1);
+                IF cond1 = num_floor & cond2 = num_floor THEN
+                    flag_cancel_up := TRUE
+                END
             END;
             
-            IF cancel_set_floor_down_2ref_(0) = num_floor & cancel_set_floor_down_2ref_(1) = num_floor THEN
-                flag_cancel_down := TRUE
+            VAR cond1, cond2 IN
+                cond1 := cancel_set_floor_down_2ref_(0);
+                cond2 := cancel_set_floor_down_2ref_(1);
+                IF cond1 = num_floor & cond2 = num_floor THEN
+                    flag_cancel_down := TRUE
+                END
             END;
             ii := 0;
             WHILE ii < 8
             DO
-                IF behavior_up(ii) = TRUE THEN
-                   count := count + 1
-                END;
-                IF behavior_down(ii) = TRUE THEN
-                    count := count + 1
+                VAR cond1, cond2 IN
+                   cond1 := behavior_up(ii);
+                   cond2 := behavior_down(ii);
+                   IF cond1 = TRUE THEN
+                       count := count + 1
+                    END;
+                    IF cond2 = TRUE THEN
+                        count := count + 1
+                    END 
                 END
                 
             INVARIANT
@@ -856,5 +884,4 @@ OPERATIONS
          END
       END
     END
-
  END
