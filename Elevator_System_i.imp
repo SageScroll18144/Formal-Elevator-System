@@ -88,7 +88,7 @@ INITIALISATION
     ptr_qtd := 1
 
 OPERATIONS
-     move = skip;
+    move = skip;
     /*move = 
     PRE
         status_work = TRUE
@@ -176,12 +176,13 @@ OPERATIONS
     //Implementado
     elevator_operation_request(user_orders) = 
     BEGIN
-        VAR f1, flag IN
+        VAR f1, flag, tmp, tmp2, tmp3 IN
             f1 := 0;
             flag := TRUE;
             WHILE f1 < 8
             DO
-                IF f1 /= current_floor & display_floor_(f1) = TRUE THEN
+                tmp := display_floor_(f1);
+                IF f1 /= current_floor & tmp = TRUE THEN
                     flag := FALSE        
                 END;
                 f1 := f1 + 1
@@ -191,8 +192,11 @@ OPERATIONS
                 8 - f1
             END;
             
-        IF display_floor_(current_floor) = TRUE & flag = TRUE & sensor_balance <= 450 & sensor_balance > 0 & user_orders >= 0 & user_orders < NUM_FLOOR & status_operation = TRUE
-            & btn_special(btn_phone) = FALSE THEN    
+        tmp2 := display_floor_(current_floor);
+        tmp3 := btn_special(btn_phone);
+        
+        IF tmp2 = TRUE & flag = TRUE & sensor_balance <= 450 & sensor_balance > 0 & user_orders >= 0 & user_orders < NUM_FLOOR & status_operation = TRUE
+            & tmp3 = FALSE THEN    
             
                 VAR delta IN
                     delta := user_orders - current_floor;
@@ -239,12 +243,14 @@ OPERATIONS
     BEGIN
         IF status_work = FALSE & status_door = TRUE & status_operation = TRUE & alarm_door = FALSE THEN
             
-            VAR ii, flag_ans IN 
+            VAR ii, flag_ans, tmp_up, tmp_down IN 
                 ii := 0;
                 flag_ans := FALSE;
                 WHILE ii < 8
                 DO
-                    IF behavior_up(ii) = TRUE or behavior_down(ii) = TRUE THEN
+                    tmp_up := behavior_up(ii);
+                    tmp_down := behavior_down(ii);
+                    IF tmp_up = TRUE or tmp_down = TRUE THEN
                         flag_ans := TRUE
                     END
                 INVARIANT
@@ -279,12 +285,14 @@ OPERATIONS
     BEGIN
         IF status_operation = TRUE & alarm_door = FALSE & current_direction = empty & sensor_balance > 0 THEN
             
-            VAR ii, flag_ans IN 
+            VAR ii, flag_ans, tmp_up, tmp_down IN 
                 ii := 0;
                 flag_ans := FALSE;
                 WHILE ii < 8
                 DO
-                    IF behavior_up(ii) = TRUE or behavior_down(ii) = TRUE THEN
+                    tmp_up := behavior_up(ii);
+                    tmp_down := behavior_down(ii);
+                    IF tmp_up = TRUE or tmp_down = TRUE THEN
                         flag_ans := TRUE
                     END
                 INVARIANT
@@ -350,12 +358,14 @@ OPERATIONS
     elevator_operation_break_to_repair =
     BEGIN
         IF status_operation = FALSE & ask_to_repair = TRUE THEN
-            VAR flag_behavior,ii IN
+            VAR flag_behavior,ii, tmp_up, tmp_down IN
                 flag_behavior := TRUE; // vai checar se nao tem requisicao 
                 ii := 0;
                 WHILE ii < NUM_FLOOR
                 DO
-                    IF behavior_up(ii) = TRUE or behavior_down(ii) = TRUE THEN
+                    tmp_up := behavior_up(ii);
+                    tmp_down := behavior_down(ii);
+                    IF tmp_up = TRUE or tmp_down = TRUE THEN
                         flag_behavior := FALSE    
                     END;
                     ii := ii + 1
@@ -457,13 +467,14 @@ OPERATIONS
     // Implementado
     exit_elevator =
     BEGIN 
-        VAR ii, flag_ans IN
+        VAR ii, flag_ans, tmp IN
             ii := 0;
             flag_ans := FALSE;
             
             WHILE ii < QTD
             DO
-                IF people_in_elevator_2ref_(ii) /= 0 THEN
+                tmp := people_in_elevator_2ref_(ii);
+                IF tmp /= 0 THEN
                     flag_ans := TRUE  
                 END
             INVARIANT
@@ -499,8 +510,11 @@ OPERATIONS
     // Implementado
     intermediary_call_elevator(number_floor, direction) =
     BEGIN
-       IF number_floor > 1 & number_floor < NUM_FLOOR & direction /= empty & status_operation = TRUE & btn_special(btn_phone) = FALSE & number_floor /= current_floor THEN
-           IF sensor_pir = FALSE THEN
+        VAR tmp IN
+            tmp := btn_special(btn_phone);
+            
+            IF number_floor > 1 & number_floor < NUM_FLOOR & direction /= empty & status_operation = TRUE & tmp = FALSE & number_floor /= current_floor THEN
+            IF sensor_pir = FALSE THEN
             VAR delta IN
                 delta := (number_floor - current_floor);
                IF delta < 0 THEN
@@ -558,7 +572,9 @@ OPERATIONS
                 END  
             END
         END
-       END
+        END
+        END    
+       
     END;
 
     // Implementado
