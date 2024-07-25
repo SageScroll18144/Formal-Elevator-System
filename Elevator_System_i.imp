@@ -40,6 +40,7 @@ INVARIANT
     & display_floor : (0..NUM_FLOOR - 1) --> BOOL
     & display_floor(current_floor) = TRUE
     & btn_actions : (0..NUM_FLOOR - 1) --> BOOL 
+    & state_blink : (0..NUM_FLOOR - 1) --> BOOL
 
 INITIALISATION
     current_floor := 3;
@@ -47,7 +48,7 @@ INITIALISATION
     status_door := TRUE;
     status_work := FALSE;
     status_operation := TRUE;
-    btn_actions := ELEVATOR_ORDINARY_BUTTONS * {FALSE}; // relação com o elevador;
+    btn_actions := (0..NUM_FLOOR - 1) * {FALSE}; // relação com o elevador;
     btn_special := ELEVATOR_SPECIAL_BUTTONS * {FALSE}; // relação com o elevador;
     display_floor :=  (0..NUM_FLOOR - 1) * {FALSE} <+ {3 |-> TRUE}; // relação com o elevador;
     time := 0;
@@ -58,7 +59,7 @@ INITIALISATION
     sensor_balance := 0;
     display_direction_elevator := empty;
     ask_to_repair := FALSE;
-    people_in_elevator_2ref := (1..QTD) * {0};
+    people_in_elevator_2ref := (0..QTD-1) * {0};
     behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE};
     behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE};
     floor_leds_up := ELEVATOR_ORDINARY_BUTTONS * {FALSE};
@@ -66,7 +67,7 @@ INITIALISATION
     cancel_set_2ref := (1..TIME_CANCEL) * {0};
     cancel_set_floor_up_2ref := (1..TIME_CANCEL) * {0};
     cancel_set_floor_down_2ref := (1..TIME_CANCEL) * {0};
-    state_blink := ELEVATOR_FLOOR_DISPLAY  * {FALSE};
+    state_blink := (0..NUM_FLOOR - 1)  * {FALSE};
     alarm_door := FALSE;
     ptr_qtd := 1
 
