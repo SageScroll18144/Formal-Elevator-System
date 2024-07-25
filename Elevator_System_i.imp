@@ -3,8 +3,8 @@
  * Creation date: 23/07/24
  */
 
-IMPLEMENTATION Elevator_System_i
-REFINES Elevator_System_2r
+IMPLEMENTATION Elevator_system_i
+REFINES Elevator_system_2r
 
 CONCRETE_VARIABLES 
     current_floor,
@@ -37,10 +37,9 @@ CONCRETE_VARIABLES
 
 INVARIANT
     people_in_elevator_2ref : (0..QTD-1) --> NAT
-    & display_floor : (0..NUM_FLOOR - 1) --> BOOL
-    & display_floor(current_floor) = TRUE
-    & btn_actions : (0..NUM_FLOOR - 1) --> BOOL 
-    & state_blink : (0..NUM_FLOOR - 1) --> BOOL
+    & cancel_set_2ref : (0..TIME_CANCEL-1) --> 0..NUM_FLOOR
+    & cancel_set_floor_up_2ref : (0..TIME_CANCEL-1) --> 0..NUM_FLOOR
+    & cancel_set_floor_down_2ref : (0..TIME_CANCEL-1) --> 0..NUM_FLOOR 
 
 INITIALISATION
     current_floor := 3;
@@ -48,9 +47,9 @@ INITIALISATION
     status_door := TRUE;
     status_work := FALSE;
     status_operation := TRUE;
-    btn_actions := (0..NUM_FLOOR - 1) * {FALSE}; // relação com o elevador;
+    btn_actions := ELEVATOR_ORDINARY_BUTTONS * {FALSE}; // relação com o elevador;
     btn_special := ELEVATOR_SPECIAL_BUTTONS * {FALSE}; // relação com o elevador;
-    display_floor :=  (0..NUM_FLOOR - 1) * {FALSE} <+ {3 |-> TRUE}; // relação com o elevador;
+    display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {3 |-> TRUE}; // relação com o elevador;
     time := 0;
     time_floor_up := 0;
     time_floor_down := 0;
@@ -64,16 +63,16 @@ INITIALISATION
     behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE};
     floor_leds_up := ELEVATOR_ORDINARY_BUTTONS * {FALSE};
     floor_leds_down := ELEVATOR_ORDINARY_BUTTONS * {FALSE};
-    cancel_set_2ref := (1..TIME_CANCEL) * {0};
-    cancel_set_floor_up_2ref := (1..TIME_CANCEL) * {0};
-    cancel_set_floor_down_2ref := (1..TIME_CANCEL) * {0};
-    state_blink := (0..NUM_FLOOR - 1)  * {FALSE};
+    cancel_set_2ref := (0..TIME_CANCEL-1) * {0};
+    cancel_set_floor_up_2ref := (0..TIME_CANCEL-1) * {0};
+    cancel_set_floor_down_2ref := (0..TIME_CANCEL-1) * {0};
+    state_blink := ELEVATOR_FLOOR_DISPLAY  * {FALSE};
     alarm_door := FALSE;
     ptr_qtd := 1
 
 
 OPERATIONS
- 
+    // Implementado    
     move = 
     PRE
         status_work = TRUE
@@ -90,9 +89,9 @@ OPERATIONS
             || display_direction_elevator := empty
             || status_door := TRUE
             || status_work := FALSE
-            || cancel_set_2ref := (1..TIME_CANCEL) * {0}
-            || cancel_set_floor_up_2ref := (1..TIME_CANCEL) * {0}
-            || cancel_set_floor_down_2ref := (1..TIME_CANCEL) * {0}
+            || cancel_set_2ref := (0..TIME_CANCEL-1) * {0}
+            || cancel_set_floor_up_2ref := (0..TIME_CANCEL-1) * {0}
+            || cancel_set_floor_down_2ref := (0..TIME_CANCEL-1) * {0}
             || btn_special(btn_close) := FALSE
             || btn_actions(current_floor) := FALSE
             || floor_leds_up(current_floor) := FALSE
@@ -104,9 +103,9 @@ OPERATIONS
                  current_floor := current_floor + 1
                 || current_direction := up
                 || display_direction_elevator := up
-                || cancel_set_2ref := (1..TIME_CANCEL) * {0}
-                || cancel_set_floor_up_2ref := (1..TIME_CANCEL) * {0}
-                || cancel_set_floor_down_2ref := (1..TIME_CANCEL) * {0}
+                || cancel_set_2ref := (0..TIME_CANCEL-1) * {0}
+                || cancel_set_floor_up_2ref := (0..TIME_CANCEL-1) * {0}
+                || cancel_set_floor_down_2ref := (0..TIME_CANCEL-1) * {0}
                 || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {(display_floor~(TRUE) + 1) |-> TRUE} 
                 || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE} <+ { xx,yy | xx : 0..(NUM_FLOOR - 1) & yy : {TRUE} & (xx + 1) |-> yy : behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}}
                 || behavior_down_ref :=  (0..NUM_FLOOR-1) * {FALSE} <+ { xx,yy | xx : 0..(NUM_FLOOR - 1) & yy : {TRUE} & (xx - 1) |-> yy : behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE}}
@@ -117,9 +116,9 @@ OPERATIONS
                     current_floor := current_floor - 1
                     || current_direction := down
                     || display_direction_elevator := down
-                    || cancel_set_2ref := (1..TIME_CANCEL) * {0}
-                    || cancel_set_floor_up_2ref := (1..TIME_CANCEL) * {0}
-                    || cancel_set_floor_down_2ref := (1..TIME_CANCEL) * {0}
+                    || cancel_set_2ref := (0..TIME_CANCEL-1) * {0}
+                    || cancel_set_floor_up_2ref := (0..TIME_CANCEL-1) * {0}
+                    || cancel_set_floor_down_2ref := (0..TIME_CANCEL-1) * {0}
                     || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {((display_floor~(TRUE)) - 1) |-> TRUE}
                     || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE} <+ { xx,yy | xx : 0..(NUM_FLOOR - 1) & yy : {TRUE} & (xx - 1) |-> yy : behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}}
                 || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE} <+ { xx,yy | xx : 0..(NUM_FLOOR - 1) & yy : {TRUE} & (xx + 1) |-> yy : behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE}}
@@ -130,9 +129,9 @@ OPERATIONS
                         current_floor := current_floor - 1
                         || current_direction := down
                         || display_direction_elevator := down
-                        || cancel_set_2ref := (1..TIME_CANCEL) * {0}
-                        || cancel_set_floor_up_2ref := (1..TIME_CANCEL) * {0}
-                        || cancel_set_floor_down_2ref := (1..TIME_CANCEL) * {0}
+                        || cancel_set_2ref := (0..TIME_CANCEL-1) * {0}
+                        || cancel_set_floor_up_2ref := (0..TIME_CANCEL-1) * {0}
+                        || cancel_set_floor_down_2ref := (0..TIME_CANCEL-1) * {0}
                         || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {(display_floor~(TRUE) - 1) |-> TRUE}
                         || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE} <+ { xx,yy | xx : 0..(NUM_FLOOR - 1) & yy : {TRUE} & (xx - 1) |-> yy : behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}}
                 || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE} <+ { xx,yy | xx : 0..(NUM_FLOOR - 1) & yy : {TRUE} & (xx + 1) |-> yy : behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE}}
@@ -158,41 +157,26 @@ OPERATIONS
 
 
         
-    //Implementado
+    // Operações referentes ao elevador
+    
     elevator_operation_request(user_orders) = 
-    BEGIN
-        VAR f1, flag IN
-            f1 := 0;
-            flag := TRUE;
-            WHILE f1 < NUM_FLOOR
-            DO
-                IF f1 /= current_floor & display_floor(f1) = TRUE THEN
-                    flag := FALSE        
-                END;
-                f1 := f1 + 1;
-            INVARIANT
-                f1 < NUM_FLOOR
-            VARIANT 
-                NUM_FLOOR - f1
-            END
-        END;
-            
-        IF
-            display_floor(current_floor) = TRUE
-            & f1 = TRUE
-            & sensor_balance <= 450
-            & sensor_balance > 0
-            & user_orders : 1..NUM_FLOOR
-            & status_operation = TRUE
-            & btn_special(btn_phone) = FALSE THEN    
-            
-                IF (user_orders - current_floor) < 0 THEN
-                    behavior_down_ref(current_floor - user_orders) := TRUE
-                    ; btn_actions(user_orders) := TRUE
-                ELSE
-                    behavior_up_ref(user_orders - current_floor) := TRUE
-                    ; btn_actions(user_orders) := TRUE
-                END
+    PRE
+        user_orders : 1..NUM_FLOOR
+        & display_floor(current_floor) = TRUE
+        & !(f1) . (f1 : NAT & f1 /= current_floor => display_floor(f1) = FALSE)
+        & sensor_balance <= 450
+        & sensor_balance > 0
+        & user_orders : 1..NUM_FLOOR
+        & status_operation = TRUE
+        & btn_special(btn_phone) = FALSE
+
+    THEN        
+        IF (user_orders - current_floor) < 0 THEN
+            behavior_down_ref(current_floor - user_orders) := TRUE
+            || btn_actions(user_orders) := TRUE
+        ELSE
+            behavior_up_ref(user_orders - current_floor) := TRUE
+            || btn_actions(user_orders) := TRUE
         END
     END;
 
@@ -318,7 +302,7 @@ OPERATIONS
         END
     END;
 
-    // Implementado
+    // Implemenetado
     elevator_operation_let_go = 
     BEGIN
         IF sensor_pir = TRUE THEN 
@@ -326,72 +310,55 @@ OPERATIONS
             time_door := 1    
         END
     END;
-    
-    // Implementado
+
     elevator_operation_break_to_repair =
-    BEGIN
-        IF status_operation = FALSE & ask_to_repair = TRUE THEN
-            VAR flag_behavior,ii IN
-                flag_behavior := TRUE; // vai checar se nao tem requisicao 
-                ii := 0;
-                WHILE ii < NUM_FLOOR
-                DO
-                    IF behavior_up_ref(ii) = TRUE or behavior_down_ref(ii) = TRUE THEN
-                        flag_behavior := FALSE    
-                    END;
-                    ii := ii + 1
-                INVARIANT
-                    ii < NUM_FLOOR
-                VARIANT
-                    NUM_FLOOR - ii
-                END;
-                
-                IF flag_behavior = TRUE or current_direction = empty THEN
-                    status_work := FALSE
-                    ; display_direction_elevator := empty
-                    ; ask_to_repair := FALSE
-                    ; behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
-                    ; behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
-                    ; people_in_elevator_2ref := (0..QTD-1) * {0}
-                    ; ptr_qtd := 1
-                    ; sensor_balance := 0
-                    ; sensor_pir := FALSE
-                ELSE
-                   IF (current_direction = up & current_floor /= NUM_FLOOR) or (current_floor = 1) THEN
-                       // vai para o pavimento acima
-                        status_work := FALSE
-                        ; current_floor := current_floor + 1 
-                        ; display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {current_floor |-> TRUE}
-                        ; current_direction := empty
-                        ; display_direction_elevator := empty
-                        ; ask_to_repair := FALSE
-                        ; behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
-                        ; behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
-                        ; people_in_elevator_2ref := (0..QTD-1) * {0}
-                        ; ptr_qtd := 1
-                        ; sensor_balance := 0
-                        ; sensor_pir := FALSE
-                   ELSE IF (current_direction = down & current_floor /= 1) or (current_floor = NUM_FLOOR) THEN
-                        status_work := FALSE
-                        ; current_floor := current_floor - 1 
-                        ; display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {current_floor |-> TRUE}
-                        ; current_direction := empty
-                        ; display_direction_elevator := empty
-                        ; ask_to_repair := FALSE
-                        ; behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
-                        ; behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
-                        ; people_in_elevator_2ref := (0..QTD-1) * {0}
-                        ; ptr_qtd := 1
-                        ; sensor_balance := 0
-                        ; sensor_pir := FALSE
-                    END
-                   END
-                END
-                
+    PRE
+        status_operation = FALSE
+        & ask_to_repair = TRUE
+    THEN
+        IF card(dom(behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}) \/ dom(behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE})) = 0 or current_direction = empty THEN
+            status_work := FALSE
+            || display_direction_elevator := empty
+            || ask_to_repair := FALSE
+            || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
+            || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
+            || people_in_elevator_2ref := (1..QTD) * {0}
+            || ptr_qtd := 1
+            || sensor_balance := 0
+            || sensor_pir := FALSE
+        ELSE
+           IF (current_direction = up & current_floor /= NUM_FLOOR) or (current_floor = 1) THEN
+               // vai para o pavimento acima
+                status_work := FALSE
+                || current_floor := current_floor + 1 
+                || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {display_floor~(TRUE) + 1 |-> TRUE}
+                || current_direction := empty
+                || display_direction_elevator := empty
+                || ask_to_repair := FALSE
+                || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
+                || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
+                || people_in_elevator_2ref := (1..QTD) * {0}
+                || ptr_qtd := 1
+                || sensor_balance := 0
+                || sensor_pir := FALSE
+           ELSE IF (current_direction = down & current_floor /= 1) or (current_floor = NUM_FLOOR) THEN
+                status_work := FALSE
+                || current_floor := current_floor - 1 
+                || display_floor := ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {display_floor~(TRUE) - 1 |-> TRUE}
+                || current_direction := empty
+                || display_direction_elevator := empty
+                || ask_to_repair := FALSE
+                || behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
+                || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
+                || people_in_elevator_2ref := (1..QTD) * {0}
+                || ptr_qtd := 1
+                || sensor_balance := 0
+                || sensor_pir := FALSE
             END
+           END
         END
     END;
-    
+
     // Implementado
     elevator_operation_repaired =
     BEGIN
@@ -400,15 +367,15 @@ OPERATIONS
             ; status_door := TRUE
             ; status_work := FALSE
             ; status_operation := TRUE
-            ; btn_actions := (0..NUM_FLOOR-1) * {FALSE} // relação com o elevador
+            ; btn_actions := ELEVATOR_ORDINARY_BUTTONS * {FALSE} // relação com o elevador
             ; btn_special := ELEVATOR_SPECIAL_BUTTONS * {FALSE} // relação com o elevador
-            ; display_floor :=  (0..NUM_FLOOR-1) * {FALSE} <+ {current_floor |-> TRUE} // relação com o elevador
+            ; display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {current_floor |-> TRUE} // relação com o elevador
             ; time_door := 1
             ; sensor_pir := FALSE
             ; sensor_balance := 0
             ; display_direction_elevator := empty
             ; ask_to_repair := FALSE
-            ; people_in_elevator_2ref := (0..QTD-1) * {0}
+            ; people_in_elevator_2ref := (1..QTD) * {0}
             ; ptr_qtd := 1
             ; behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
             ; behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
@@ -417,7 +384,7 @@ OPERATIONS
             ; cancel_set_2ref := (0..TIME_CANCEL-1) * {0}
             ; cancel_set_floor_up_2ref := (0..TIME_CANCEL-1) * {0}
             ; cancel_set_floor_down_2ref := (0..TIME_CANCEL-1) * {0}
-            ; state_blink := (0..NUM_FLOOR-1)  * {FALSE}
+            ; state_blink := ELEVATOR_FLOOR_DISPLAY  * {FALSE}
             ; alarm_door := FALSE
         END
     END;
@@ -473,65 +440,79 @@ OPERATIONS
         END
     END;
 
-    // Implementado
-    intermediary_call_elevator(number_floor, direction) =
-    BEGIN
-       IF number_floor > 1 & number_floor < NUM_FLOOR & direction : ELEVATOR_DIRECTIONS & direction /= empty & status_operation = TRUE & btn_special(btn_phone) = FALSE ((direction = up & floor_leds_up(number_floor) = FALSE) or (direction = down & floor_leds_down(number_floor) = FALSE)) & number_floor /= current_floor THEN
-           IF sensor_pir = FALSE THEN
+
+      
+    
+    // Operações referentes ao pavimento
+        // Obs: voce pode apertar mais de uma vez, entretanto na função só é registrado uma unica vez a requisição
+
+    intermediary_call_elevator(number_floor, direction) = 
+    PRE
+        number_floor : NAT
+        & number_floor > 1 & number_floor < NUM_FLOOR
+        & direction : ELEVATOR_DIRECTIONS & direction /= empty
+        & status_operation = TRUE
+        & btn_special(btn_phone) = FALSE
+        & (direction = up => floor_leds_up(number_floor) = FALSE)
+        & (direction = down => floor_leds_down(number_floor) = FALSE)
+        & number_floor /= current_floor
+    THEN
+        IF sensor_pir = FALSE THEN
             IF (number_floor - current_floor) < 0 THEN
                 IF direction = up THEN
                     behavior_down_ref(current_floor - number_floor) := TRUE
-                    ; status_door := FALSE
-                    ; status_work := TRUE
-                    ; floor_leds_up(number_floor) := TRUE
+                    || status_door := FALSE
+                    || status_work := TRUE
+                    || floor_leds_up(number_floor) := TRUE
                 ELSE
                     behavior_down_ref(current_floor - number_floor) := TRUE
-                    ; status_door := FALSE
-                    ; status_work := TRUE
-                    ; floor_leds_down(number_floor) := TRUE
+                    || status_door := FALSE
+                    || status_work := TRUE
+                    || floor_leds_down(number_floor) := TRUE
                 END
             ELSE 
                 IF direction = up THEN
                     behavior_up_ref(number_floor - current_floor) := TRUE
-                    ; status_door := FALSE
-                    ; status_work := TRUE
-                    ; floor_leds_up(number_floor) := TRUE
+                    || status_door := FALSE
+                    || status_work := TRUE
+                    || floor_leds_up(number_floor) := TRUE
                 ELSE
                     behavior_up_ref(number_floor - current_floor) := TRUE
-                    ; status_door := FALSE
-                    ; status_work := TRUE
-                    ; floor_leds_down(number_floor) := TRUE
+                    || status_door := FALSE
+                    || status_work := TRUE
+                    || floor_leds_down(number_floor) := TRUE
                 END
             END
         ELSE
             IF (number_floor - current_floor) < 0 THEN
                 IF direction = up THEN
                     behavior_down_ref(current_floor - number_floor) := TRUE
-                    ; status_door := TRUE
-                    ; status_work := FALSE
-                    ; floor_leds_up(number_floor) := TRUE
+                    || status_door := TRUE
+                    || status_work := FALSE
+                    || floor_leds_up(number_floor) := TRUE
                 ELSE
                     behavior_down_ref(current_floor - number_floor) := TRUE
-                    ; status_door := TRUE
-                    ; status_work := FALSE
-                    ; floor_leds_down(number_floor) := TRUE
+                    || status_door := TRUE
+                    || status_work := FALSE
+                    || floor_leds_down(number_floor) := TRUE
                 END
             ELSE 
                 IF direction = up THEN
                     behavior_up_ref(number_floor - current_floor) := TRUE
-                    ; status_door := TRUE
-                    ; status_work := FALSE
-                    ; floor_leds_up(number_floor) := TRUE
+                    || status_door := TRUE
+                    || status_work := FALSE
+                    || floor_leds_up(number_floor) := TRUE
                 ELSE
                     behavior_up_ref(number_floor - current_floor) := TRUE
-                    ; status_door := TRUE
-                    ; status_work := FALSE
-                    ; floor_leds_down(number_floor) := TRUE
+                    || status_door := TRUE
+                    || status_work := FALSE
+                    || floor_leds_down(number_floor) := TRUE
                 END
             END
         END
-       END
+
     END;
+
 
     // Implementado
     ground_floor_call_elevator = 
@@ -579,11 +560,35 @@ OPERATIONS
     // Implementado
     cancel(num_floor) =
     BEGIN
-        VAR flag_btn_actions IN
+        VAR flag_btn_actions, flag_single_req, ii, count, flag_cancel IN
             flag_btn_actions := btn_actions(num_floor);
+            flag_single_req := FALSE;
+            ii := 0;
+            count := 0;
+            flag_cancel := FALSE;
+            
+            IF cancel_set_2ref(0) = num_floor & cancel_set_2ref(1) = num_floor THEN
+                flag_cancel := TRUE
+            END;
+                
+            WHILE ii < 8
+            DO
+                IF behavior_up_ref(ii) = TRUE THEN
+                   count := count + 1
+                END;
+                IF behavior_down_ref(ii) = TRUE THEN
+                    count := count + 1
+                END
+                
+            INVARIANT
+                ii <= 8
+            VARIANT 
+                ii - 8
+            END;
+                   
             IF num_floor > 0 & flag_btn_actions = TRUE & status_operation = TRUE THEN
-                IF ran(cancel_set_2ref) = {num_floor}  THEN
-                    IF card(dom(behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}) \/ dom(behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE})) = 1 THEN
+                IF flag_cancel = TRUE THEN
+                    IF count = 1 THEN
                         state_blink(num_floor) := TRUE
                     ELSE IF (num_floor - current_floor) < 0 THEN
                         behavior_down_ref(current_floor - num_floor) := FALSE
@@ -609,142 +614,180 @@ OPERATIONS
                     state_blink(num_floor) := FALSE
                 END
             END
-        END
+          END
+       END
     END;
     
     cancel_floor(num_floor, direction) =
-    PRE 
-        num_floor : NAT
-        & direction : ELEVATOR_DIRECTIONS 
-        & num_floor /= current_floor 
-        & ((direction = up) => (floor_leds_up(num_floor) = TRUE)) 
-        & ((direction = down) => (floor_leds_down(num_floor) = TRUE))
-        & status_operation = TRUE
-        & direction /= empty
-    THEN
-        IF direction = up THEN
-            IF ran(cancel_set_floor_up_2ref) = {num_floor} THEN
-                IF card(dom(behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}) \/ dom(behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE})) = 1 THEN
-                    IF current_direction = up THEN
-                        behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
-                        || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
-                        || floor_leds_up(num_floor) := FALSE
-                        || floor_leds_down(num_floor) := FALSE
-                        || current_direction := empty
-                        || display_direction_elevator := empty
-                        || current_floor := current_floor + 1 
-                        || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {display_floor~(TRUE) +1 |-> TRUE}
+    BEGIN
+        VAR flag_leds_up, flag_leds_down, flag_cancel_up, flag_cancel_down, ii, count IN
+            flag_leds_up := FALSE;
+            flag_leds_down := FALSE;
+            flag_cancel_up := FALSE;
+            flag_cancel_down := FALSE;
+            ii := 0;
+            count := 0;
+            
+            IF floor_leds_up(num_floor) = TRUE THEN 
+               flag_leds_up := TRUE
+            END;
+            
+            IF floor_leds_down(num_floor) = TRUE THEN 
+               flag_leds_down := TRUE
+            END;
+            
+            IF cancel_set_floor_up_2ref(0) = num_floor & cancel_set_floor_up_2ref(1) = num_floor THEN
+                flag_cancel_up := TRUE
+            END;
+            
+            IF cancel_set_floor_down_2ref(0) = num_floor & cancel_set_floor_down_2ref(1) = num_floor THEN
+                flag_cancel_down := TRUE
+            END;
+            
+            WHILE ii < 8
+            DO
+                IF behavior_up_ref(ii) = TRUE THEN
+                   count := count + 1
+                END;
+                IF behavior_down_ref(ii) = TRUE THEN
+                    count := count + 1
+                END
+                
+            INVARIANT
+                ii <= 8
+            VARIANT 
+                ii - 8
+            END;
+     
+            IF num_floor /= current_floor & (((direction = up) & (flag_leds_up = TRUE)) or ((direction = down) & (flag_leds_down = TRUE))) & status_operation = TRUE & direction /= empty THEN
+                IF direction = up THEN
+                    IF flag_cancel_up = TRUE THEN
+                        IF count = 1 THEN
+                            IF current_direction = up THEN
+                                behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
+                                ; behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
+                                ; floor_leds_up(num_floor) := FALSE
+                                ; floor_leds_down(num_floor) := FALSE
+                                ; current_direction := empty
+                                ; display_direction_elevator := empty
+                                ; current_floor := current_floor + 1 
+                                ; display_floor(current_floor) := TRUE
+                                ; display_floor(current_floor-1) := FALSE
+                                
+                             ELSE IF current_direction = down THEN
+                                behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
+                                ; behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
+                                ; floor_leds_up(num_floor) := FALSE
+                                ; floor_leds_down(num_floor) := FALSE
+                                ; current_direction := empty
+                                ; display_direction_elevator := empty
+                                ; current_floor := current_floor - 1
+                                ; display_floor(current_floor) := TRUE
+                                ; display_floor(current_floor+1) := FALSE
+                                 
+                             ELSE
+                                behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
+                                ; behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
+                                ; floor_leds_up(num_floor) := FALSE
+                                ; floor_leds_down(num_floor) := FALSE
+                                ; current_direction := empty
+                                ; display_direction_elevator := empty
+                                 
+                           
+                             END
+                        END
                         
-                     ELSE IF current_direction = down THEN
-                        behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
-                        || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
-                        || floor_leds_up(num_floor) := FALSE
-                        || floor_leds_down(num_floor) := FALSE
-                        || current_direction := empty
-                        || display_direction_elevator := empty
-                        || current_floor := current_floor - 1
-                        || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {display_floor~(TRUE) -1 |-> TRUE}
-                         
-                     ELSE
-                        behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
-                        || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
-                        || floor_leds_up(num_floor) := FALSE
-                        || floor_leds_down(num_floor) := FALSE
-                        || current_direction := empty
-                        || display_direction_elevator := empty
-                         
+                        ELSE IF current_floor > num_floor THEN
+                            behavior_down_ref(current_floor - num_floor) := FALSE
+                            ; floor_leds_up(num_floor) := FALSE
+                            ; floor_leds_down(num_floor) := FALSE
+                            ; current_direction := empty
+                            ; display_direction_elevator := empty
                    
-                     END
-                END
-                
-                ELSE IF current_floor > num_floor THEN
-                    behavior_down_ref(current_floor - num_floor) := FALSE
-                    || floor_leds_up(num_floor) := FALSE
-                    || floor_leds_down(num_floor) := FALSE
-                    || current_direction := empty
-                    || display_direction_elevator := empty
-           
+                        ELSE 
+                            behavior_up_ref(num_floor - current_floor) := FALSE
+                            ; floor_leds_up(num_floor) := FALSE
+                            ; floor_leds_down(num_floor) := FALSE
+                            ; current_direction := empty
+                            ; display_direction_elevator := empty
+                   
+                        END
+                    END
+                    
+                ELSE IF time_floor_up < 2 THEN
+                    time_floor_up := time_floor_up + 1;
+                    cancel_set_floor_up_2ref := cancel_set_floor_up_2ref <+ {time_floor_up |-> num_floor}
+                   
                 ELSE 
-                    behavior_up_ref(num_floor - current_floor) := FALSE
-                    || floor_leds_up(num_floor) := FALSE
-                    || floor_leds_down(num_floor) := FALSE
-                    || current_direction := empty
-                    || display_direction_elevator := empty
-           
+                    time_floor_up := 1;
+                    cancel_set_floor_up_2ref := cancel_set_floor_up_2ref <+ {time_floor_up |-> num_floor}
                 END
                 END
-                
-            ELSE IF time_floor_up < 2 THEN
-                time_floor_up := time_floor_up + 1;
-                cancel_set_floor_up_2ref := cancel_set_floor_up_2ref <+ {time_floor_up |-> num_floor}
-               
-            ELSE 
-                time_floor_up := 1;
-                cancel_set_floor_up_2ref := cancel_set_floor_up_2ref <+ {time_floor_up |-> num_floor}
-            END
-            END
-        ELSE
-            IF ran(cancel_set_floor_down_2ref) = {num_floor} THEN 
-                    IF card(dom(behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}) \/ dom(behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE})) = 1 THEN
-                        IF current_direction = up THEN
-                            behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
-                            || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
-                            || floor_leds_up(num_floor) := FALSE
-                            || floor_leds_down(num_floor) := FALSE
-                            || current_direction := empty
-                            || display_direction_elevator := empty
-                            || current_floor := current_floor + 1 
-                            || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {display_floor~(TRUE) +1 |-> TRUE}
-                            
-                         ELSE IF current_direction = down THEN
-                            behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
-                            || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
-                            || floor_leds_up(num_floor) := FALSE
-                            || floor_leds_down(num_floor) := FALSE
-                            || current_direction := empty
-                            || display_direction_elevator := empty
-                            || current_floor := current_floor - 1
-                            || display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {display_floor~(TRUE) -1 |-> TRUE}
-                             
-                         ELSE
-                            behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
-                            || behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
-                            || floor_leds_up(num_floor) := FALSE
-                            || floor_leds_down(num_floor) := FALSE
-                            || current_direction := empty
-                            || display_direction_elevator := empty
-                             
-                       
-                         END
-                    END
-                    
-                    ELSE IF current_floor > num_floor  THEN
-                        behavior_down_ref(current_floor - num_floor) := FALSE
-                        || floor_leds_up(num_floor) := FALSE
-                        || floor_leds_down(num_floor) := FALSE
-                        || current_direction := empty
-                        || display_direction_elevator := empty
-               
-                    ELSE 
-                        behavior_up_ref(num_floor - current_floor) := FALSE
-                        || floor_leds_up(num_floor) := FALSE
-                        || floor_leds_down(num_floor) := FALSE
-                        || current_direction := empty
-                        || display_direction_elevator := empty
-               
+            ELSE
+                IF flag_cancel_down = TRUE THEN 
+                        IF count = 1 THEN
+                            IF current_direction = up THEN
+                                behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
+                                ; behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
+                                ; floor_leds_up(num_floor) := FALSE
+                                ; floor_leds_down(num_floor) := FALSE
+                                ; current_direction := empty
+                                ; display_direction_elevator := empty
+                                ; current_floor := current_floor + 1 
+                                ; display_floor(current_floor) := TRUE
+                                ; display_floor(current_floor-1) := FALSE
+                                
+                             ELSE IF current_direction = down THEN
+                                behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
+                                ; behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
+                                ; floor_leds_up(num_floor) := FALSE
+                                ; floor_leds_down(num_floor) := FALSE
+                                ; current_direction := empty
+                                ; display_direction_elevator := empty
+                                ; current_floor := current_floor - 1
+                                ; display_floor(current_floor) := TRUE
+                                ; display_floor(current_floor+1) := FALSE
+                                 
+                             ELSE
+                                behavior_up_ref := (0..NUM_FLOOR-1) * {FALSE}
+                                ; behavior_down_ref := (0..NUM_FLOOR-1) * {FALSE}
+                                ; floor_leds_up(num_floor) := FALSE
+                                ; floor_leds_down(num_floor) := FALSE
+                                ; current_direction := empty
+                                ; display_direction_elevator := empty
+                                 
+                           
+                             END
+                        END
+                        
+                        ELSE IF current_floor > num_floor  THEN
+                            behavior_down_ref(current_floor - num_floor) := FALSE
+                            ; floor_leds_up(num_floor) := FALSE
+                            ; floor_leds_down(num_floor) := FALSE
+                            ; current_direction := empty
+                            ; display_direction_elevator := empty
+                   
+                        ELSE 
+                            behavior_up_ref(num_floor - current_floor) := FALSE
+                            ; floor_leds_up(num_floor) := FALSE
+                            ; floor_leds_down(num_floor) := FALSE
+                            ; current_direction := empty
+                            ; display_direction_elevator := empty
+                   
+                        END
+                        END
+                        
+                    ELSE IF time_floor_down < 2 THEN
+                        time_floor_down := time_floor_down + 1;
+                        cancel_set_floor_down_2ref := cancel_set_floor_down_2ref <+ {time_floor_down |-> num_floor}
+                        
+                    ELSE
+                        time_floor_down := 1;
+                        cancel_set_floor_down_2ref := cancel_set_floor_down_2ref <+ {time_floor_down |-> num_floor}
                     END
                     END
-                    
-                ELSE IF time_floor_down < 2 THEN
-                    time_floor_down := time_floor_down + 1;
-                    cancel_set_floor_down_2ref := cancel_set_floor_down_2ref <+ {time_floor_down |-> num_floor}
-                    
-                ELSE
-                    time_floor_down := 1;
-                    cancel_set_floor_down_2ref := cancel_set_floor_down_2ref <+ {time_floor_down |-> num_floor}
-                END
-                END
-         END       
-     END
-
+             END       
+         END
+      END
+    END
  END
