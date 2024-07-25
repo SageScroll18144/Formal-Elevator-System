@@ -37,7 +37,9 @@ CONCRETE_VARIABLES
 
 INVARIANT
     people_in_elevator_2ref : (0..QTD-1) --> NAT
-
+    & display_floor : (0..NUM_FLOOR - 1) --> BOOL
+    & display_floor(current_floor) = TRUE
+    & btn_actions : (0..NUM_FLOOR - 1) --> BOOL 
 
 INITIALISATION
     current_floor := 3;
@@ -47,7 +49,7 @@ INITIALISATION
     status_operation := TRUE;
     btn_actions := ELEVATOR_ORDINARY_BUTTONS * {FALSE}; // relação com o elevador;
     btn_special := ELEVATOR_SPECIAL_BUTTONS * {FALSE}; // relação com o elevador;
-    display_floor :=  ELEVATOR_FLOOR_DISPLAY * {FALSE} <+ {3 |-> TRUE}; // relação com o elevador;
+    display_floor :=  (0..NUM_FLOOR - 1) * {FALSE} <+ {3 |-> TRUE}; // relação com o elevador;
     time := 0;
     time_floor_up := 0;
     time_floor_down := 0;
@@ -70,7 +72,7 @@ INITIALISATION
 
 
 OPERATIONS
-    // Implementado    
+ 
     move = 
     PRE
         status_work = TRUE
@@ -155,26 +157,41 @@ OPERATIONS
 
 
         
-    // Operações referentes ao elevador
-    
+    //Implementado
     elevator_operation_request(user_orders) = 
-    PRE
-        user_orders : 1..NUM_FLOOR
-        & display_floor(current_floor) = TRUE
-        & !(f1) . (f1 : NAT & f1 /= current_floor => display_floor(f1) = FALSE)
-        & sensor_balance <= 450
-        & sensor_balance > 0
-        & user_orders : 1..NUM_FLOOR
-        & status_operation = TRUE
-        & btn_special(btn_phone) = FALSE
-
-    THEN        
-        IF (user_orders - current_floor) < 0 THEN
-            behavior_down_ref(current_floor - user_orders) := TRUE
-            || btn_actions(user_orders) := TRUE
-        ELSE
-            behavior_up_ref(user_orders - current_floor) := TRUE
-            || btn_actions(user_orders) := TRUE
+    BEGIN
+        VAR f1, flag IN
+            f1 := 0;
+            flag := TRUE;
+            WHILE f1 < NUM_FLOOR
+            DO
+                IF f1 /= current_floor & display_floor(f1) = TRUE THEN
+                    flag := FALSE        
+                END;
+                f1 := f1 + 1;
+            INVARIANT
+                f1 < NUM_FLOOR
+            VARIANT 
+                NUM_FLOOR - f1
+            END
+        END;
+            
+        IF
+            display_floor(current_floor) = TRUE
+            & f1 = TRUE
+            & sensor_balance <= 450
+            & sensor_balance > 0
+            & user_orders : 1..NUM_FLOOR
+            & status_operation = TRUE
+            & btn_special(btn_phone) = FALSE THEN    
+            
+                IF (user_orders - current_floor) < 0 THEN
+                    behavior_down_ref(current_floor - user_orders) := TRUE
+                    ; btn_actions(user_orders) := TRUE
+                ELSE
+                    behavior_up_ref(user_orders - current_floor) := TRUE
+                    ; btn_actions(user_orders) := TRUE
+                END
         END
     END;
 
