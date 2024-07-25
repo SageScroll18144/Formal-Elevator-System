@@ -35,6 +35,9 @@ CONCRETE_VARIABLES
     time_floor_down,
     alarm_door   
 
+INVARIANT
+    people_in_elevator_2ref : (0..QTD-1) --> NAT
+
 
 INITIALISATION
     current_floor := 3;
@@ -204,22 +207,38 @@ OPERATIONS
     elevator_operation_hold_door = 
     BEGIN
         IF status_work = FALSE & status_door = TRUE & status_operation = TRUE & alarm_door = FALSE THEN
-            IF time_door = 10 & card(dom(behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}) \/ dom(behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE})) > 0 THEN 
-            time_door := 1;
-            alarm_door := TRUE;
-            sensor_pir := TRUE
-        ELSE IF card(ran(behavior_up_ref) \/ ran(behavior_down_ref)) > 0 THEN
-             sensor_pir := TRUE ;
-             status_door := TRUE;
-             time_door := time_door + 1
-           ELSE
-             sensor_pir := TRUE;
-             status_door := TRUE;
-             time_door := 1
-            END 
+            
+            VAR ii, flag_ans IN 
+                ii := 0;
+                flag_ans := FALSE;
+                WHILE ii < 8
+                DO
+                    IF behavior_up_ref(ii) = TRUE or behavior_down_ref(ii) = TRUE THEN
+                        flag_ans := TRUE
+                    END
+                INVARIANT
+                    ii <= 8
+                VARIANT
+                    8 - ii
+                END;
+                 IF time_door = 10 & flag_ans = TRUE THEN 
+                    time_door := 1;
+                    alarm_door := TRUE;
+                    sensor_pir := TRUE
+                ELSE IF flag_ans = TRUE THEN
+                     sensor_pir := TRUE ;
+                     status_door := TRUE;
+                     time_door := time_door + 1
+               ELSE
+                 sensor_pir := TRUE;
+                 status_door := TRUE;
+                 time_door := 1
+                END 
         
-        END
-        
+                END
+                
+            END
+            
         END
         
     END;
@@ -228,24 +247,40 @@ OPERATIONS
     elevator_operation_open_door = 
     BEGIN
         IF status_operation = TRUE & alarm_door = FALSE & current_direction = empty & sensor_balance > 0 THEN
-            IF time_door = 10 & card(dom(behavior_up_ref /\ (0..NUM_FLOOR-1) * {TRUE}) \/ dom(behavior_down_ref /\ (0..NUM_FLOOR-1) * {TRUE})) > 0 THEN 
-            time_door := 1;
-            alarm_door := TRUE;
-            btn_special := btn_special <+ {btn_open |-> FALSE, btn_close |-> FALSE};
-            status_work := FALSE
-        ELSE IF card(ran(behavior_up_ref) \/ ran(behavior_down_ref)) > 0 THEN
-            btn_special := btn_special <+ {btn_open |-> TRUE, btn_close |-> FALSE};
-            status_door := TRUE;
-            time_door := time_door + 1;
-            status_work := FALSE
-           ELSE
-            btn_special := btn_special <+ {btn_open |-> TRUE, btn_close |-> FALSE};
-            status_door := TRUE;
-            time_door := 1;
-            status_work := FALSE
-       
-            END 
-        END        
+            
+            VAR ii, flag_ans IN 
+                ii := 0;
+                flag_ans := FALSE;
+                WHILE ii < 8
+                DO
+                    IF behavior_up_ref(ii) = TRUE or behavior_down_ref(ii) = TRUE THEN
+                        flag_ans := TRUE
+                    END
+                INVARIANT
+                    ii <= 8
+                VARIANT
+                    8 - ii
+                END;
+                IF time_door = 10 & flag_ans = TRUE THEN 
+                    time_door := 1;
+                    alarm_door := TRUE;
+                    btn_special := btn_special <+ {btn_open |-> FALSE, btn_close |-> FALSE};
+                    status_work := FALSE
+                ELSE IF flag_ans = TRUE THEN
+                    btn_special := btn_special <+ {btn_open |-> TRUE, btn_close |-> FALSE};
+                    status_door := TRUE;
+                    time_door := time_door + 1;
+                    status_work := FALSE
+                   ELSE
+                    btn_special := btn_special <+ {btn_open |-> TRUE, btn_close |-> FALSE};
+                    status_door := TRUE;
+                    time_door := 1;
+                    status_work := FALSE
+               
+                    END 
+                END  
+                
+            END      
         
         END
     END;
@@ -365,11 +400,28 @@ OPERATIONS
     // Implementado
     exit_elevator =
     BEGIN 
-        IF people_in_elevator_2ref /= (1..QTD) * {0} & status_door = TRUE & status_operation = TRUE & status_work = FALSE & alarm_door = FALSE THEN
-            sensor_balance := sensor_balance - people_in_elevator_2ref(ptr_qtd - 1);
-            people_in_elevator_2ref(ptr_qtd - 1) := 0;
-            ptr_qtd := ptr_qtd - 1
+        VAR ii, flag_ans IN
+            ii := 0;
+            flag_ans := FALSE;
+            
+            WHILE ii < QTD
+            DO
+                IF people_in_elevator_2ref(ii) /= 0 THEN
+                    flag_ans := TRUE  
+                END
+            INVARIANT
+                ii < QTD
+            VARIANT
+                QTD - ii
+            END;
+            
+            IF flag_ans = TRUE & status_door = TRUE & status_operation = TRUE & status_work = FALSE & alarm_door = FALSE THEN
+                sensor_balance := sensor_balance - people_in_elevator_2ref(ptr_qtd - 1);
+                people_in_elevator_2ref(ptr_qtd - 1) := 0;
+                ptr_qtd := ptr_qtd - 1
+            END
         END
+        
     END;
 
 

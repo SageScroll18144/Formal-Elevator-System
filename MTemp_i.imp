@@ -25,8 +25,13 @@ OPERATIONS
     END;
     
     ss <-- getCard = 
-    BEGIN
-        ss := set_t(0)
+    BEGIN 
+        VAR tmp IN
+            tmp := ran(set_t);
+            IF set_t /= (0..8) * {1} THEN
+                ss := 2
+            END
+        END
     END    
 
  END
