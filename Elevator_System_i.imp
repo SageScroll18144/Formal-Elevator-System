@@ -3,8 +3,8 @@
  * Creation date: 23/07/24
  */
 
-IMPLEMENTATION Elevator_system_i
-REFINES Elevator_system_2r
+IMPLEMENTATION Elevator_System_i
+REFINES Elevator_System_2r
 
 CONCRETE_VARIABLES 
     current_floor,
