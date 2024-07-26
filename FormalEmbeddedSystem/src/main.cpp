@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "Elevator_System.h"
 
 const int numLinhas = 4;                      // número de linhas do teclado
 const int numColunas = 3;                     // número de colunas do teclado
@@ -10,8 +11,9 @@ const char teclado[numLinhas][numColunas] = { // definição do teclado
     {'*', '0', '#'}};
 const int PinosLINHAS[numLinhas] = {7, 2, 3, 5};                                  // pinos do Arduino que
 const int PinosCOLUNAS[numColunas] = {6, 8, 4}; // pinos do Arduino que
-const char kNADA = 0;                          // constante que simboliza nenhuma tecla pressionada (deve ser
+const char kNADA = 0;                          
 
+char TeclaPressionada();
 //---------------------------------------------------------------------------------
 void setup()
 {
@@ -29,6 +31,7 @@ void setup()
     digitalWrite(PinosCOLUNAS[coluna], HIGH);
   }
   Serial.println("--- pressione uma tecla ---");
+  Elevator_System__INITIALISATION();
 }
 //---------------------------------------------------------------------------------
 void loop()
@@ -38,47 +41,47 @@ void loop()
   switch (tecla)
   {
     case '1':
-      /* enter */
+      Elevator_System__ground_floor_call_elevator();
       break;
     
     case '2':
-      /* request */
+      Elevator_System__intermediary_call_elevator(2, Elevator_System__up);
       break;
     
     case '3':
-      /* exit */
+      Elevator_System__intermediary_call_elevator(3, Elevator_System__up);
       break;
 
     case '4':
-      /* code */
+      Elevator_System__intermediary_call_elevator(4, Elevator_System__up);
       break;
 
     case '5':
-      /* code */
+      Elevator_System__intermediary_call_elevator(5, Elevator_System__up);
       break;
 
     case '6':
-      /* code */
+      Elevator_System__intermediary_call_elevator(6, Elevator_System__up);
       break;
 
     case '7':
-      /* code */
+      Elevator_System__intermediary_call_elevator(7, Elevator_System__up);
       break;
 
     case '8':
-      /* code */
+      Elevator_System__last_floor_call_elevator();
       break;
 
     case '9':
-      /* code */
+      Elevator_System__elevator_operation_open_door();
       break;
 
     case '*':
-      /* move */
+      Elevator_System__elevator_operation_close_door();
       break;
 
     case '#':
-      /* code */
+      Elevator_System__move();
       break;
 
   }
@@ -87,9 +90,28 @@ void loop()
 
   if (tecla != kNADA)
   {
-    Serial.print("Tecla pressionada: ");
-    Serial.println(tecla);
+    Serial.println("\n\n\n-------------------------------------------------------------------------------------------");
+    // Historico
+    // print_alarm_door();
+    // print_ask_to_repair();
+    print_behavior();
+    // print_btn_actions();
+    // print_btn_special();
+    // print_cancel();
+    // print_current();
+    // print_display_directon();
+    // print_display_floor();
+    // print_floor_leds();
+    // print_people_in_elev();
+    // print_ptr_qtd();
+    // print_sensors();
+    //print_state_blink();
+    print_status();
+    //print_time();
+    Serial.println("\n-------------------------------------------------------------------------------------------");
   }
+
+  
 }
 // Determina qual tecla foi pressionada
 char TeclaPressionada()

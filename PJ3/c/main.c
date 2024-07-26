@@ -109,18 +109,24 @@ int main() {
             w;
             printf(" - Informe o andar: ");
             scanf("%d", &w);
-            d;
-            printf(" - Informe a direção | 1 -> up | 0 -> down: ");
-            scanf("%d", &d);
-            switch (d)
-            {
-            case 1:
+            if(w == 1) {
                 Elevator_System__cancel_floor(w, Elevator_System__up);
-                break;
-            
-            case 0:
+            } else if(w >= 8){
                 Elevator_System__cancel_floor(w, Elevator_System__down);
-                break;
+            } else {
+                d;
+                printf(" - Informe a direção | 1 -> up | 0 -> down: ");
+                scanf("%d", &d);
+                switch (d)
+                {
+                case 1:
+                    Elevator_System__cancel_floor(w, Elevator_System__up);
+                    break;
+                
+                case 0:
+                    Elevator_System__cancel_floor(w, Elevator_System__down);
+                    break;
+                }
             }
             break;    
 
