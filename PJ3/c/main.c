@@ -79,7 +79,7 @@ int main() {
             w;
             printf(" - Informe o andar: ");
             scanf("%d", &w);
-            if(w >= 7) {
+            if(w >= 8) {
                 Elevator_System__last_floor_call_elevator();
             }
             else if(w == 1) {
@@ -112,7 +112,16 @@ int main() {
             d;
             printf(" - Informe a direção | 1 -> up | 0 -> down: ");
             scanf("%d", &d);
-            Elevator_System__cancel_floor(w, d);
+            switch (d)
+            {
+            case 1:
+                Elevator_System__cancel_floor(w, Elevator_System__up);
+                break;
+            
+            case 0:
+                Elevator_System__cancel_floor(w, Elevator_System__down);
+                break;
+            }
             break;    
 
         default:
@@ -129,6 +138,7 @@ int main() {
         print_current();
         print_display_directon();
         print_display_floor();
+        print_floor_leds();
         print_people_in_elev();
         print_ptr_qtd();
         print_sensors();

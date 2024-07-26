@@ -80,6 +80,7 @@ void print_cancel();
 void print_current();
 void print_display_directon();
 void print_display_floor();
+void print_floor_leds();
 void print_people_in_elev();
 void print_ptr_qtd();
 void print_sensors();

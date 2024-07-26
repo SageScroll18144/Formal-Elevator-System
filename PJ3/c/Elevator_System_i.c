@@ -212,7 +212,7 @@ void Elevator_System__move(void)
                         }
                         else
                         {
-                            if(((pivo_down) > (pivo_up)) &&
+                            if(((pivo_down) >= (pivo_up)) &&
                             ((Elevator_System__current_direction) != (Elevator_System__down)))
                             {
                                 Elevator_System__current_floor = Elevator_System__current_floor+1;
@@ -238,28 +238,33 @@ void Elevator_System__move(void)
                                     bool tmp_up;
                                     bool tmp_down;
                                     
-                                    ii = 0;
-                                    tmp_up = Elevator_System__behavior_up[ii];
-                                    tmp_down = Elevator_System__behavior_up[ii];
+                                    ii = 1;
                                     while((ii) < (8))
                                     {
+                                        tmp_up = Elevator_System__behavior_up[ii];
                                         if(tmp_up == true)
                                         {
                                             Elevator_System__behavior_up[ii-1] = true;
                                             Elevator_System__behavior_up[ii] = false;
                                         }
+                                        ii = ii+1;
+                                    }
+                                    ii = 6;
+                                    while((ii) >= (0))
+                                    {
+                                        tmp_down = Elevator_System__behavior_down[ii];
                                         if(tmp_down == true)
                                         {
                                             Elevator_System__behavior_down[ii+1] = true;
                                             Elevator_System__behavior_down[ii] = false;
                                         }
-                                        ii = ii+1;
+                                        ii = ii-1;
                                     }
                                 }
                             }
                             else
                             {
-                                if(((pivo_down) < (pivo_up)) &&
+                                if(((pivo_down) <= (pivo_up)) &&
                                 ((Elevator_System__current_direction) != (Elevator_System__up)))
                                 {
                                     Elevator_System__current_floor = Elevator_System__current_floor-1;
@@ -285,22 +290,27 @@ void Elevator_System__move(void)
                                         bool tmp_up;
                                         bool tmp_down;
                                         
-                                        ii = 0;
-                                        tmp_up = Elevator_System__behavior_up[ii];
-                                        tmp_down = Elevator_System__behavior_up[ii];
+                                        ii = 1;
                                         while((ii) < (8))
                                         {
-                                            if(tmp_up == true)
-                                            {
-                                                Elevator_System__behavior_up[ii+1] = true;
-                                                Elevator_System__behavior_up[ii] = false;
-                                            }
+                                            tmp_down = Elevator_System__behavior_down[ii];
                                             if(tmp_down == true)
                                             {
                                                 Elevator_System__behavior_down[ii-1] = true;
                                                 Elevator_System__behavior_down[ii] = false;
                                             }
                                             ii = ii+1;
+                                        }
+                                        ii = 6;
+                                        while((ii) >= (0))
+                                        {
+                                            tmp_up = Elevator_System__behavior_up[ii];
+                                            if(tmp_up == true)
+                                            {
+                                                Elevator_System__behavior_up[ii+1] = true;
+                                                Elevator_System__behavior_up[ii] = false;
+                                            }
+                                            ii = ii-1;
                                         }
                                     }
                                 }
@@ -332,22 +342,27 @@ void Elevator_System__move(void)
                                             bool tmp_up;
                                             bool tmp_down;
                                             
-                                            ii = 0;
-                                            tmp_up = Elevator_System__behavior_up[ii];
-                                            tmp_down = Elevator_System__behavior_up[ii];
+                                            ii = 1;
                                             while((ii) < (8))
                                             {
-                                                if(tmp_up == true)
-                                                {
-                                                    Elevator_System__behavior_up[ii+1] = true;
-                                                    Elevator_System__behavior_up[ii] = false;
-                                                }
+                                                tmp_down = Elevator_System__behavior_down[ii];
                                                 if(tmp_down == true)
                                                 {
                                                     Elevator_System__behavior_down[ii-1] = true;
                                                     Elevator_System__behavior_down[ii] = false;
                                                 }
                                                 ii = ii+1;
+                                            }
+                                            ii = 6;
+                                            while((ii) >= (0))
+                                            {
+                                                tmp_up = Elevator_System__behavior_up[ii];
+                                                if(tmp_up == true)
+                                                {
+                                                    Elevator_System__behavior_up[ii+1] = true;
+                                                    Elevator_System__behavior_up[ii] = false;
+                                                }
+                                                ii = ii-1;
                                             }
                                         }
                                     }
@@ -376,22 +391,27 @@ void Elevator_System__move(void)
                                             bool tmp_up;
                                             bool tmp_down;
                                             
-                                            ii = 0;
-                                            tmp_up = Elevator_System__behavior_up[ii];
-                                            tmp_down = Elevator_System__behavior_up[ii];
+                                            ii = 1;
                                             while((ii) < (8))
                                             {
+                                                tmp_up = Elevator_System__behavior_up[ii];
                                                 if(tmp_up == true)
                                                 {
                                                     Elevator_System__behavior_up[ii-1] = true;
                                                     Elevator_System__behavior_up[ii] = false;
                                                 }
+                                                ii = ii+1;
+                                            }
+                                            ii = 6;
+                                            while((ii) >= (0))
+                                            {
+                                                tmp_down = Elevator_System__behavior_down[ii];
                                                 if(tmp_down == true)
                                                 {
                                                     Elevator_System__behavior_down[ii+1] = true;
                                                     Elevator_System__behavior_down[ii] = false;
                                                 }
-                                                ii = ii+1;
+                                                ii = ii-1;
                                             }
                                         }
                                     }
@@ -644,7 +664,7 @@ void Elevator_System__elevator_operation_break_to_repair(void)
                 
                 flag_behavior = true;
                 ii = 0;
-                while((ii) < (Elevator_System__NUM_FLOOR))
+                while((ii) < (8))
                 {
                     tmp_up = Elevator_System__behavior_up[ii];
                     tmp_down = Elevator_System__behavior_down[ii];
@@ -843,7 +863,7 @@ void Elevator_System__exit_elevator(void)
         
         ii = 0;
         flag_ans = false;
-        while((ii) < (Elevator_System__QTD))
+        while((ii) < (9))
         {
             tmp = Elevator_System__people_in_elevator_2ref_[ii];
             if((tmp) != (0))
@@ -1040,13 +1060,11 @@ void Elevator_System__cancel(int32_t num_floor)
 {
     {
         bool flag_btn_actions_;
-        bool flag_single_req;
         int32_t ii;
         int32_t count;
         bool flag_cancel;
         
         flag_btn_actions_ = Elevator_System__btn_actions_[num_floor];
-        flag_single_req = false;
         ii = 0;
         count = 0;
         flag_cancel = false;
@@ -1123,14 +1141,15 @@ void Elevator_System__cancel(int32_t num_floor)
             {
                 if((Elevator_System__time) < (2))
                 {
-                    Elevator_System__time = Elevator_System__time+1;
                     Elevator_System__cancel_set_2ref_[Elevator_System__time] = num_floor;
+                    Elevator_System__time = Elevator_System__time+1;
                     Elevator_System__state_blink_[num_floor] = false;
                 }
                 else
                 {
-                    Elevator_System__time = 1;
+                    Elevator_System__time = 0;
                     Elevator_System__cancel_set_2ref_[Elevator_System__time] = num_floor;
+                    Elevator_System__time = Elevator_System__time+1;
                     Elevator_System__state_blink_[num_floor] = false;
                 }
             }
@@ -1218,136 +1237,42 @@ void Elevator_System__cancel_floor(int32_t num_floor, Elevator_System__ELEVATOR_
                 }
                 ii = ii+1;
             }
-            if(((((num_floor) != (Elevator_System__current_floor)) &&
-                    ((((((direction == Elevator_System__up)) &&
-                                    ((flag_leds_up == true)))) ||
-                            ((((direction == Elevator_System__down)) &&
-                                    ((flag_leds_down == true))))))) &&
-                (Elevator_System__status_operation == true)) &&
-            ((direction) != (Elevator_System__empty)))
             {
+                bool flag;
+                bool tmp1;
+                bool tmp2;
+                
+                flag = false;
+                tmp1 = Elevator_System__floor_leds_up_[num_floor];
+                tmp2 = Elevator_System__floor_leds_down_[num_floor];
                 if(direction == Elevator_System__up)
                 {
-                    if(flag_cancel_up == true)
+                    if(tmp1 == true)
                     {
-                        if(count == 1)
-                        {
-                            if(Elevator_System__current_direction == Elevator_System__up)
-                            {
-                                for(i = 0; i <= 7;i++)
-                                {
-                                    Elevator_System__behavior_up[i] = false;
-                                }
-                                for(i = 0; i <= 7;i++)
-                                {
-                                    Elevator_System__behavior_down[i] = false;
-                                }
-                                Elevator_System__floor_leds_up_[num_floor] = false;
-                                Elevator_System__floor_leds_down_[num_floor] = false;
-                                Elevator_System__current_direction = Elevator_System__empty;
-                                Elevator_System__display_direction_elevator = Elevator_System__empty;
-                                Elevator_System__current_floor = Elevator_System__current_floor+1;
-                                Elevator_System__display_floor_[Elevator_System__current_floor] = true;
-                                Elevator_System__display_floor_[Elevator_System__current_floor-1] = false;
-                            }
-                            else
-                            {
-                                if(Elevator_System__current_direction == Elevator_System__down)
-                                {
-                                    for(i = 0; i <= 7;i++)
-                                    {
-                                        Elevator_System__behavior_up[i] = false;
-                                    }
-                                    for(i = 0; i <= 7;i++)
-                                    {
-                                        Elevator_System__behavior_down[i] = false;
-                                    }
-                                    Elevator_System__floor_leds_up_[num_floor] = false;
-                                    Elevator_System__floor_leds_down_[num_floor] = false;
-                                    Elevator_System__current_direction = Elevator_System__empty;
-                                    Elevator_System__display_direction_elevator = Elevator_System__empty;
-                                    Elevator_System__current_floor = Elevator_System__current_floor-1;
-                                    Elevator_System__display_floor_[Elevator_System__current_floor] = true;
-                                    Elevator_System__display_floor_[Elevator_System__current_floor+1] = false;
-                                }
-                                else
-                                {
-                                    for(i = 0; i <= 7;i++)
-                                    {
-                                        Elevator_System__behavior_up[i] = false;
-                                    }
-                                    for(i = 0; i <= 7;i++)
-                                    {
-                                        Elevator_System__behavior_down[i] = false;
-                                    }
-                                    Elevator_System__floor_leds_up_[num_floor] = false;
-                                    Elevator_System__floor_leds_down_[num_floor] = false;
-                                    Elevator_System__current_direction = Elevator_System__empty;
-                                    Elevator_System__display_direction_elevator = Elevator_System__empty;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if((Elevator_System__current_floor) > (num_floor))
-                            {
-                                Elevator_System__behavior_down[Elevator_System__current_floor-num_floor] = false;
-                                Elevator_System__floor_leds_up_[num_floor] = false;
-                                Elevator_System__floor_leds_down_[num_floor] = false;
-                                Elevator_System__current_direction = Elevator_System__empty;
-                                Elevator_System__display_direction_elevator = Elevator_System__empty;
-                            }
-                            else
-                            {
-                                Elevator_System__behavior_up[num_floor-Elevator_System__current_floor] = false;
-                                Elevator_System__floor_leds_up_[num_floor] = false;
-                                Elevator_System__floor_leds_down_[num_floor] = false;
-                                Elevator_System__current_direction = Elevator_System__empty;
-                                Elevator_System__display_direction_elevator = Elevator_System__empty;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if((Elevator_System__time_floor_up) < (2))
-                        {
-                            Elevator_System__time_floor_up = Elevator_System__time_floor_up+1;
-                            Elevator_System__cancel_set_floor_up_2ref_[Elevator_System__time_floor_up] = num_floor;
-                        }
-                        else
-                        {
-                            Elevator_System__time_floor_up = 1;
-                            Elevator_System__cancel_set_floor_up_2ref_[Elevator_System__time_floor_up] = num_floor;
-                        }
+                        flag = true;
                     }
                 }
-                else
+                if(direction == Elevator_System__down)
                 {
-                    if(flag_cancel_down == true)
+                    if(tmp2 == true)
                     {
-                        if(count == 1)
+                        flag = true;
+                    }
+                }
+                
+                if(((((num_floor) != (Elevator_System__current_floor)) &&
+                        (flag == true)) &&
+                    (Elevator_System__status_operation == true)) &&
+                ((direction) != (Elevator_System__empty)))
+                {
+                	
+                    if(direction == Elevator_System__up)
+                    {
+                        if(flag_cancel_up == true)
                         {
-                            if(Elevator_System__current_direction == Elevator_System__up)
+                            if(count == 1)
                             {
-                                for(i = 0; i <= 7;i++)
-                                {
-                                    Elevator_System__behavior_up[i] = false;
-                                }
-                                for(i = 0; i <= 7;i++)
-                                {
-                                    Elevator_System__behavior_down[i] = false;
-                                }
-                                Elevator_System__floor_leds_up_[num_floor] = false;
-                                Elevator_System__floor_leds_down_[num_floor] = false;
-                                Elevator_System__current_direction = Elevator_System__empty;
-                                Elevator_System__display_direction_elevator = Elevator_System__empty;
-                                Elevator_System__current_floor = Elevator_System__current_floor+1;
-                                Elevator_System__display_floor_[Elevator_System__current_floor] = true;
-                                Elevator_System__display_floor_[Elevator_System__current_floor-1] = false;
-                            }
-                            else
-                            {
-                                if(Elevator_System__current_direction == Elevator_System__down)
+                                if(Elevator_System__current_direction == Elevator_System__up)
                                 {
                                     for(i = 0; i <= 7;i++)
                                     {
@@ -1361,20 +1286,60 @@ void Elevator_System__cancel_floor(int32_t num_floor, Elevator_System__ELEVATOR_
                                     Elevator_System__floor_leds_down_[num_floor] = false;
                                     Elevator_System__current_direction = Elevator_System__empty;
                                     Elevator_System__display_direction_elevator = Elevator_System__empty;
-                                    Elevator_System__current_floor = Elevator_System__current_floor-1;
+                                    Elevator_System__current_floor = Elevator_System__current_floor+1;
                                     Elevator_System__display_floor_[Elevator_System__current_floor] = true;
-                                    Elevator_System__display_floor_[Elevator_System__current_floor+1] = false;
+                                    Elevator_System__display_floor_[Elevator_System__current_floor-1] = false;
                                 }
                                 else
                                 {
-                                    for(i = 0; i <= 7;i++)
+                                    if(Elevator_System__current_direction == Elevator_System__down)
                                     {
-                                        Elevator_System__behavior_up[i] = false;
+                                        for(i = 0; i <= 7;i++)
+                                        {
+                                            Elevator_System__behavior_up[i] = false;
+                                        }
+                                        for(i = 0; i <= 7;i++)
+                                        {
+                                            Elevator_System__behavior_down[i] = false;
+                                        }
+                                        Elevator_System__floor_leds_up_[num_floor] = false;
+                                        Elevator_System__floor_leds_down_[num_floor] = false;
+                                        Elevator_System__current_direction = Elevator_System__empty;
+                                        Elevator_System__display_direction_elevator = Elevator_System__empty;
+                                        Elevator_System__current_floor = Elevator_System__current_floor-1;
+                                        Elevator_System__display_floor_[Elevator_System__current_floor] = true;
+                                        Elevator_System__display_floor_[Elevator_System__current_floor+1] = false;
                                     }
-                                    for(i = 0; i <= 7;i++)
+                                    else
                                     {
-                                        Elevator_System__behavior_down[i] = false;
+                                        for(i = 0; i <= 7;i++)
+                                        {
+                                            Elevator_System__behavior_up[i] = false;
+                                        }
+                                        for(i = 0; i <= 7;i++)
+                                        {
+                                            Elevator_System__behavior_down[i] = false;
+                                        }
+                                        Elevator_System__floor_leds_up_[num_floor] = false;
+                                        Elevator_System__floor_leds_down_[num_floor] = false;
+                                        Elevator_System__current_direction = Elevator_System__empty;
+                                        Elevator_System__display_direction_elevator = Elevator_System__empty;
                                     }
+                                }
+                            }
+                            else
+                            {
+                                if((Elevator_System__current_floor) > (num_floor))
+                                {
+                                    Elevator_System__behavior_down[Elevator_System__current_floor-num_floor] = false;
+                                    Elevator_System__floor_leds_up_[num_floor] = false;
+                                    Elevator_System__floor_leds_down_[num_floor] = false;
+                                    Elevator_System__current_direction = Elevator_System__empty;
+                                    Elevator_System__display_direction_elevator = Elevator_System__empty;
+                                }
+                                else
+                                {
+                                    Elevator_System__behavior_up[num_floor-Elevator_System__current_floor] = false;
                                     Elevator_System__floor_leds_up_[num_floor] = false;
                                     Elevator_System__floor_leds_down_[num_floor] = false;
                                     Elevator_System__current_direction = Elevator_System__empty;
@@ -1384,35 +1349,113 @@ void Elevator_System__cancel_floor(int32_t num_floor, Elevator_System__ELEVATOR_
                         }
                         else
                         {
-                            if((Elevator_System__current_floor) > (num_floor))
+                            if((Elevator_System__time_floor_up) < (2))
                             {
-                                Elevator_System__behavior_down[Elevator_System__current_floor-num_floor] = false;
-                                Elevator_System__floor_leds_up_[num_floor] = false;
-                                Elevator_System__floor_leds_down_[num_floor] = false;
-                                Elevator_System__current_direction = Elevator_System__empty;
-                                Elevator_System__display_direction_elevator = Elevator_System__empty;
+                                Elevator_System__cancel_set_floor_up_2ref_[Elevator_System__time_floor_up] = num_floor;
+                                Elevator_System__time_floor_up = Elevator_System__time_floor_up+1;
                             }
                             else
                             {
-                                Elevator_System__behavior_up[num_floor-Elevator_System__current_floor] = false;
-                                Elevator_System__floor_leds_up_[num_floor] = false;
-                                Elevator_System__floor_leds_down_[num_floor] = false;
-                                Elevator_System__current_direction = Elevator_System__empty;
-                                Elevator_System__display_direction_elevator = Elevator_System__empty;
+                                Elevator_System__time_floor_up = 0;
+                                Elevator_System__cancel_set_floor_up_2ref_[Elevator_System__time_floor_up] = num_floor;
+                                Elevator_System__time_floor_up = Elevator_System__time_floor_up+1;
                             }
                         }
                     }
                     else
                     {
-                        if((Elevator_System__time_floor_down) < (2))
+                        if(flag_cancel_down == true)
                         {
-                            Elevator_System__time_floor_down = Elevator_System__time_floor_down+1;
-                            Elevator_System__cancel_set_floor_down_2ref_[Elevator_System__time_floor_down] = num_floor;
+                            if(count == 1)
+                            {
+                                if(Elevator_System__current_direction == Elevator_System__up)
+                                {
+                                    for(i = 0; i <= 7;i++)
+                                    {
+                                        Elevator_System__behavior_up[i] = false;
+                                    }
+                                    for(i = 0; i <= 7;i++)
+                                    {
+                                        Elevator_System__behavior_down[i] = false;
+                                    }
+                                    Elevator_System__floor_leds_up_[num_floor] = false;
+                                    Elevator_System__floor_leds_down_[num_floor] = false;
+                                    Elevator_System__current_direction = Elevator_System__empty;
+                                    Elevator_System__display_direction_elevator = Elevator_System__empty;
+                                    Elevator_System__current_floor = Elevator_System__current_floor+1;
+                                    Elevator_System__display_floor_[Elevator_System__current_floor] = true;
+                                    Elevator_System__display_floor_[Elevator_System__current_floor-1] = false;
+                                }
+                                else
+                                {
+                                    if(Elevator_System__current_direction == Elevator_System__down)
+                                    {
+                                        for(i = 0; i <= 7;i++)
+                                        {
+                                            Elevator_System__behavior_up[i] = false;
+                                        }
+                                        for(i = 0; i <= 7;i++)
+                                        {
+                                            Elevator_System__behavior_down[i] = false;
+                                        }
+                                        Elevator_System__floor_leds_up_[num_floor] = false;
+                                        Elevator_System__floor_leds_down_[num_floor] = false;
+                                        Elevator_System__current_direction = Elevator_System__empty;
+                                        Elevator_System__display_direction_elevator = Elevator_System__empty;
+                                        Elevator_System__current_floor = Elevator_System__current_floor-1;
+                                        Elevator_System__display_floor_[Elevator_System__current_floor] = true;
+                                        Elevator_System__display_floor_[Elevator_System__current_floor+1] = false;
+                                    }
+                                    else
+                                    {
+                                        for(i = 0; i <= 7;i++)
+                                        {
+                                            Elevator_System__behavior_up[i] = false;
+                                        }
+                                        for(i = 0; i <= 7;i++)
+                                        {
+                                            Elevator_System__behavior_down[i] = false;
+                                        }
+                                        Elevator_System__floor_leds_up_[num_floor] = false;
+                                        Elevator_System__floor_leds_down_[num_floor] = false;
+                                        Elevator_System__current_direction = Elevator_System__empty;
+                                        Elevator_System__display_direction_elevator = Elevator_System__empty;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if((Elevator_System__current_floor) > (num_floor))
+                                {
+                                    Elevator_System__behavior_down[Elevator_System__current_floor-num_floor] = false;
+                                    Elevator_System__floor_leds_up_[num_floor] = false;
+                                    Elevator_System__floor_leds_down_[num_floor] = false;
+                                    Elevator_System__current_direction = Elevator_System__empty;
+                                    Elevator_System__display_direction_elevator = Elevator_System__empty;
+                                }
+                                else
+                                {
+                                    Elevator_System__behavior_up[num_floor-Elevator_System__current_floor] = false;
+                                    Elevator_System__floor_leds_up_[num_floor] = false;
+                                    Elevator_System__floor_leds_down_[num_floor] = false;
+                                    Elevator_System__current_direction = Elevator_System__empty;
+                                    Elevator_System__display_direction_elevator = Elevator_System__empty;
+                                }
+                            }
                         }
                         else
                         {
-                            Elevator_System__time_floor_down = 1;
-                            Elevator_System__cancel_set_floor_down_2ref_[Elevator_System__time_floor_down] = num_floor;
+                            if((Elevator_System__time_floor_down) < (2))
+                            {
+                                Elevator_System__cancel_set_floor_down_2ref_[Elevator_System__time_floor_down] = num_floor;
+                                Elevator_System__time_floor_down = Elevator_System__time_floor_down+1;
+                            }
+                            else
+                            {
+                                Elevator_System__time_floor_down = 0;
+                                Elevator_System__cancel_set_floor_down_2ref_[Elevator_System__time_floor_down] = num_floor;
+                                Elevator_System__time_floor_down = Elevator_System__time_floor_down+1;
+                            }
                         }
                     }
                 }
@@ -1420,7 +1463,6 @@ void Elevator_System__cancel_floor(int32_t num_floor, Elevator_System__ELEVATOR_
         }
     }
 }
-
 void print_alarm_door() {
     if(Elevator_System__alarm_door) printf("alarm_door = TRUE\n");
     else printf("alarm_door = FALSE\n");
@@ -1575,3 +1617,4 @@ void print_time() {
     printf("time_floor_down = %d\n", Elevator_System__time_floor_down);
     printf("time_floor_up = %d\n", Elevator_System__time_floor_up);
 }
+
