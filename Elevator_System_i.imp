@@ -817,9 +817,8 @@ OPERATIONS
     // Implementado
     cancel(num_floor) =
     BEGIN
-        VAR flag_btn_actions_, flag_single_req, ii, count, flag_cancel IN
+        VAR flag_btn_actions_, ii, count, flag_cancel IN
             flag_btn_actions_ := btn_actions_(num_floor);
-            flag_single_req := FALSE;
             ii := 0;
             count := 0;
             flag_cancel := FALSE;
@@ -876,12 +875,13 @@ OPERATIONS
                         END 
                     END
                 ELSE IF time < 2 THEN
-                    time := time + 1;
                     cancel_set_2ref_(time) := num_floor;
+                    time := time + 1;
                     state_blink_(num_floor) := FALSE
                 ELSE 
-                    time := 1;
+                    time := 0;
                     cancel_set_2ref_(time) := num_floor;
+                    time := time + 1;
                     state_blink_(num_floor) := FALSE
                 END
             END
@@ -1023,12 +1023,14 @@ OPERATIONS
                     END
                     
                 ELSE IF time_floor_up < 2 THEN
-                    time_floor_up := time_floor_up + 1;
-                    cancel_set_floor_up_2ref_(time_floor_up) := num_floor
+                    cancel_set_floor_up_2ref_(time_floor_up) := num_floor;
+                    time_floor_up := time_floor_up + 1
+                    
                    
                 ELSE 
-                    time_floor_up := 1;
-                    cancel_set_floor_up_2ref_(time_floor_up) := num_floor
+                    time_floor_up := 0;
+                    cancel_set_floor_up_2ref_(time_floor_up) := num_floor;
+                    time_floor_up := time_floor_up + 1
                 END
                 END
             ELSE
@@ -1086,12 +1088,13 @@ OPERATIONS
                         END
                         
                     ELSE IF time_floor_down < 2 THEN
-                        time_floor_down := time_floor_down + 1;
-                        cancel_set_floor_down_2ref_(time_floor_down) := num_floor
+                        cancel_set_floor_down_2ref_(time_floor_down) := num_floor;
+                        time_floor_down := time_floor_down + 1
                         
                     ELSE
-                        time_floor_down := 1;
-                        cancel_set_floor_down_2ref_(time_floor_down) := num_floor
+                        time_floor_down := 0;
+                        cancel_set_floor_down_2ref_(time_floor_down) := num_floor;
+                        time_floor_down := time_floor_down + 1
                     END
                   END
                 END
