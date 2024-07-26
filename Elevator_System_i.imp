@@ -949,25 +949,24 @@ OPERATIONS
                 8 - ii
             END;
             
-            VAR flag_up, flag_down IN
-                flag_up := FALSE;
-                flag_down := FALSE;
+            VAR flag, tmp1, tmp2 IN
+                flag := FALSE;
+                tmp1 := floor_leds_up_(num_floor);
+                tmp2 := floor_leds_down_(num_floor);
                 
                 IF direction = up THEN
-                    IF flag_leds_up = TRUE THEN
-                        flag_up := TRUE;
-                        flag_down := TRUE
+                    IF tmp1 = TRUE THEN
+                        flag := TRUE
                     END 
                 END;
                 
                 IF direction = down THEN
-                   IF flag_leds_down = TRUE THEN
-                       flag_up := TRUE;
-                       flag_down := TRUE
+                   IF tmp2 = TRUE THEN
+                       flag := TRUE
                    END 
                 END;
             
-            IF num_floor /= current_floor & flag_up = TRUE & flag_down = TRUE & status_operation = TRUE & direction /= empty THEN
+            IF num_floor /= current_floor & flag = TRUE & status_operation = TRUE & direction /= empty THEN
                 IF direction = up THEN
                     IF flag_cancel_up = TRUE THEN
                         IF count = 1 THEN
