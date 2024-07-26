@@ -3,8 +3,8 @@
  * Creation date: 23/07/24
  */
 
-IMPLEMENTATION Elevator_System_i
-REFINES Elevator_System_2r
+IMPLEMENTATION Elevator_system__i
+REFINES Elevator_system_2r
 
 VALUES
     QTD = 10;
@@ -948,8 +948,26 @@ OPERATIONS
             VARIANT 
                 8 - ii
             END;
-     
-            IF num_floor /= current_floor & (((direction = up) & (flag_leds_up = TRUE)) or ((direction = down) & (flag_leds_down = TRUE))) & status_operation = TRUE & direction /= empty THEN
+            
+            VAR flag_up, flag_down IN
+                flag_up := FALSE;
+                flag_down := FALSE;
+                
+                IF direction = up THEN
+                    IF flag_leds_up = TRUE THEN
+                        flag_up := TRUE;
+                        flag_down := TRUE
+                    END 
+                END;
+                
+                IF direction = down THEN
+                   IF flag_leds_down = TRUE THEN
+                       flag_up := TRUE;
+                       flag_down := TRUE
+                   END 
+                END;
+            
+            IF num_floor /= current_floor & flag_up = TRUE & flag_down = TRUE & status_operation = TRUE & direction /= empty THEN
                 IF direction = up THEN
                     IF flag_cancel_up = TRUE THEN
                         IF count = 1 THEN
@@ -1075,7 +1093,8 @@ OPERATIONS
                         time_floor_down := 1;
                         cancel_set_floor_down_2ref_(time_floor_down) := num_floor
                     END
-                    END
+                  END
+                END
              END       
          END
       END
