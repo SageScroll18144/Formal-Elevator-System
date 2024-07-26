@@ -104,7 +104,7 @@ OPERATIONS
             END;
             ii := ii + 1
         INVARIANT
-            ii <= 8
+            ii < 8
         VARIANT
             8 - ii
         END;
@@ -132,7 +132,7 @@ OPERATIONS
                         END;
                         ii := ii + 1
                     INVARIANT
-                        ii <= 8
+                        ii < 8
                     VARIANT
                         8 - ii
                     END;
@@ -146,7 +146,7 @@ OPERATIONS
                         END;
                         ii := ii + 1
                     INVARIANT
-                        ii <= 8
+                        ii < 8
                     VARIANT
                         8 - ii
                     END;
@@ -167,7 +167,7 @@ OPERATIONS
                         floor_leds_down_(current_floor) := FALSE;
                         state_blink_(current_floor) := FALSE
                     ELSE 
-                        IF pivo_down >= pivo_up & current_direction /= down THEN
+                        IF pivo_down > pivo_up & current_direction /= down THEN
                             current_floor := current_floor + 1;
                             current_direction := up;
                             display_direction_elevator := up;
@@ -179,41 +179,29 @@ OPERATIONS
                             status_work := TRUE;
 
                             VAR ii, tmp_up, tmp_down IN
-                                ii := 1;
+                                ii := 0;
+                                tmp_up := behavior_up(ii);
+                                tmp_down := behavior_up(ii);
+
                                 WHILE ii < 8 DO
-                                    tmp_up := behavior_up(ii);
                                     IF tmp_up = TRUE THEN
                                         behavior_up(ii-1) := TRUE;
                                         behavior_up(ii) := FALSE
                                     END;
 
+                                    IF tmp_down = TRUE THEN
+                                        behavior_down(ii+1) := TRUE;
+                                        behavior_down(ii) := FALSE
+                                    END;
                                     ii := ii + 1
                                 INVARIANT
-                                    ii <= 8
+                                    ii < 8
                                 VARIANT
                                     8 - ii
-                                END;
-                                
-                                ii := 6;
-                                
-                                WHILE ii >= 0
-                                DO
-                                   tmp_down := behavior_down(ii);
-                                   IF tmp_down = TRUE THEN
-                                       behavior_down(ii+1) := TRUE;
-                                       behavior_down(ii) := FALSE
-                                   END;
-                                   
-                                   ii := ii - 1
-                                   
-                                   INVARIANT
-                                       ii >= -1
-                                   VARIANT
-                                       ii + 1
                                 END
                             END
                         ELSE 
-                            IF pivo_down <= pivo_up & current_direction /= up THEN
+                            IF pivo_down < pivo_up & current_direction /= up THEN
                                 current_floor := current_floor - 1;
                                 current_direction := down;
                                 display_direction_elevator := down;
@@ -225,10 +213,15 @@ OPERATIONS
                                 status_work := TRUE;
 
                                 VAR ii, tmp_up, tmp_down IN
-                                    ii := 1;
-                                    
+                                    ii := 0;
+                                    tmp_up := behavior_up(ii);
+                                    tmp_down := behavior_up(ii);
+
                                     WHILE ii < 8 DO
-                                        tmp_down := behavior_down(ii);
+                                        IF tmp_up = TRUE THEN
+                                            behavior_up(ii+1) := TRUE;
+                                            behavior_up(ii) := FALSE
+                                        END;
 
                                         IF tmp_down = TRUE THEN
                                             behavior_down(ii-1) := TRUE;
@@ -236,27 +229,9 @@ OPERATIONS
                                         END;
                                         ii := ii + 1
                                     INVARIANT
-                                        ii <= 8
+                                        ii < 8
                                     VARIANT
                                         8 - ii
-                                    END;
-                                    
-                                    ii := 6;
-                                    
-                                    WHILE ii >= 0
-                                    DO
-                                       tmp_up := behavior_up(ii);
-                                       IF tmp_up = TRUE THEN
-                                           behavior_up(ii+1) := TRUE;
-                                           behavior_up(ii) := FALSE
-                                       END;
-                                       
-                                       ii := ii - 1
-                                       
-                                       INVARIANT
-                                           ii >= -1
-                                       VARIANT
-                                           ii + 1
                                     END
                                 END
                             ELSE 
@@ -272,10 +247,15 @@ OPERATIONS
                                     status_work := TRUE;
 
                                     VAR ii, tmp_up, tmp_down IN
-                                        ii := 1;
-                                        
+                                        ii := 0;
+                                        tmp_up := behavior_up(ii);
+                                        tmp_down := behavior_up(ii);
+
                                         WHILE ii < 8 DO
-                                            tmp_down := behavior_down(ii);
+                                            IF tmp_up = TRUE THEN
+                                                behavior_up(ii+1) := TRUE;
+                                                behavior_up(ii) := FALSE
+                                            END;
 
                                             IF tmp_down = TRUE THEN
                                                 behavior_down(ii-1) := TRUE;
@@ -283,27 +263,9 @@ OPERATIONS
                                             END;
                                             ii := ii + 1
                                         INVARIANT
-                                            ii <= 8
+                                            ii < 8
                                         VARIANT
                                             8 - ii
-                                        END;
-                                        
-                                        ii := 6;
-                                    
-                                        WHILE ii >= 0
-                                        DO
-                                           tmp_up := behavior_up(ii);
-                                           IF tmp_up = TRUE THEN
-                                               behavior_up(ii+1) := TRUE;
-                                               behavior_up(ii) := FALSE
-                                           END;
-                                           
-                                           ii := ii - 1
-                                           
-                                           INVARIANT
-                                               ii >= -1
-                                           VARIANT
-                                               ii + 1
                                         END
                                     END
                                 ELSE
@@ -318,39 +280,25 @@ OPERATIONS
                                     status_work := TRUE;
 
                                     VAR ii, tmp_up, tmp_down IN
-                                        ii := 1;
+                                        ii := 0;
+                                        tmp_up := behavior_up(ii);
+                                        tmp_down := behavior_up(ii);
 
                                         WHILE ii < 8 DO
-                                            tmp_up := behavior_up(ii);
-                                            
                                             IF tmp_up = TRUE THEN
                                                 behavior_up(ii-1) := TRUE;
                                                 behavior_up(ii) := FALSE
                                             END;
 
+                                            IF tmp_down = TRUE THEN
+                                                behavior_down(ii+1) := TRUE;
+                                                behavior_down(ii) := FALSE
+                                            END;
                                             ii := ii + 1
                                         INVARIANT
-                                            ii <= 8
+                                            ii < 8
                                         VARIANT
                                             8 - ii
-                                        END;
-                                        
-                                        ii := 6;
-                                
-                                        WHILE ii >= 0
-                                        DO
-                                           tmp_down := behavior_down(ii);
-                                           IF tmp_down = TRUE THEN
-                                               behavior_down(ii+1) := TRUE;
-                                               behavior_down(ii) := FALSE
-                                           END;
-                                           
-                                           ii := ii - 1
-                                           
-                                           INVARIANT
-                                               ii >= -1
-                                           VARIANT
-                                               ii + 1
                                         END
                                     END
                                 END
@@ -378,7 +326,7 @@ OPERATIONS
                 END;
                 f1 := f1 + 1
             INVARIANT
-                f1 <= 8
+                f1 < 8
             VARIANT 
                 8 - f1
             END;
@@ -446,7 +394,7 @@ OPERATIONS
                     END;
                      ii := ii + 1
                 INVARIANT
-                    ii <= 8
+                    ii < 8
                 VARIANT
                     8 - ii
                 END;
@@ -489,7 +437,7 @@ OPERATIONS
                     END;
                      ii := ii + 1
                 INVARIANT
-                    ii <= 8
+                    ii < 8
                 VARIANT
                     8 - ii
                 END;
@@ -554,7 +502,7 @@ OPERATIONS
             VAR flag_behavior,ii, tmp_up, tmp_down IN
                 flag_behavior := TRUE; // vai checar se nao tem requisicao 
                 ii := 0;
-                WHILE ii < 8
+                WHILE ii < NUM_FLOOR
                 DO
                     tmp_up := behavior_up(ii);
                     tmp_down := behavior_down(ii);
@@ -563,9 +511,9 @@ OPERATIONS
                     END;
                     ii := ii + 1
                 INVARIANT
-                    ii <= 8
+                    ii < NUM_FLOOR
                 VARIANT
-                    8 - ii
+                    NUM_FLOOR - ii
                 END;
                 
                 IF flag_behavior = TRUE or current_direction = empty THEN
@@ -664,7 +612,7 @@ OPERATIONS
             ii := 0;
             flag_ans := FALSE;
             
-            WHILE ii < 9
+            WHILE ii < QTD
             DO
                 tmp := people_in_elevator_2ref_(ii);
                 IF tmp /= 0 THEN
@@ -672,9 +620,9 @@ OPERATIONS
                 END;
                  ii := ii + 1
             INVARIANT
-                ii <= 9
+                ii < QTD
             VARIANT
-                9 - ii
+                QTD - ii
             END;
             
             IF flag_ans = TRUE & status_door = TRUE & status_operation = TRUE & status_work = FALSE & alarm_door = FALSE THEN
@@ -849,9 +797,9 @@ OPERATIONS
                  ii := ii + 1
                 
             INVARIANT
-                ii <= 8
+                ii < 8
             VARIANT 
-                8 - ii
+                ii - 8
             END;
                    
             IF num_floor > 0 & flag_btn_actions_ = TRUE & status_operation = TRUE THEN
@@ -944,9 +892,9 @@ OPERATIONS
                  ii := ii + 1
                 
             INVARIANT
-                ii <= 8
+                ii < 8
             VARIANT 
-                8 - ii
+                ii - 8
             END;
      
             IF num_floor /= current_floor & (((direction = up) & (flag_leds_up = TRUE)) or ((direction = down) & (flag_leds_down = TRUE))) & status_operation = TRUE & direction /= empty THEN
